@@ -327,6 +327,22 @@
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
+  .confirm-overlay{
+    position:fixed; inset:0; z-index:80; background:rgba(20,30,45,.45);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .confirm-box{
+    width:100%; max-width:320px; background: var(--paper); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow); padding:20px 18px 16px; text-align:center;
+  }
+  .confirm-msg{ font-size:13.5px; color: var(--text); line-height:1.6; margin-bottom:16px; white-space:pre-line; }
+  .confirm-actions{ display:flex; gap:10px; }
+  .confirm-btn{
+    flex:1; padding:9px 0; border-radius: var(--radius-sm); font-size:13px; font-weight:700; cursor:pointer; border:1.4px solid transparent;
+  }
+  .confirm-btn.cancel{ background: transparent; border-color: var(--border); color: var(--ink-soft); }
+  .confirm-btn.ok{ background: var(--vermillion); color:#fff; }
+
   .footer-mark{ text-align:center; padding: 18px 16px 6px; color: var(--text-soft); font-size:11px; }
   .footer-mark .stamp{
     font-family:'Shippori Mincho',serif; font-size:10.5px; color: var(--vermillion);
@@ -453,6 +469,16 @@
   </nav>
 
   <div class="toast" id="toast"></div>
+
+  <div class="confirm-overlay hidden" id="confirm-overlay">
+    <div class="confirm-box">
+      <div class="confirm-msg" id="confirm-msg"></div>
+      <div class="confirm-actions">
+        <button class="confirm-btn cancel" id="confirm-cancel">取消</button>
+        <button class="confirm-btn ok" id="confirm-ok">確定</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -529,10 +555,6 @@
       prep:[
         '明天要早起＋換乘多種交通工具去黑部立山，務必早點休息補充體力，帶點小零嘴在身上',
         '海拔最高 2,000 公尺，氣溫平均 8–15 度，帽子／圍巾／外套等記得戴上'
-      ],
-      highlights:[
-        '高山紅葉（楓紅）：室堂與大觀峰等高海拔地區應該看得到',
-        '觀光洩洪：黑部水庫的觀光洩洪通常持續到 10 月中旬'
       ]
     },
     {
@@ -645,6 +667,27 @@
 
   function iconUse(name){ return '<svg class="icon"><use href="#'+name+'"/></svg>'; }
 
+  function showConfirm(message, onConfirm, okLabel){
+    var overlay = document.getElementById('confirm-overlay');
+    var okBtn = document.getElementById('confirm-ok');
+    var cancelBtn = document.getElementById('confirm-cancel');
+    document.getElementById('confirm-msg').textContent = message;
+    okBtn.textContent = okLabel || '確定';
+    overlay.classList.remove('hidden');
+    function cleanup(){
+      overlay.classList.add('hidden');
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      overlay.removeEventListener('click', onOverlay);
+    }
+    function onOk(){ cleanup(); onConfirm(); }
+    function onCancel(){ cleanup(); }
+    function onOverlay(e){ if(e.target === overlay) cleanup(); }
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    overlay.addEventListener('click', onOverlay);
+  }
+
   /* ================= HOME ================= */
   function renderHome(){
     document.querySelectorAll('[data-goto]').forEach(function(el){
@@ -714,7 +757,6 @@
 
     html += panelShell(d.id+'-tips', 'i-alert', '小提醒', 'tips-'+d.id, false);
     html += panelShell(d.id+'-prep', 'i-suitcase', '隔天準備 Checklist', 'prep-'+d.id, true);
-    html += panelShell(d.id+'-hl', 'i-pin', '明日看點', 'hl-'+d.id, false);
 
     html += '<div class="day-textnote">'+
       '<label>'+iconUse('i-pencil')+'當日筆記（可隨手記錄，僅存在此裝置）</label>'+
@@ -732,7 +774,6 @@
     renderTimeline(d);
     renderList(d.tips || [], false, 'tips-'+d.id);
     renderList(d.prep || [], true, 'prep-'+d.id);
-    renderList(d.highlights || [], false, 'hl-'+d.id);
     bindPanelToggles();
     bindDayNote(d);
     applyEditingState();
@@ -816,10 +857,11 @@
 
     row.querySelector('.t-del-btn').addEventListener('click', function(){
       var titleNow = row.querySelector('[data-key="'+entry.titleKey+'"]').textContent || '此行程';
-      if(!confirm('確定要刪除「'+titleNow+'」嗎？')) return;
-      var order = getItemOrder(d).filter(function(tk){ return tk !== token; });
-      saveItemOrder(d, order);
-      renderTimeline(d);
+      showConfirm('確定要刪除「'+titleNow+'」嗎？此動作無法復原。', function(){
+        var order = getItemOrder(d).filter(function(tk){ return tk !== token; });
+        saveItemOrder(d, order);
+        renderTimeline(d);
+      }, '刪除');
     });
     return row;
   }
@@ -1052,10 +1094,10 @@
   });
 
   document.getElementById('btn-reset').addEventListener('click', function(){
-    if(confirm('確定要將所有已編輯、勾選的內容重設為預設行程嗎？此動作無法復原。')){
+    showConfirm('確定要將所有已編輯、勾選、新增的內容重設為預設行程嗎？此動作無法復原。', function(){
       Object.keys(localStorage).filter(function(k){return k.indexOf(LS_PREFIX)===0;}).forEach(function(k){ localStorage.removeItem(k); });
       location.reload();
-    }
+    }, '重設');
   });
 
   /* ================= INIT ================= */
