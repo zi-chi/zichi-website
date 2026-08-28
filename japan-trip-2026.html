@@ -105,43 +105,6 @@
   .section-title{ display:flex; align-items:center; gap:8px; font-size:15px; font-weight:700; color:var(--ink); margin: 4px 0 12px; }
   .section-title .icon{ font-size:18px; color:var(--vermillion); }
 
-  .day-card{
-    display:flex; align-items:center; gap:12px;
-    background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-lg);
-    padding: 14px; margin-bottom:12px; box-shadow: var(--shadow-sm); cursor:pointer;
-    position:relative; overflow:hidden;
-  }
-  .day-card:active{ transform: scale(.99); }
-  .day-card::before{
-    content:""; position:absolute; inset:0; opacity:.06; pointer-events:none;
-    background-image: radial-gradient(circle at 100% 0%, var(--ink) 0, transparent 60%);
-  }
-  .day-card .d-num{
-    width:52px; height:52px; border-radius:14px; flex:none;
-    background: linear-gradient(155deg, var(--ink), var(--ink-deep));
-    color:#f4ecd8; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    font-family:'Shippori Mincho',serif;
-  }
-  .day-card .d-num .d-label{ font-size:9.5px; letter-spacing:.08em; color:var(--gold); }
-  .day-card .d-num .d-no{ font-size:18px; font-weight:700; line-height:1.1; }
-  .day-card .d-info{ flex:1; min-width:0; }
-  .day-card .d-date{ font-size:13px; font-weight:700; color:var(--ink); }
-  .day-card .d-region{ font-size:12px; color: var(--text-soft); margin-top:2px; }
-  .day-card .d-tags{ display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
-  .tag{
-    font-size:10.5px; padding:2px 8px; border-radius:999px; background: rgba(31,58,95,.08);
-    color: var(--ink); border:1px solid var(--border-soft);
-  }
-  .day-card .d-arrow{ color: var(--vermillion); font-size:18px; flex:none; transform:rotate(-90deg); }
-  .day-card.today{ border-color: var(--vermillion); box-shadow: 0 0 0 2px rgba(189,64,52,.18), var(--shadow-sm); }
-  .today-flag{
-    position:absolute; top:10px; right:12px; background: var(--vermillion); color:#fff;
-    font-size:10px; padding:2px 8px; border-radius:999px; letter-spacing:.06em; font-weight:700;
-  }
-  .day-card.disabled{ opacity:.55; cursor:default; }
-  .day-card.disabled:active{ transform:none; }
-  .day-card.disabled .d-num{ background: linear-gradient(155deg,#9aa4ae,#7c8790); }
-
   .nav-card{
     display:flex; align-items:center; gap:12px; background: var(--paper);
     border:1px solid var(--border-soft); border-radius: var(--radius-lg); padding:14px 16px;
@@ -186,8 +149,7 @@
 
   /* ---------- Timeline ---------- */
   .timeline{ padding: 16px 16px 4px; position:relative; }
-  .t-item{ display:flex; gap:12px; position:relative; padding-bottom:20px; }
-  .t-item:last-child{ padding-bottom:4px; }
+  .t-item{ display:flex; gap:12px; position:relative; }
   .t-rail{ flex:none; width:26px; display:flex; flex-direction:column; align-items:center; }
   .t-dot{
     width:26px; height:26px; border-radius:50%; background: var(--paper); border:2px solid var(--ink);
@@ -201,11 +163,26 @@
   .t-top{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
   .t-time{ font-family:'Shippori Mincho',serif; font-weight:700; color: var(--vermillion); font-size:14px; flex:none; font-variant-numeric: tabular-nums; }
   .t-title{ font-weight:700; font-size:14px; color:var(--ink); outline:none; }
+  .t-del-btn{
+    display:none; margin-left:auto; flex:none; background:none; border:none; color: var(--vermillion);
+    cursor:pointer; padding:0; font-size:15px; align-items:center;
+  }
+  .editing .t-del-btn{ display:inline-flex; }
   .t-desc{ font-size:12.5px; color: var(--text-soft); margin-top:4px; outline:none; line-height:1.5; }
   .t-desc:empty{ display:none; }
   .editing .t-desc:empty{ display:block; min-height:1.4em; }
   .editing .t-desc:empty::before{ content:'點此新增行程說明'; opacity:.5; }
   .editing .editable{ background: rgba(191,64,52,.06); border:1px dashed rgba(191,64,52,.4); border-radius:6px; padding:2px 5px; }
+
+  .t-slot{ display:flex; gap:12px; }
+  .t-slot:not(.edge){ min-height:22px; }
+  .t-slot.edge{ min-height:6px; }
+  .t-slot-body{ flex:1; display:flex; align-items:center; }
+  .t-add-btn{
+    display:none; align-items:center; gap:4px; padding:3px 10px; border-radius:999px;
+    border:1.3px dashed var(--vermillion); background:transparent; color: var(--vermillion); font-size:10.5px; cursor:pointer;
+  }
+  .editing .t-add-btn{ display:inline-flex; }
 
   .chk{
     appearance:none; -webkit-appearance:none; width:19px; height:19px; border-radius:6px; border:1.6px solid var(--ink);
@@ -416,15 +393,15 @@
     </div>
 
     <div class="section">
-      <div class="section-title"><svg class="icon"><use href="#i-book"/></svg>每日行程</div>
-      <div id="day-cards"></div>
-    </div>
-
-    <div class="section">
       <div class="section-title"><svg class="icon"><use href="#i-ticket"/></svg>旅遊資訊</div>
       <div class="nav-card" data-goto="flight">
         <div class="n-icon"><svg class="icon"><use href="#i-plane"/></svg></div>
         <div><div class="n-title">航班與住宿資訊</div><div class="n-sub">去程航班・逐日飯店・行李寄送提醒</div></div>
+        <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
+      </div>
+      <div class="nav-card" data-goto="itin">
+        <div class="n-icon"><svg class="icon"><use href="#i-calendar"/></svg></div>
+        <div><div class="n-title">每日行程</div><div class="n-sub">10/6－10/11 逐日時間軸，切換頁籤看每一天</div></div>
         <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
       </div>
       <div class="nav-card disabled">
@@ -670,30 +647,6 @@
 
   /* ================= HOME ================= */
   function renderHome(){
-    var wrap = document.getElementById('day-cards');
-    wrap.innerHTML = '';
-    var todayIso = new Date().toISOString().slice(0,10);
-    days.forEach(function(d){
-      var card = document.createElement('div');
-      card.className = 'day-card' + (d.active ? '' : ' disabled');
-      var isToday = d.isoDate === todayIso;
-      if(isToday) card.classList.add('today');
-      card.innerHTML =
-        (isToday ? '<span class="today-flag">今日</span>' : '') +
-        '<div class="d-num"><span class="d-label">DAY</span><span class="d-no">'+d.no+'</span></div>'+
-        '<div class="d-info">'+
-          '<div class="d-date">'+d.date+'（'+d.weekday+'）</div>'+
-          '<div class="d-region">'+d.region+'</div>'+
-          '<div class="d-tags">'+ d.tags.map(function(tg){return '<span class="tag">'+tg+'</span>';}).join('') +'</div>'+
-        '</div>'+
-        (d.active ? '<svg class="icon d-arrow"><use href="#i-chevron"/></svg>' : '');
-      if(d.active){
-        card.addEventListener('click', function(){ switchView('itin'); selectDay(d.id); });
-      } else {
-        card.addEventListener('click', function(){ showToast(d.date+' 行程整理中，敬請期待'); });
-      }
-      wrap.appendChild(card);
-    });
     document.querySelectorAll('[data-goto]').forEach(function(el){
       el.addEventListener('click', function(){ switchView(el.getAttribute('data-goto')); });
     });
@@ -759,9 +712,9 @@
 
     html += '<div class="timeline" id="timeline-'+d.id+'"></div>';
 
-    if(d.tips && d.tips.length){ html += panelShell(d.id+'-tips', 'i-alert', '小提醒', 'tips-'+d.id, false); }
-    if(d.prep && d.prep.length){ html += panelShell(d.id+'-prep', 'i-suitcase', '隔天準備 Checklist', 'prep-'+d.id, true); }
-    if(d.highlights && d.highlights.length){ html += panelShell(d.id+'-hl', 'i-pin', '明日看點', 'hl-'+d.id, false); }
+    html += panelShell(d.id+'-tips', 'i-alert', '小提醒', 'tips-'+d.id, false);
+    html += panelShell(d.id+'-prep', 'i-suitcase', '隔天準備 Checklist', 'prep-'+d.id, true);
+    html += panelShell(d.id+'-hl', 'i-pin', '明日看點', 'hl-'+d.id, false);
 
     html += '<div class="day-textnote">'+
       '<label>'+iconUse('i-pencil')+'當日筆記（可隨手記錄，僅存在此裝置）</label>'+
@@ -777,9 +730,9 @@
     bindEditableText(host.querySelector('[data-key="hotel-'+d.id+'"]'), 'hotel-'+d.id, hotelDefault);
 
     renderTimeline(d);
-    if(d.tips && d.tips.length) renderList(d.tips, false, 'tips-'+d.id);
-    if(d.prep && d.prep.length) renderList(d.prep, true, 'prep-'+d.id);
-    if(d.highlights && d.highlights.length) renderList(d.highlights, false, 'hl-'+d.id);
+    renderList(d.tips || [], false, 'tips-'+d.id);
+    renderList(d.prep || [], true, 'prep-'+d.id);
+    renderList(d.highlights || [], false, 'hl-'+d.id);
     bindPanelToggles();
     bindDayNote(d);
     applyEditingState();
@@ -804,33 +757,92 @@
     });
   }
 
+  function getItemOrder(d){
+    var stored = lsGet(d.id+':items:order', null);
+    if(stored && stored.length) return stored;
+    return d.items.map(function(_, i){ return 'd'+i; });
+  }
+  function saveItemOrder(d, order){ lsSet(d.id+':items:order', order); }
+
+  function resolveItem(d, token){
+    if(token.charAt(0) === 'd'){
+      var idx = parseInt(token.slice(1), 10);
+      var base = d.items[idx];
+      return {
+        t: base.t, title: base.title, desc: base.desc || '', type: base.type,
+        timeKey: d.id+'-item'+idx+'-time', titleKey: d.id+'-item'+idx+'-title', descKey: d.id+'-item'+idx+'-desc'
+      };
+    }
+    var xId = token.slice(1);
+    var extras = lsGet(d.id+':items:extra', {});
+    var ex = extras[xId] || {t:'', title:'新行程', desc:'', type:'note'};
+    return {
+      t: ex.t, title: ex.title, desc: ex.desc || '', type: ex.type,
+      timeKey: d.id+'-itemx'+xId+'-time', titleKey: d.id+'-itemx'+xId+'-title', descKey: d.id+'-itemx'+xId+'-desc'
+    };
+  }
+
   function renderTimeline(d){
     var host = document.getElementById('timeline-'+d.id);
     host.innerHTML = '';
-    d.items.forEach(function(item, idx){
-      var timeKey = d.id+'-item'+idx+'-time';
-      var titleKey = d.id+'-item'+idx+'-title';
-      var descKey = d.id+'-item'+idx+'-desc';
+    var order = getItemOrder(d);
 
-      var row = document.createElement('div');
-      row.className = 't-item';
-      row.innerHTML =
-        '<div class="t-rail"><div class="t-dot">'+iconUse(ICONS[item.type]||'i-note')+'</div>'+
-          (idx < d.items.length-1 ? '<div class="t-line"></div>' : '')+
-        '</div>'+
-        '<div class="t-card">'+
-          '<div class="t-top">'+
-            '<span class="t-time editable" contenteditable="false" data-key="'+timeKey+'"></span>'+
-            '<span class="t-title editable" contenteditable="false" data-key="'+titleKey+'"></span>'+
-          '</div>'+
-          '<div class="t-desc editable" contenteditable="false" data-key="'+descKey+'"></div>'+
-        '</div>';
-      host.appendChild(row);
-
-      bindEditableText(row.querySelector('[data-key="'+timeKey+'"]'), timeKey, item.t);
-      bindEditableText(row.querySelector('[data-key="'+titleKey+'"]'), titleKey, item.title);
-      bindEditableText(row.querySelector('[data-key="'+descKey+'"]'), descKey, item.desc || '');
+    host.appendChild(buildAddSlot(d, 0, true));
+    order.forEach(function(token, i){
+      var entry = resolveItem(d, token);
+      host.appendChild(buildItemRow(d, token, entry));
+      host.appendChild(buildAddSlot(d, i+1, i === order.length-1));
     });
+    applyEditingState();
+  }
+
+  function buildItemRow(d, token, entry){
+    var row = document.createElement('div');
+    row.className = 't-item';
+    row.innerHTML =
+      '<div class="t-rail"><div class="t-dot">'+iconUse(ICONS[entry.type]||'i-note')+'</div></div>'+
+      '<div class="t-card">'+
+        '<div class="t-top">'+
+          '<span class="t-time editable" contenteditable="false" data-key="'+entry.timeKey+'"></span>'+
+          '<span class="t-title editable" contenteditable="false" data-key="'+entry.titleKey+'"></span>'+
+          '<button class="t-del-btn" title="刪除此行程">'+iconUse('i-close')+'</button>'+
+        '</div>'+
+        '<div class="t-desc editable" contenteditable="false" data-key="'+entry.descKey+'"></div>'+
+      '</div>';
+
+    bindEditableText(row.querySelector('[data-key="'+entry.timeKey+'"]'), entry.timeKey, entry.t);
+    bindEditableText(row.querySelector('[data-key="'+entry.titleKey+'"]'), entry.titleKey, entry.title);
+    bindEditableText(row.querySelector('[data-key="'+entry.descKey+'"]'), entry.descKey, entry.desc);
+
+    row.querySelector('.t-del-btn').addEventListener('click', function(){
+      var titleNow = row.querySelector('[data-key="'+entry.titleKey+'"]').textContent || '此行程';
+      if(!confirm('確定要刪除「'+titleNow+'」嗎？')) return;
+      var order = getItemOrder(d).filter(function(tk){ return tk !== token; });
+      saveItemOrder(d, order);
+      renderTimeline(d);
+    });
+    return row;
+  }
+
+  function buildAddSlot(d, pos, isEdge){
+    var slot = document.createElement('div');
+    slot.className = 't-slot' + (isEdge ? ' edge' : '');
+    slot.innerHTML =
+      '<div class="t-rail">'+(isEdge ? '' : '<div class="t-line"></div>')+'</div>'+
+      '<div class="t-slot-body"><button class="t-add-btn">'+iconUse('i-plus')+' 新增行程</button></div>';
+    slot.querySelector('.t-add-btn').addEventListener('click', function(){
+      var extras = lsGet(d.id+':items:extra', {});
+      var xId = 'n'+Date.now().toString(36)+Math.floor(Math.random()*1000);
+      extras[xId] = {t:'', title:'新行程', desc:'', type:'note'};
+      lsSet(d.id+':items:extra', extras);
+      var order = getItemOrder(d);
+      order.splice(pos, 0, 'x'+xId);
+      saveItemOrder(d, order);
+      renderTimeline(d);
+      var el = document.querySelector('[data-key="'+d.id+'-itemx'+xId+'-title"]');
+      if(el){ el.focus(); selectAllText(el); }
+    });
+    return slot;
   }
 
   function renderList(defaults, isChecklist, storeKey){
