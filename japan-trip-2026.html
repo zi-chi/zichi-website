@@ -193,19 +193,24 @@
     width:26px; height:26px; border-radius:50%; background: var(--paper); border:2px solid var(--ink);
     color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:13px; z-index:2;
   }
-  .t-item.done .t-dot{ background: var(--vermillion); border-color:var(--vermillion); color:#fff; }
   .t-line{ width:2px; flex:1; background: repeating-linear-gradient(to bottom, var(--border) 0 4px, transparent 4px 8px); margin-top:2px; }
   .t-card{
     flex:1; min-width:0; background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
     padding:10px 12px; box-shadow: var(--shadow-sm);
   }
-  .t-item.done .t-card{ opacity:.6; }
   .t-top{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
   .t-time{ font-family:'Shippori Mincho',serif; font-weight:700; color: var(--vermillion); font-size:14px; flex:none; font-variant-numeric: tabular-nums; }
   .t-title{ font-weight:700; font-size:14px; color:var(--ink); outline:none; }
-  .t-people{ font-size:9.5px; background: rgba(31,58,95,.08); color:var(--ink); padding:1px 7px; border-radius:999px; }
   .t-desc{ font-size:12.5px; color: var(--text-soft); margin-top:4px; outline:none; line-height:1.5; }
-  .t-check-row{ margin-left:auto; display:flex; align-items:center; }
+  .t-desc:empty{ display:none; }
+  .editing .t-desc:empty{ display:block; min-height:1.4em; }
+  .editing .t-desc:empty::before{ content:'點此新增行程說明'; opacity:.5; }
+  .t-note{
+    margin-top:8px; display:flex; align-items:flex-start; gap:6px;
+    background: rgba(191,64,52,.06); border:1px solid rgba(191,64,52,.25); border-radius: var(--radius-sm);
+    padding:8px 10px; font-size:11.8px; color: var(--text); line-height:1.55;
+  }
+  .t-note .icon{ color: var(--vermillion); flex:none; margin-top:1px; }
   .editing .editable{ background: rgba(191,64,52,.06); border:1px dashed rgba(191,64,52,.4); border-radius:6px; padding:2px 5px; }
 
   .chk{
@@ -490,14 +495,13 @@
       id:'d1', no:1, date:'10/6', weekday:'二', isoDate:'2026-10-06', region:'桃園 → 成田 → 上野 → 長野',
       tags:['出發日','移動日'], active:true,
       meals:{ b:'自備帶到機場', l:'新幹線便當', d:'長野餐廳（TBC）' },
-      hotel:'Hotel NewNagano Next（長野）',
       items:[
         {t:'03:30', title:'搭乘機場接駁', desc:'前往桃園機場', type:'bus'},
         {t:'04:20', title:'櫃台報到、出境', desc:'', type:'note'},
-        {t:'06:35', title:'爸、媽登機', desc:'', type:'plane', people:'爸媽'},
-        {t:'07:55', title:'捷、淇登機', desc:'', type:'plane', people:'捷淇'},
-        {t:'11:00', title:'爸、媽抵達成田機場、入境', desc:'', type:'plane', people:'爸媽'},
-        {t:'12:25', title:'捷、淇抵達成田機場，跟爸媽會合', desc:'', type:'plane', people:'捷淇'},
+        {t:'06:35', title:'爸、媽登機', desc:'', type:'plane', note:'日本入境須知：記得準備好你的入境 QR code'},
+        {t:'07:55', title:'捷、淇登機', desc:'', type:'plane'},
+        {t:'11:00', title:'爸、媽抵達成田機場、入境', desc:'', type:'plane', note:'捷、淇抵達日本前，爸媽可在成田機場隨意逛街'},
+        {t:'12:25', title:'捷、淇抵達成田機場，跟爸媽會合', desc:'', type:'plane'},
         {t:'13:30', title:'搭乘 Skyliner，前往上野車站', desc:'', type:'train'},
         {t:'15:00', title:'抵達上野車站', desc:'買車上零嘴', type:'train'},
         {t:'15:30', title:'搭乘北陸新幹線到長野', desc:'車程約 2.5 小時', type:'train'},
@@ -505,8 +509,6 @@
         {t:'19:00', title:'晚餐、超市買小點心', desc:'', type:'bowl'}
       ],
       tips:[
-        '日本入境須知：記得準備好你的入境 QR code',
-        '捷、淇抵達日本前，爸媽可在成田機場隨意逛街',
         '長野特產包含蕎麥麵、蘋果、味噌等。信州MIDORI有賣信州伴手禮，想買建議在百貨商店街一次購入，明天就離開信州地區了'
       ],
       prep:[
@@ -520,7 +522,6 @@
       id:'d2', no:2, date:'10/7', weekday:'三', isoDate:'2026-10-07', region:'長野 → 上高地 → 高山',
       tags:['健行日','換宿'], active:true,
       meals:{ b:'飯店', l:'上高地', d:'高山餐廳（TBC）' },
-      hotel:'高山飯店（名稱待確認）',
       items:[
         {t:'~08:10', title:'盥洗、吃早餐、寄送行李', desc:'', type:'bed'},
         {t:'08:15', title:'抵達長野巴士站', desc:'尋找前往上高地的巴士月台', type:'bus'},
@@ -688,10 +689,10 @@
     '</div>';
 
     html += '<div class="glance">'+
-      glanceItem('i-bed','住宿', d.hotel || '—') +
-      glanceItem('i-bowl','早餐', d.meals ? d.meals.b : '—') +
-      glanceItem('i-bowl','午餐', d.meals ? d.meals.l : '—') +
-      glanceItem('i-bowl','晚餐', d.meals ? d.meals.d : '—') +
+      glanceItem('i-bowl','早餐', d.id+'-meal-b') +
+      glanceItem('i-bowl','午餐', d.id+'-meal-l') +
+      glanceItem('i-bowl','晚餐', d.id+'-meal-d') +
+      glanceItem('i-bed','住宿', 'hotel-'+d.id) +
     '</div>';
 
     html += '<div class="timeline" id="timeline-'+d.id+'"></div>';
@@ -706,6 +707,12 @@
 
     host.innerHTML = html;
 
+    bindEditableText(host.querySelector('[data-key="'+d.id+'-meal-b"]'), d.id+'-meal-b', d.meals ? d.meals.b : '—');
+    bindEditableText(host.querySelector('[data-key="'+d.id+'-meal-l"]'), d.id+'-meal-l', d.meals ? d.meals.l : '—');
+    bindEditableText(host.querySelector('[data-key="'+d.id+'-meal-d"]'), d.id+'-meal-d', d.meals ? d.meals.d : '—');
+    var hotelDefault = (hotels[d.id] && hotels[d.id].name) || '—';
+    bindEditableText(host.querySelector('[data-key="hotel-'+d.id+'"]'), 'hotel-'+d.id, hotelDefault);
+
     renderTimeline(d);
     if(d.tips && d.tips.length) renderList(d.tips, false, 'tips-'+d.id);
     if(d.prep && d.prep.length) renderList(d.prep, true, 'prep-'+d.id);
@@ -714,8 +721,8 @@
     applyEditingState();
   }
 
-  function glanceItem(icon,label,text){
-    return '<div class="glance-item"><div class="g-icon">'+iconUse(icon)+'</div><div class="g-label">'+label+'</div><div class="g-text">'+text+'</div></div>';
+  function glanceItem(icon,label,key){
+    return '<div class="glance-item"><div class="g-icon">'+iconUse(icon)+'</div><div class="g-label">'+label+'</div><div class="g-text editable" contenteditable="false" data-key="'+key+'"></div></div>';
   }
 
   function panelShell(panelId, icon, title, storeKey, isPrep){
@@ -737,36 +744,33 @@
     var host = document.getElementById('timeline-'+d.id);
     host.innerHTML = '';
     d.items.forEach(function(item, idx){
-      var doneKey = d.id+'-item'+idx+'-done';
+      var timeKey = d.id+'-item'+idx+'-time';
       var titleKey = d.id+'-item'+idx+'-title';
       var descKey = d.id+'-item'+idx+'-desc';
-      var done = lsGet(doneKey, false);
+      var noteKey = d.id+'-item'+idx+'-note';
 
       var row = document.createElement('div');
-      row.className = 't-item' + (done ? ' done':'');
+      row.className = 't-item';
       row.innerHTML =
         '<div class="t-rail"><div class="t-dot">'+iconUse(ICONS[item.type]||'i-note')+'</div>'+
           (idx < d.items.length-1 ? '<div class="t-line"></div>' : '')+
         '</div>'+
         '<div class="t-card">'+
           '<div class="t-top">'+
-            '<span class="t-time">'+item.t+'</span>'+
-            '<span class="t-title" data-key="'+titleKey+'"></span>'+
-            (item.people ? '<span class="t-people">'+item.people+'</span>' : '')+
-            '<span class="t-check-row"><input type="checkbox" class="chk" '+(done?'checked':'')+' title="標記完成"></span>'+
+            '<span class="t-time editable" contenteditable="false" data-key="'+timeKey+'"></span>'+
+            '<span class="t-title editable" contenteditable="false" data-key="'+titleKey+'"></span>'+
           '</div>'+
-          (item.desc ? '<div class="t-desc" data-key="'+descKey+'"></div>' : '')+
+          '<div class="t-desc editable" contenteditable="false" data-key="'+descKey+'"></div>'+
+          (item.note !== undefined ? ('<div class="t-note">'+iconUse('i-note')+' <span class="editable" contenteditable="false" data-key="'+noteKey+'"></span></div>') : '')+
         '</div>';
       host.appendChild(row);
 
-      bindEditableText(row.querySelector('.t-title'), titleKey, item.title);
-      if(item.desc) bindEditableText(row.querySelector('.t-desc'), descKey, item.desc);
-
-      var chk = row.querySelector('.chk');
-      chk.addEventListener('change', function(){
-        lsSet(doneKey, chk.checked);
-        row.classList.toggle('done', chk.checked);
-      });
+      bindEditableText(row.querySelector('[data-key="'+timeKey+'"]'), timeKey, item.t);
+      bindEditableText(row.querySelector('[data-key="'+titleKey+'"]'), titleKey, item.title);
+      bindEditableText(row.querySelector('[data-key="'+descKey+'"]'), descKey, item.desc || '');
+      if(item.note !== undefined){
+        bindEditableText(row.querySelector('[data-key="'+noteKey+'"]'), noteKey, item.note);
+      }
     });
   }
 
@@ -952,6 +956,9 @@
     document.querySelectorAll('.tabbtn[data-view]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-view')===name);
     });
+    // re-render so fields shared between views (e.g. hotel name) stay in sync
+    if(name==='itin'){ renderDayContent(currentDay); }
+    if(name==='flight'){ renderFlights(); renderHotels(); applyEditingState(); }
     window.scrollTo(0,0);
   }
   document.querySelectorAll('.tabbtn[data-view]').forEach(function(b){
