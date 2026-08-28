@@ -205,12 +205,6 @@
   .t-desc:empty{ display:none; }
   .editing .t-desc:empty{ display:block; min-height:1.4em; }
   .editing .t-desc:empty::before{ content:'點此新增行程說明'; opacity:.5; }
-  .t-note{
-    margin-top:8px; display:flex; align-items:flex-start; gap:6px;
-    background: rgba(191,64,52,.06); border:1px solid rgba(191,64,52,.25); border-radius: var(--radius-sm);
-    padding:8px 10px; font-size:11.8px; color: var(--text); line-height:1.55;
-  }
-  .t-note .icon{ color: var(--vermillion); flex:none; margin-top:1px; }
   .editing .editable{ background: rgba(191,64,52,.06); border:1px dashed rgba(191,64,52,.4); border-radius:6px; padding:2px 5px; }
 
   .chk{
@@ -498,9 +492,9 @@
       items:[
         {t:'03:30', title:'搭乘機場接駁', desc:'前往桃園機場', type:'bus'},
         {t:'04:20', title:'櫃台報到、出境', desc:'', type:'note'},
-        {t:'06:35', title:'爸、媽登機', desc:'', type:'plane', note:'日本入境須知：記得準備好你的入境 QR code'},
+        {t:'06:35', title:'爸、媽登機', desc:'日本入境須知：記得準備好你的入境 QR code', type:'plane'},
         {t:'07:55', title:'捷、淇登機', desc:'', type:'plane'},
-        {t:'11:00', title:'爸、媽抵達成田機場、入境', desc:'', type:'plane', note:'捷、淇抵達日本前，爸媽可在成田機場隨意逛街'},
+        {t:'11:00', title:'爸、媽抵達成田機場、入境', desc:'捷、淇抵達日本前，爸媽可在成田機場隨意逛街', type:'plane'},
         {t:'12:25', title:'捷、淇抵達成田機場，跟爸媽會合', desc:'', type:'plane'},
         {t:'13:30', title:'搭乘 Skyliner，前往上野車站', desc:'', type:'train'},
         {t:'15:00', title:'抵達上野車站', desc:'買車上零嘴', type:'train'},
@@ -747,7 +741,6 @@
       var timeKey = d.id+'-item'+idx+'-time';
       var titleKey = d.id+'-item'+idx+'-title';
       var descKey = d.id+'-item'+idx+'-desc';
-      var noteKey = d.id+'-item'+idx+'-note';
 
       var row = document.createElement('div');
       row.className = 't-item';
@@ -761,16 +754,12 @@
             '<span class="t-title editable" contenteditable="false" data-key="'+titleKey+'"></span>'+
           '</div>'+
           '<div class="t-desc editable" contenteditable="false" data-key="'+descKey+'"></div>'+
-          (item.note !== undefined ? ('<div class="t-note">'+iconUse('i-note')+' <span class="editable" contenteditable="false" data-key="'+noteKey+'"></span></div>') : '')+
         '</div>';
       host.appendChild(row);
 
       bindEditableText(row.querySelector('[data-key="'+timeKey+'"]'), timeKey, item.t);
       bindEditableText(row.querySelector('[data-key="'+titleKey+'"]'), titleKey, item.title);
       bindEditableText(row.querySelector('[data-key="'+descKey+'"]'), descKey, item.desc || '');
-      if(item.note !== undefined){
-        bindEditableText(row.querySelector('[data-key="'+noteKey+'"]'), noteKey, item.note);
-      }
     });
   }
 
