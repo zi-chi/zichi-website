@@ -313,6 +313,8 @@
   }
   .hc-photo.tone-a{ background: linear-gradient(155deg,#2a4d74,#142943); }
   .hc-photo.tone-b{ background: linear-gradient(155deg,#8a4536,#5c2a20); }
+  .hc-photo.tone-c{ background: linear-gradient(155deg,#4a6d52,#28402c); }
+  .hc-photo.tone-d{ background: linear-gradient(155deg,#7a5a2e,#4d3818); }
   .hc-photo .icon{ font-size:26px; opacity:.85; }
   .hc-photo .hc-photo-tag{
     position:absolute; bottom:2px; left:0; right:0; text-align:center; font-size:7.5px; letter-spacing:.03em;
@@ -476,11 +478,6 @@
     <div class="section">
       <div class="section-title"><svg class="icon"><use href="#i-bed"/></svg>逐日住宿</div>
       <div id="hotel-cards"></div>
-      <div class="info-note">
-        <svg class="icon"><use href="#i-suitcase"/></svg>
-        <b>行李寄送提醒：</b>10/7 早上僅需攜帶一天份行李前往上高地，其餘大件行李將直接寄送至
-        <span class="editable" contenteditable="false" data-key="flight-luggage-dest"></span>。
-      </div>
     </div>
     <div class="footer-mark">班機時刻／飯店名稱如有更動，可直接點編輯即時修改</div>
   </main>
@@ -567,9 +564,12 @@
       checkin:'15:00', checkout:'10:00', breakfast:'包含（10/7 早上在此享用）', rich:true, tone:'a' },
     d2:{ city:'高山', name:'hotel around TAKAYAMA, Ascend Hotel Collection', address:'1 Chome-42-7 Hanaokamachi, Takayama, Gifu 506-0009, Japan',
       checkin:'15:00', checkout:'11:00', breakfast:'不含（10/8 早餐請至宮川朝市／高山老街商店街解決）', rich:true, tone:'b' },
-    d3:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan', rich:false },
-    d4:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan', rich:false },
-    d5:{ city:'名古屋', name:'Comfort Hotel Nagoya Fushimi（名古屋伏見凱富酒店）', address:'2 Chome-19-14 Nishiki, Naka Ward, Nagoya, Aichi 460-0003, Japan', rich:false }
+    d3:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan',
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true, tone:'c' },
+    d4:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan',
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true, tone:'c' },
+    d5:{ city:'名古屋', name:'Comfort Hotel Nagoya Fushimi（名古屋伏見凱富酒店）', address:'2 Chome-19-14 Nishiki, Naka Ward, Nagoya, Aichi 460-0003, Japan',
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:00）', rich:true, tone:'d' }
   };
 
   function mapLink(address){ return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(address); }
@@ -947,9 +947,6 @@
     });
   }
 
-  function renderFlightInfoNotes(){
-    bindEditableText(document.querySelector('[data-key="flight-luggage-dest"]'), 'flight-luggage-dest', '第三天（10/8）入住的富山 Comfort Hotel Toyama');
-  }
 
   /* ================= VIEW SWITCHING ================= */
   function switchView(name){
@@ -993,7 +990,6 @@
   renderDayContent(currentDay);
   renderFlights();
   renderHotels();
-  renderFlightInfoNotes();
 
 })();
 </script>
