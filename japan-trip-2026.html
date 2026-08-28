@@ -534,10 +534,78 @@
       ],
       prep:[]
     },
-    {id:'d3', no:3, date:'10/8', weekday:'四', isoDate:'2026-10-08', region:'高山 → 富山', tags:['整理中'], active:false},
-    {id:'d4', no:4, date:'10/9', weekday:'五', isoDate:'2026-10-09', region:'立山黑部（富山來回）', tags:['整理中'], active:false},
-    {id:'d5', no:5, date:'10/10', weekday:'六', isoDate:'2026-10-10', region:'富山 → 名古屋', tags:['整理中'], active:false},
-    {id:'d6', no:6, date:'10/11', weekday:'日', isoDate:'2026-10-11', region:'名古屋 → 賦歸', tags:['整理中'], active:false}
+    {
+      id:'d3', no:3, date:'10/8', weekday:'四', isoDate:'2026-10-08', region:'高山 → 富山',
+      tags:['老街市集','換城市'], active:true,
+      meals:{ b:'宮川朝市 or 預訂飯店早餐', l:'高山老街', d:'富山餐廳（TBC）' },
+      items:[
+        {t:'13:00', title:'宮川朝市、合掌村', desc:'', type:'walk'},
+        {t:'13:00', title:'高山老街', desc:'', type:'walk'},
+        {t:'14:47', title:'搭乘新幹線前往富山', desc:'抵達富山後前往飯店 Check-in', type:'train'},
+        {t:'15:30', title:'富山景點晃晃', desc:'環水公園、池田屋安兵衛商店老舖', type:'walk'},
+        {t:'18:30', title:'吃晚餐', desc:'きときと市場的すし玉，車站附近', type:'bowl'},
+        {t:'19:30', title:'買小零食隔天吃', desc:'', type:'note'}
+      ],
+      tips:[
+        '飯店連住 2 天，不用先整理行李'
+      ],
+      prep:[
+        '明天要早起＋換乘多種交通工具去黑部立山，務必早點休息補充體力，帶點小零嘴在身上',
+        '海拔最高 2,000 公尺，氣溫平均 8–15 度，帽子／圍巾／外套等記得戴上'
+      ],
+      highlights:[
+        '高山紅葉（楓紅）：室堂與大觀峰等高海拔地區應該看得到',
+        '觀光洩洪：黑部水庫的觀光洩洪通常持續到 10 月中旬'
+      ]
+    },
+    {
+      id:'d4', no:4, date:'10/9', weekday:'五', isoDate:'2026-10-09', region:'富山 → 立山黑部（來回）',
+      tags:['立山黑部','纜車健行'], active:true,
+      meals:{ b:'飯店（Comfort Hotel Toyama）', l:'未特別安排（立山黑部沿途覓食）', d:'きときと市場 すし玉（車站附近）' },
+      items:[
+        {t:'~08:30', title:'前往立山車站', desc:'', type:'train'},
+        {t:'09:00', title:'搭乘纜車上黑部立山', desc:'實際時刻依當時預約到的纜車班次而定', type:'train'},
+        {t:'14:00', title:'折返回富山', desc:'', type:'train'},
+        {t:'17:00', title:'回到富山', desc:'', type:'train'},
+        {t:'17:30', title:'回飯店休息 or 環水公園、池田屋安兵衛商店老舖', desc:'', type:'note'},
+        {t:'18:30', title:'晚餐', desc:'きときと市場的すし玉，車站附近', type:'bowl'}
+      ],
+      tips:[],
+      prep:[]
+    },
+    {
+      id:'d5', no:5, date:'10/10', weekday:'六', isoDate:'2026-10-10', region:'富山 → 金澤 → 名古屋',
+      tags:['金澤一日遊','換城市'], active:true,
+      meals:{ b:'飯店（Comfort Hotel Toyama）', l:'金澤市場／東茶屋街', d:'名古屋榮商圈（自由用餐）' },
+      items:[
+        {t:'10:00', title:'搭乘 JR 前往金澤站', desc:'', type:'train'},
+        {t:'10:30', title:'前往市場、東茶屋街吃午餐、兼六園', desc:'', type:'walk'},
+        {t:'16:00', title:'搭乘 JR 返回名古屋', desc:'經富山轉車', type:'train'},
+        {t:'18:30', title:'抵達名古屋、前往飯店 Check-in', desc:'', type:'bed'},
+        {t:'19:30', title:'晚餐、榮商圈採買', desc:'', type:'bowl'}
+      ],
+      tips:[],
+      prep:[]
+    },
+    {
+      id:'d6', no:6, date:'10/11', weekday:'日', isoDate:'2026-10-11', region:'名古屋 → 賦歸',
+      tags:['賦歸日','市區觀光'], active:true,
+      meals:{ b:'名古屋喫茶店 Konparu（榮西店）', l:'大須商店街周邊（自由用餐）', d:'機場或自理（視班機時間彈性安排）' },
+      items:[
+        {t:'10:30', title:'飯店退房，寄放行李', desc:'', type:'bed'},
+        {t:'10:30', title:'早餐文化', desc:'名古屋 Konparu 喫茶店（榮西店）', type:'bowl'},
+        {t:'11:30', title:'熱田神宮', desc:'', type:'walk'},
+        {t:'13:00', title:'名古屋城', desc:'', type:'walk'},
+        {t:'14:00', title:'大須商店街', desc:'', type:'walk'},
+        {t:'16:30', title:'回飯店拿行李', desc:'', type:'suitcase'},
+        {t:'17:00', title:'名古屋車站、前往機場', desc:'', type:'train'},
+        {t:'18:00', title:'抵達機場', desc:'', type:'plane'},
+        {t:'21:20', title:'上飛機', desc:'', type:'plane'},
+        {t:'23:25', title:'抵達桃園機場', desc:'', type:'plane'}
+      ],
+      tips:[],
+      prep:[]
+    }
   ];
 
   var hotels = {
@@ -563,7 +631,7 @@
     {group:'全家', airline:'虎航 Tigerair', flightNo:'IT209', board:'21:20', boardLabel:'中部國際機場（名古屋）登機', arrive:'23:25', arriveLabel:'桃園機場入境'}
   ];
 
-  var ICONS = { bus:'i-bus', train:'i-train', plane:'i-plane', walk:'i-walk', bed:'i-bed', bowl:'i-bowl', note:'i-note' };
+  var ICONS = { bus:'i-bus', train:'i-train', plane:'i-plane', walk:'i-walk', bed:'i-bed', bowl:'i-bowl', note:'i-note', suitcase:'i-suitcase' };
 
   /* ================= STORAGE ================= */
   var LS_PREFIX = 'jpTrip2026:';
@@ -693,6 +761,7 @@
 
     if(d.tips && d.tips.length){ html += panelShell(d.id+'-tips', 'i-alert', '小提醒', 'tips-'+d.id, false); }
     if(d.prep && d.prep.length){ html += panelShell(d.id+'-prep', 'i-suitcase', '隔天準備 Checklist', 'prep-'+d.id, true); }
+    if(d.highlights && d.highlights.length){ html += panelShell(d.id+'-hl', 'i-pin', '明日看點', 'hl-'+d.id, false); }
 
     html += '<div class="day-textnote">'+
       '<label>'+iconUse('i-pencil')+'當日筆記（可隨手記錄，僅存在此裝置）</label>'+
@@ -710,6 +779,7 @@
     renderTimeline(d);
     if(d.tips && d.tips.length) renderList(d.tips, false, 'tips-'+d.id);
     if(d.prep && d.prep.length) renderList(d.prep, true, 'prep-'+d.id);
+    if(d.highlights && d.highlights.length) renderList(d.highlights, false, 'hl-'+d.id);
     bindPanelToggles();
     bindDayNote(d);
     applyEditingState();
