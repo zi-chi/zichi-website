@@ -307,19 +307,6 @@
   /* rich hotel card (D1/D2) */
   .hotel-card.rich{ flex-direction:column; align-items:stretch; padding:0; overflow:hidden; }
   .hc-row{ display:flex; gap:12px; align-items:center; padding:14px; }
-  .hc-photo{
-    flex:none; width:72px; height:72px; border-radius: var(--radius-md); position:relative; overflow:hidden;
-    display:flex; align-items:center; justify-content:center; color:#f4ecd8;
-  }
-  .hc-photo.tone-a{ background: linear-gradient(155deg,#2a4d74,#142943); }
-  .hc-photo.tone-b{ background: linear-gradient(155deg,#8a4536,#5c2a20); }
-  .hc-photo.tone-c{ background: linear-gradient(155deg,#4a6d52,#28402c); }
-  .hc-photo.tone-d{ background: linear-gradient(155deg,#7a5a2e,#4d3818); }
-  .hc-photo .icon{ font-size:26px; opacity:.85; }
-  .hc-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
-  .hc-photo .hc-photo-fallback{ display:none; position:absolute; inset:0; align-items:center; justify-content:center; }
-  .hc-photo.fallback img{ display:none; }
-  .hc-photo.fallback .hc-photo-fallback{ display:flex; }
   .hc-toggle{
     width:100%; display:flex; align-items:center; gap:6px; padding:9px 14px; background: rgba(31,58,95,.04);
     border:none; border-top:1px solid var(--border-soft); color: var(--ink); font-size:12px; font-weight:700; cursor:pointer;
@@ -560,20 +547,15 @@
 
   var hotels = {
     d1:{ city:'長野', name:'Hotel NewNagano Next', address:'828 Minamichitose, Nagano, 380-0822, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（10/7 早上在此享用）', rich:true, tone:'a',
-      photo:'https://cf.bstatic.com/xdata/images/hotel/max1024x768/526273219.jpg?k=4ff9be34219146036b247a4817a441d3e79a1add6fcf0be504c9e706ae4dab90&o=' },
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（10/7 早上在此享用）', rich:true },
     d2:{ city:'高山', name:'hotel around TAKAYAMA, Ascend Hotel Collection', address:'1 Chome-42-7 Hanaokamachi, Takayama, Gifu 506-0009, Japan',
-      checkin:'15:00', checkout:'11:00', breakfast:'不含（10/8 早餐請至宮川朝市／高山老街商店街解決）', rich:true, tone:'b',
-      photo:'https://pix8.agoda.net/hotelImages/43263391/0/4433fc61739855b1d5f4b79c87b008b3.jpeg?ce=3&s=1024x' },
+      checkin:'15:00', checkout:'11:00', breakfast:'不含（10/8 早餐請至宮川朝市／高山老街商店街解決）', rich:true },
     d3:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true, tone:'c',
-      photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw-a5dcsP1R4kzo6E9OF42VlEc0AGqjMq-8B-1W3lQ-Q&s=10' },
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true },
     d4:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true, tone:'c',
-      photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw-a5dcsP1R4kzo6E9OF42VlEc0AGqjMq-8B-1W3lQ-Q&s=10' },
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true },
     d5:{ city:'名古屋', name:'Comfort Hotel Nagoya Fushimi（名古屋伏見凱富酒店）', address:'2 Chome-19-14 Nishiki, Naka Ward, Nagoya, Aichi 460-0003, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:00）', rich:true, tone:'d',
-      photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDMqk3r34f336ZkGCk6uEdsZkJa0YfRHWo-iA1cmAs9g&s=10' }
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:00）', rich:true }
   };
 
   function mapLink(address){ return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(address); }
@@ -868,29 +850,32 @@
   }
 
   /* ================= FLIGHT & HOTEL ================= */
-  var ENTRY_REMINDER_HTML = iconUse('i-note')+' <b>入境提醒：</b>記得提前準備好 '+
-    '<span class="editable" contenteditable="false" data-key="flight-qr"></span>，護照效期與隨身文件請出發前再次確認。';
+  var FLIGHT_REMARK_DEFAULT = '入境提醒：記得提前準備好 Visit Japan Web 入境 QR code，護照效期與隨身文件請出發前再次確認。';
 
-  function renderFlightGroup(hostId, list, keyPrefix, tripLabel, showEntryReminder){
+  function renderFlightGroup(hostId, list, keyPrefix, tripLabel, showRemark){
     var host = document.getElementById(hostId);
     host.innerHTML = '';
     list.forEach(function(f, idx){
+      var boardKey = keyPrefix+'-'+idx+'-board', arriveKey = keyPrefix+'-'+idx+'-arrive';
+      var noKey = keyPrefix+'-'+idx+'-no', remarkKey = keyPrefix+'-'+idx+'-remark';
       var card = document.createElement('div');
       card.className = 'ticket';
       card.innerHTML =
         '<div class="ticket-head">'+iconUse('i-plane')+' '+f.group+' ・ '+tripLabel+'</div>'+
         '<div class="ticket-body">'+
-          '<div class="ticket-pt"><div class="tp-time">'+f.board+'</div><div class="tp-label">'+f.boardLabel+'</div></div>'+
+          '<div class="ticket-pt"><div class="tp-time editable" contenteditable="false" data-key="'+boardKey+'"></div><div class="tp-label">'+f.boardLabel+'</div></div>'+
           '<div class="ticket-mid">'+iconUse('i-plane')+'<div class="tm-line"></div><div class="tm-note">直飛</div>'+
-            '<div class="tm-flight"><span class="tm-airline">'+f.airline+'</span><span class="editable tm-no" contenteditable="false" data-key="'+keyPrefix+'-'+idx+'-no"></span></div>'+
+            '<div class="tm-flight"><span class="tm-airline">'+f.airline+'</span><span class="editable tm-no" contenteditable="false" data-key="'+noKey+'"></span></div>'+
           '</div>'+
-          '<div class="ticket-pt"><div class="tp-time">'+f.arrive+'</div><div class="tp-label">'+f.arriveLabel+'</div></div>'+
+          '<div class="ticket-pt"><div class="tp-time editable" contenteditable="false" data-key="'+arriveKey+'"></div><div class="tp-label">'+f.arriveLabel+'</div></div>'+
         '</div>'+
-        (showEntryReminder ? ('<div class="ticket-cut"></div><div class="ticket-foot">'+ENTRY_REMINDER_HTML+'</div>') : '');
+        (showRemark ? ('<div class="ticket-cut"></div><div class="ticket-foot">'+iconUse('i-note')+' <span class="editable" contenteditable="false" data-key="'+remarkKey+'"></span></div>') : '');
       host.appendChild(card);
-      bindEditableText(card.querySelector('[data-key="'+keyPrefix+'-'+idx+'-no"]'), keyPrefix+'-'+idx+'-no', f.flightNo);
-      if(showEntryReminder){
-        bindEditableText(card.querySelector('[data-key="flight-qr"]'), 'flight-qr', 'Visit Japan Web 入境 QR code');
+      bindEditableText(card.querySelector('[data-key="'+boardKey+'"]'), boardKey, f.board);
+      bindEditableText(card.querySelector('[data-key="'+arriveKey+'"]'), arriveKey, f.arrive);
+      bindEditableText(card.querySelector('[data-key="'+noKey+'"]'), noKey, f.flightNo);
+      if(showRemark){
+        bindEditableText(card.querySelector('[data-key="'+remarkKey+'"]'), remarkKey, FLIGHT_REMARK_DEFAULT);
       }
     });
   }
@@ -910,16 +895,13 @@
       var nameKey = 'hotel-'+d.id;
 
       var addrLink = '<a class="h-addr" href="'+mapLink(h.address)+'" target="_blank" rel="noopener">'+iconUse('i-pin')+'<span>'+h.address+'</span></a>';
-      var photoImg = h.photo ? '<img src="'+h.photo+'" alt="'+h.name+'" loading="lazy" onerror="this.closest(\'.hc-photo\').classList.add(\'fallback\')">' : '';
-      var photoHtml = '<div class="hc-photo tone-'+h.tone+(h.photo?'':' fallback')+'">'+photoImg+
-        '<span class="hc-photo-fallback">'+iconUse('i-bed')+'</span></div>';
 
       if(h.rich){
+        var checkinKey = nameKey+'-checkin', checkoutKey = nameKey+'-checkout', breakfastKey = nameKey+'-breakfast';
         card.className = 'hotel-card rich';
         card.innerHTML =
           '<div class="hc-row">'+
             '<div class="h-night"><div class="h-d">DAY '+d.no+'</div><div class="h-date">'+d.date+'</div></div>'+
-            photoHtml+
             '<div class="h-info">'+
               '<div class="h-name" data-key="'+nameKey+'"></div>'+
               addrLink+
@@ -927,11 +909,19 @@
           '</div>'+
           '<button class="hc-toggle" aria-expanded="false">'+iconUse('i-note')+' 入住資訊 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
           '<div class="hc-detail">'+
-            '<div class="hc-detail-row">'+iconUse('i-bed')+'<span><b>入住</b> '+h.checkin+'　<b>退房</b> '+h.checkout+'</span></div>'+
-            '<div class="hc-detail-row">'+iconUse('i-bowl')+'<span><b>早餐</b>　'+h.breakfast+'</span></div>'+
+            '<div class="hc-detail-row">'+iconUse('i-bed')+
+              '<span><b>入住</b> <span class="editable" contenteditable="false" data-key="'+checkinKey+'"></span>'+
+              '　<b>退房</b> <span class="editable" contenteditable="false" data-key="'+checkoutKey+'"></span></span>'+
+            '</div>'+
+            '<div class="hc-detail-row">'+iconUse('i-bowl')+
+              '<span><b>早餐</b>　<span class="editable" contenteditable="false" data-key="'+breakfastKey+'"></span></span>'+
+            '</div>'+
           '</div>';
         host.appendChild(card);
         bindEditableText(card.querySelector('[data-key="'+nameKey+'"]'), nameKey, h.name);
+        bindEditableText(card.querySelector('[data-key="'+checkinKey+'"]'), checkinKey, h.checkin);
+        bindEditableText(card.querySelector('[data-key="'+checkoutKey+'"]'), checkoutKey, h.checkout);
+        bindEditableText(card.querySelector('[data-key="'+breakfastKey+'"]'), breakfastKey, h.breakfast);
         var toggle = card.querySelector('.hc-toggle');
         var detail = card.querySelector('.hc-detail');
         toggle.addEventListener('click', function(){
