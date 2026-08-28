@@ -271,15 +271,20 @@
   .ticket-pt{ flex:1; text-align:center; }
   .ticket-pt .tp-time{ font-family:'Shippori Mincho',serif; font-size:20px; font-weight:700; color: var(--ink); font-variant-numeric: tabular-nums; }
   .ticket-pt .tp-label{ font-size:10.5px; color: var(--text-soft); margin-top:2px; }
-  .ticket-mid{ flex:none; display:flex; flex-direction:column; align-items:center; color: var(--vermillion); width:64px; }
+  .ticket-mid{ flex:none; display:flex; flex-direction:column; align-items:center; color: var(--vermillion); width:84px; }
   .ticket-mid .icon{ font-size:20px; }
   .ticket-mid .tm-line{ width:100%; height:1px; background: repeating-linear-gradient(to right, var(--border) 0 5px, transparent 5px 9px); margin:4px 0; }
   .ticket-mid .tm-note{ font-size:9.5px; color: var(--text-soft); text-align:center; }
+  .ticket-mid .tm-flight{ margin-top:5px; text-align:center; line-height:1.3; }
+  .ticket-mid .tm-airline{ display:block; font-size:9px; color: var(--text-soft); }
+  .ticket-mid .tm-no{ display:block; font-size:11.5px; font-weight:700; color: var(--ink); }
   .ticket-cut{ position:relative; height:0; border-top:2px dashed var(--border-soft); margin:0 14px; }
   .ticket-cut::before, .ticket-cut::after{ content:""; position:absolute; top:-9px; width:18px; height:18px; background: var(--bg); border-radius:50%; }
   .ticket-cut::before{ left:-25px; } .ticket-cut::after{ right:-25px; }
-  .ticket-foot{ padding: 10px 14px 14px; font-size:12px; color: var(--text-soft); }
-  .ticket-foot .editable{ color: var(--vermillion); font-weight:600; font-style:italic; }
+  .ticket-foot{ padding: 10px 14px 14px; font-size:11.5px; color: var(--text-soft); line-height:1.6; }
+  .ticket-foot b{ color: var(--vermillion); }
+  .ticket-foot .icon{ color: var(--vermillion); }
+  .ticket-foot .editable{ color: var(--ink); font-weight:600; }
 
   .hotel-card{
     margin:0 16px 12px; background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-lg);
@@ -290,11 +295,14 @@
   .hotel-card .h-night .h-date{ font-size:15px; font-weight:700; }
   .hotel-card .h-info{ flex:1; min-width:0; }
   .hotel-card .h-name{ font-weight:700; font-size:14px; color: var(--ink); outline:none; }
-  .hotel-card .h-name.tbc{ color: var(--vermillion); font-style:italic; }
   .hotel-card .h-city{ font-size:11.5px; color: var(--text-soft); margin-top:2px; }
   .hotel-card .h-icon{ color: var(--vermillion); flex:none; }
-  .hotel-card a.h-name{ text-decoration:none; display:inline-flex; align-items:baseline; gap:4px; }
-  .hotel-card a.h-name .icon{ font-size:11px; color: var(--vermillion); }
+  .hotel-card .h-addr{
+    display:inline-flex; align-items:flex-start; gap:4px; text-decoration:none; color: var(--vermillion);
+    font-size:11px; line-height:1.4; margin-top:3px;
+  }
+  .hotel-card .h-addr .icon{ font-size:11px; flex:none; margin-top:1.5px; }
+  .hotel-card .h-addr:active{ opacity:.7; }
 
   /* rich hotel card (D1/D2) */
   .hotel-card.rich{ flex-direction:column; align-items:stretch; padding:0; overflow:hidden; }
@@ -322,10 +330,6 @@
   .hc-detail-row:last-child{ margin-bottom:0; }
   .hc-detail-row .icon{ color: var(--vermillion); flex:none; margin-top:2px; }
   .hc-detail-row b{ color: var(--ink); }
-  .hc-map-btn{
-    display:inline-flex; align-items:center; gap:5px; margin-top:2px; font-size:11.5px; font-weight:700;
-    color: var(--vermillion); text-decoration:none; border:1.2px solid var(--vermillion); border-radius:999px; padding:4px 10px;
-  }
   .hc-photo-note{ font-size:10.5px; color: var(--text-soft); margin-top:8px; font-style:italic; }
 
   .info-note{
@@ -477,11 +481,6 @@
         <b>行李寄送提醒：</b>10/7 早上僅需攜帶一天份行李前往上高地，其餘大件行李將直接寄送至
         <span class="editable" contenteditable="false" data-key="flight-luggage-dest"></span>。
       </div>
-      <div class="info-note">
-        <svg class="icon"><use href="#i-note"/></svg>
-        <b>入境提醒：</b>記得提前準備好
-        <span class="editable" contenteditable="false" data-key="flight-qr"></span>，護照效期與隨身文件請出發前再次確認。
-      </div>
     </div>
     <div class="footer-mark">班機時刻／飯店名稱如有更動，可直接點編輯即時修改</div>
   </main>
@@ -565,9 +564,9 @@
 
   var hotels = {
     d1:{ city:'長野', name:'Hotel NewNagano Next', address:'828 Minamichitose, Nagano, 380-0822, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'不含，可加購（約 ¥1,300／人，西式自助＋漢堡套餐選項）', rich:true, tone:'a' },
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（10/7 早上在此享用）', rich:true, tone:'a' },
     d2:{ city:'高山', name:'hotel around TAKAYAMA, Ascend Hotel Collection', address:'1 Chome-42-7 Hanaokamachi, Takayama, Gifu 506-0009, Japan',
-      checkin:'15:00', checkout:'11:00', breakfast:'不含，可加購（約 ¥1,760–3,080／人，預設和式，需前一日 22:00 前預約西式）', rich:true, tone:'b' },
+      checkin:'15:00', checkout:'11:00', breakfast:'不含（10/8 早餐請至宮川朝市／高山老街商店街解決）', rich:true, tone:'b' },
     d3:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan', rich:false },
     d4:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan', rich:false },
     d5:{ city:'名古屋', name:'Comfort Hotel Nagoya Fushimi（名古屋伏見凱富酒店）', address:'2 Chome-19-14 Nishiki, Naka Ward, Nagoya, Aichi 460-0003, Japan', rich:false }
@@ -865,7 +864,10 @@
   }
 
   /* ================= FLIGHT & HOTEL ================= */
-  function renderFlightGroup(hostId, list, keyPrefix, tripLabel){
+  var ENTRY_REMINDER_HTML = iconUse('i-note')+' <b>入境提醒：</b>記得提前準備好 '+
+    '<span class="editable" contenteditable="false" data-key="flight-qr"></span>，護照效期與隨身文件請出發前再次確認。';
+
+  function renderFlightGroup(hostId, list, keyPrefix, tripLabel, showEntryReminder){
     var host = document.getElementById(hostId);
     host.innerHTML = '';
     list.forEach(function(f, idx){
@@ -875,18 +877,22 @@
         '<div class="ticket-head">'+iconUse('i-plane')+' '+f.group+' ・ '+tripLabel+'</div>'+
         '<div class="ticket-body">'+
           '<div class="ticket-pt"><div class="tp-time">'+f.board+'</div><div class="tp-label">'+f.boardLabel+'</div></div>'+
-          '<div class="ticket-mid">'+iconUse('i-plane')+'<div class="tm-line"></div><div class="tm-note">直飛</div></div>'+
+          '<div class="ticket-mid">'+iconUse('i-plane')+'<div class="tm-line"></div><div class="tm-note">直飛</div>'+
+            '<div class="tm-flight"><span class="tm-airline">'+f.airline+'</span><span class="editable tm-no" contenteditable="false" data-key="'+keyPrefix+'-'+idx+'-no"></span></div>'+
+          '</div>'+
           '<div class="ticket-pt"><div class="tp-time">'+f.arrive+'</div><div class="tp-label">'+f.arriveLabel+'</div></div>'+
         '</div>'+
-        '<div class="ticket-cut"></div>'+
-        '<div class="ticket-foot">'+f.airline+' <span class="editable" contenteditable="false" data-key="'+keyPrefix+'-'+idx+'-no"></span></div>';
+        (showEntryReminder ? ('<div class="ticket-cut"></div><div class="ticket-foot">'+ENTRY_REMINDER_HTML+'</div>') : '');
       host.appendChild(card);
       bindEditableText(card.querySelector('[data-key="'+keyPrefix+'-'+idx+'-no"]'), keyPrefix+'-'+idx+'-no', f.flightNo);
+      if(showEntryReminder){
+        bindEditableText(card.querySelector('[data-key="flight-qr"]'), 'flight-qr', 'Visit Japan Web 入境 QR code');
+      }
     });
   }
   function renderFlights(){
-    renderFlightGroup('flight-cards', flights, 'flight', '去程');
-    renderFlightGroup('flight-cards-return', flightsReturn, 'flight-r', '回程');
+    renderFlightGroup('flight-cards', flights, 'flight', '去程', true);
+    renderFlightGroup('flight-cards-return', flightsReturn, 'flight-r', '回程', false);
   }
 
   function renderHotels(){
@@ -899,6 +905,8 @@
       var card = document.createElement('div');
       var nameKey = 'hotel-'+d.id;
 
+      var addrLink = '<a class="h-addr" href="'+mapLink(h.address)+'" target="_blank" rel="noopener">'+iconUse('i-pin')+'<span>'+h.address+'</span></a>';
+
       if(h.rich){
         card.className = 'hotel-card rich';
         card.innerHTML =
@@ -906,18 +914,15 @@
             '<div class="h-night"><div class="h-d">DAY '+d.no+'</div><div class="h-date">'+d.date+'</div></div>'+
             '<div class="hc-photo tone-'+h.tone+'">'+iconUse('i-bed')+'<span class="hc-photo-tag">實際照片待補</span></div>'+
             '<div class="h-info">'+
-              '<a class="h-name" href="'+mapLink(h.address)+'" target="_blank" rel="noopener" data-key="'+nameKey+'"></a>'+
-              '<div class="h-city">'+h.city+'</div>'+
+              '<div class="h-name" data-key="'+nameKey+'"></div>'+
+              addrLink+
             '</div>'+
           '</div>'+
           '<button class="hc-toggle" aria-expanded="false">'+iconUse('i-note')+' 入住資訊 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
           '<div class="hc-detail">'+
             '<div class="hc-detail-row">'+iconUse('i-bed')+'<span><b>入住</b> '+h.checkin+'　<b>退房</b> '+h.checkout+'</span></div>'+
             '<div class="hc-detail-row">'+iconUse('i-bowl')+'<span><b>早餐</b>　'+h.breakfast+'</span></div>'+
-            '<div class="hc-detail-row">'+iconUse('i-pin')+'<span>'+h.address+'<br>'+
-              '<a class="hc-map-btn" href="'+mapLink(h.address)+'" target="_blank" rel="noopener">'+iconUse('i-pin')+' 開啟導航</a>'+
-            '</span></div>'+
-            '<div class="hc-photo-note">尚未取得飯店實際照片（此環境暫時無法連線訂房網站抓圖），可先點上方地址連結查看，之後補上實拍照片。</div>'+
+            '<div class="hc-photo-note">尚未取得飯店實際照片（此環境暫時無法連線訂房網站抓圖），可點上方地址查看位置，之後補上實拍照片。</div>'+
           '</div>';
         host.appendChild(card);
         bindEditableText(card.querySelector('[data-key="'+nameKey+'"]'), nameKey, h.name);
@@ -932,8 +937,8 @@
         card.innerHTML =
           '<div class="h-night"><div class="h-d">DAY '+d.no+'</div><div class="h-date">'+d.date+'</div></div>'+
           '<div class="h-info">'+
-            '<a class="h-name" href="'+mapLink(h.address)+'" target="_blank" rel="noopener" data-key="'+nameKey+'"></a>'+
-            '<div class="h-city">'+h.city+'</div>'+
+            '<div class="h-name" data-key="'+nameKey+'"></div>'+
+            addrLink+
           '</div>'+
           '<div class="h-icon">'+iconUse('i-bed')+'</div>';
         host.appendChild(card);
@@ -944,7 +949,6 @@
 
   function renderFlightInfoNotes(){
     bindEditableText(document.querySelector('[data-key="flight-luggage-dest"]'), 'flight-luggage-dest', '第三天（10/8）入住的富山 Comfort Hotel Toyama');
-    bindEditableText(document.querySelector('[data-key="flight-qr"]'), 'flight-qr', 'Visit Japan Web 入境 QR code');
   }
 
   /* ================= VIEW SWITCHING ================= */
@@ -967,9 +971,6 @@
       el.setAttribute('contenteditable', editing ? 'true' : 'false');
     });
   }
-  document.addEventListener('click', function(e){
-    if(editing && e.target.closest('a.h-name')){ e.preventDefault(); }
-  });
   document.getElementById('btn-edit').addEventListener('click', function(){
     editing = !editing;
     document.body.classList.toggle('editing', editing);
