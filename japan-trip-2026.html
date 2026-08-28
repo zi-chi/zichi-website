@@ -231,7 +231,28 @@
   .attr-list{ padding: 0 0 8px; }
   .attr-panel{ margin: 0 16px 12px; background: var(--paper); }
   .attr-panel .panel-head{ font-size:14.5px; }
-  .attr-desc{ margin:0; font-size:12.8px; color: var(--text); line-height:1.75; }
+  .attr-desc{ margin:0 0 10px; font-size:12.8px; color: var(--text); line-height:1.75; }
+  .attr-desc:last-child{ margin-bottom:0; }
+
+  .attr-photo{
+    width:100%; aspect-ratio:16/9; position:relative; overflow:hidden;
+    background: linear-gradient(155deg, var(--ink), var(--ink-deep));
+  }
+  .attr-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .attr-photo .attr-photo-fallback{
+    display:none; position:absolute; inset:0; align-items:center; justify-content:center;
+    color: rgba(244,236,216,.7); font-size:30px;
+  }
+  .attr-photo.fallback img{ display:none; }
+  .attr-photo.fallback .attr-photo-fallback{ display:flex; }
+
+  .shop-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .shop-list li{ padding-bottom:12px; border-bottom:1px dashed var(--border-soft); }
+  .shop-list li:last-child{ border-bottom:none; padding-bottom:0; }
+  .shop-name{ font-weight:700; font-size:13px; color: var(--ink); }
+  .shop-hours{ font-size:11px; color: var(--vermillion); margin-top:3px; display:flex; align-items:center; gap:4px; }
+  .shop-hours .icon{ font-size:11px; }
+  .shop-feature{ font-size:12.3px; color: var(--text); margin-top:4px; line-height:1.6; }
 
   .day-textnote{
     margin: 14px 16px 4px; background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
@@ -645,18 +666,40 @@
       region:'長野',
       overview:'長野市因擁有約 1,400 年歷史的善光寺而興盛，自古就是圍繞著參拜道路發展起來的「門前町」。這裡也是北陸新幹線的重要轉運站，車站直結的商場購物機能齊全，很適合作為前往上高地、立山黑部等中部山岳地區的中繼站。長野同時是知名的蘋果、蕎麥產地，秋天正是品嚐當季美食、選購伴手禮的好時機。',
       spots:[
-        { name:'善光寺', icon:'i-pin', desc:'善光寺創建於飛鳥時代，已有約 1,400 年歷史，供奉日本現存最古老佛像之一「一光三尊阿彌陀如來」。它是「無宗派」寺院，不論信仰宗派、人人都能參拜，因此自古就有「一生至少要參拜一次善光寺」的說法。本堂為國寶建築，是江戶中期具代表性的佛寺建築，長野市街正是圍繞著這條參道發展而成的「門前町」。本尊為絕對秘佛，每隔幾年會舉行一次「御開帳」，屆時本堂前會豎立回向柱，據說觸摸就能得到庇佑。從仁王門到本堂的參道兩旁店家林立，是體驗長野老街風情的最佳去處。' },
-        { name:'長野車站 MIDORI', icon:'i-pin', desc:'MIDORI 與 JR 長野車站直結，是新幹線轉乘時最方便的購物去處。商場共三層樓：一樓為 Midori Marché 生鮮食品超市、二樓是「信州伴手禮參道 ORAHO」、三樓則是餐廳美食街。二樓集結蕎麥麵、御燒餅、和菓子、清酒等信州各地名產，還有超過 300 年歷史的七味唐辛子老舖「八幡屋礒五郎」。蘋果相關甜點是這裡的人氣商品，蘋果巧克力餅乾、整顆蘋果年輪蛋糕都很受歡迎。營業到晚上 10 點，很適合搭車前最後衝刺，一次買齊當地伴手禮。' },
-        { name:'長野必吃美食、伴手禮', icon:'i-bowl', desc:'蕎麥麵是信州代表美食，長野的水質與氣候特別適合蕎麥種植，市區有不少現打手工蕎麥麵老店。長野蘋果產量居日本第二，果肉香甜多汁，秋季正是產季，蘋果派、蘋果奶油抹醬都是熱門甜點伴手禮。七味唐辛子老舖「八幡屋礒五郎」被譽為日本三大七味名店之一，可以客製自己喜歡的辣度與配方。御燒餅（おやき）是信州鄉土麵食，內餡包裹蔬菜或紅豆，是在地人的日常小吃。喜歡鹹香口味的話，長野味噌同樣是值得列入採購清單的在地特產。' }
+        { name:'善光寺', icon:'i-pin', photo:'',
+          desc:'善光寺創建於飛鳥時代，已有約 1,400 年歷史，供奉日本現存最古老佛像之一「一光三尊阿彌陀如來」。它是「無宗派」寺院，不論信仰宗派、人人都能參拜，因此自古就有「一生至少要參拜一次善光寺」的說法。本堂為國寶建築，是江戶中期具代表性的佛寺建築，長野市街正是圍繞著這條參道發展而成的「門前町」。本尊為絕對秘佛，每隔幾年會舉行一次「御開帳」，屆時本堂前會豎立回向柱，據說觸摸就能得到庇佑。從仁王門到本堂的參道兩旁店家林立，是體驗長野老街風情的最佳去處。' },
+        { name:'長野車站 MIDORI', icon:'i-pin', photo:'',
+          intro:'MIDORI 與 JR 長野車站直結，是新幹線轉乘前最方便的購物去處，共三層樓，逛街、採買伴手禮、用餐都能一次搞定。',
+          shops:[
+            { name:'Midori Marché（1F）', hours:'09:00–20:00', feature:'生鮮食品超市，蔬果、熟食、日常採買都齊全' },
+            { name:'信州伴手禮參道 ORAHO（2F）', hours:'09:00–20:00', feature:'集結信州各地和菓子、蕎麥麵、地酒，也有「八幡屋礒五郎」七味專櫃' },
+            { name:'おごっそ Dining（3F）', hours:'11:00–22:00', feature:'多間餐廳進駐的美食街，適合安排正餐' }
+          ] },
+        { name:'長野必吃美食、伴手禮', icon:'i-bowl', photo:'',
+          shops:[
+            { name:'手打蕎麥 吉祥庵', hours:'週一公休（詳細營業時間建議電洽 026-231-5177）', feature:'十割蕎麥麵老店，善光寺參道周邊人氣名店' },
+            { name:'信州りんご菓子工房 BENI-BENI', hours:'09:00–18:00，全年無休', feature:'長野產蘋果 100% 手工現烤蘋果派，位於善光寺仲見世通' },
+            { name:'根元 八幡屋礒五郎 本店', hours:'09:00–18:30，全年無休', feature:'280 餘年歷史，日本三大七味唐辛子名店之一，可現場客製辣度配方' },
+            { name:'御燒餅（おやき）', hours:'善光寺參道周邊多家店舖均有販售', feature:'信州鄉土麵食，內餡包蔬菜或紅豆，在地人的日常小吃' }
+          ] }
       ]
     },
     d2:{
       region:'上高地',
       overview:'上高地坐落於北阿爾卑斯山脈中、海拔約 1,500 公尺的高山溪谷，屬中部山岳國立公園範圍，因保留原始自然風貌而有「神的故鄉」之稱。這裡禁止一般車輛進入，只能搭乘接駁巴士或計程車抵達，園區內以健行步道串連大正池、河童橋、明神池等景點。清澈見底的梓川與巍峨的穗高連峰是上高地最具代表性的風景，加上 10 月正值初秋楓紅，是全年最美的季節之一。',
       spots:[
-        { name:'大正池', icon:'i-pin', desc:'大正池是 1915 年燒岳火山噴發、泥流阻斷梓川河道所形成的堰塞湖，因形成於大正時代而得名。池中枯立的樹木是當年被淹沒的森林遺跡，隨著時間逐漸腐朽，形成獨特而夢幻的景觀。晴朗無風時，池面會如鏡子般倒映出穗高連峰與燒岳，是攝影愛好者最愛取景的地點。大正池也是上高地健行步道的起點之一，沿著梓川步行即可一路走到河童橋。這裡被列為國家特別名勝與特別天然紀念物，是上高地最具代表性的景觀之一。' },
-        { name:'河童橋', icon:'i-pin', desc:'河童橋是上高地的地標，一座橫跨梓川的木造吊橋，現在看到的是 1997 年重建的第 5 代橋樑。橋名由來眾說紛紜，一說是這裡曾是傳說中河童棲息的深淵，因而得名。從橋上可以正面眺望穗高連峰與岳澤溪谷，是上高地最經典的拍照角度。文豪芥川龍之介曾以此地為靈感創作小說《河童》，讓河童橋更添文學色彩。橋畔聚集飯店、餐廳與紀念品店，是上高地最熱鬧的區域，也最適合安排用餐、休息。' },
-        { name:'上高地必吃美食、伴手禮', icon:'i-bowl', desc:'河童橋周邊食堂多主打信州在地食材，溪魚定食、蕎麥麵、山賊燒等鄉土料理都很受歡迎。五千尺食堂可以邊眺望河童橋與穗高連峰、邊享用日式定食，景觀與美食兼具。造型可愛的和菓子「河童燒」是必買伴手禮，外型做成河童模樣，有紅豆、卡士達等多種口味。上高地布丁使用嚴選雞蛋與鮮奶製作，口感濃郁滑順，也是紀念品店的人氣商品。天氣轉涼時，來一碗熱呼呼的蕎麥麵或烏龍麵最能撫慰健行後的疲憊雙腳。' }
+        { name:'大正池', icon:'i-pin', photo:'',
+          desc:'大正池是 1915 年燒岳火山噴發、泥流阻斷梓川河道所形成的堰塞湖，因形成於大正時代而得名。池中枯立的樹木是當年被淹沒的森林遺跡，隨著時間逐漸腐朽，形成獨特而夢幻的景觀。晴朗無風時，池面會如鏡子般倒映出穗高連峰與燒岳，是攝影愛好者最愛取景的地點。大正池也是上高地健行步道的起點之一，沿著梓川步行即可一路走到河童橋。這裡被列為國家特別名勝與特別天然紀念物，是上高地最具代表性的景觀之一。' },
+        { name:'河童橋', icon:'i-pin', photo:'',
+          desc:'河童橋是上高地的地標，一座橫跨梓川的木造吊橋，現在看到的是 1997 年重建的第 5 代橋樑。橋名由來眾說紛紜，一說是這裡曾是傳說中河童棲息的深淵，因而得名。從橋上可以正面眺望穗高連峰與岳澤溪谷，是上高地最經典的拍照角度。文豪芥川龍之介曾以此地為靈感創作小說《河童》，讓河童橋更添文學色彩。橋畔聚集飯店、餐廳與紀念品店，是上高地最熱鬧的區域，也最適合安排用餐、休息。' },
+        { name:'上高地必吃美食、伴手禮', icon:'i-bowl', photo:'',
+          shops:[
+            { name:'上高地食堂', hours:'06:00–14:00（依季節調整）', feature:'緊鄰巴士總站，招牌溪魚定食、山賊燒、蕎麥麵等信州鄉土料理' },
+            { name:'五千尺キッチン', hours:'07:00–18:00（14:00–16:00 暫停供餐）', feature:'二樓景觀座位正對河童橋與穗高連峰，日式定食選擇多' },
+            { name:'小梨平食堂', hours:'約 07:30–18:00，分早中晚時段供餐', feature:'小梨平露營區旁，供餐時段最長，湯麵、咖哩、丼飯都有' },
+            { name:'河童燒', hours:'營業時間依橋畔各紀念品店而異', feature:'河童造型和菓子，紅豆／卡士達／奶油紅豆等口味，一個 ¥300' },
+            { name:'上高地布丁', hours:'營業時間依季節調整', feature:'五千尺飯店「上高地みやげ店」販售，嚴選雞蛋鮮奶製作，口感濃郁' }
+          ] }
       ]
     }
   };
@@ -1133,16 +1176,28 @@
 
     var html = '';
     html += '<div class="day-head">'+
-      '<div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）</div>'+
-      '<div class="dh-route">'+a.region+'</div>'+
+      '<div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）・'+a.region+'</div>'+
     '</div>';
     html += '<div class="attr-overview">'+a.overview+'</div>';
     html += '<div class="attr-list">';
     a.spots.forEach(function(spot, idx){
+      var photoImg = spot.photo ? '<img src="'+spot.photo+'" alt="'+spot.name+'" loading="lazy" onerror="this.closest(\'.attr-photo\').classList.add(\'fallback\')">' : '';
+      var bodyHtml;
+      if(spot.shops){
+        bodyHtml = (spot.intro ? '<p class="attr-desc">'+spot.intro+'</p>' : '') +
+          '<ul class="shop-list">' + spot.shops.map(function(s){
+            return '<li><div class="shop-name">'+s.name+'</div>'+
+              '<div class="shop-hours">'+iconUse('i-calendar')+' '+s.hours+'</div>'+
+              '<div class="shop-feature">'+s.feature+'</div></li>';
+          }).join('') + '</ul>';
+      } else {
+        bodyHtml = '<p class="attr-desc">'+spot.desc+'</p>';
+      }
       html +=
         '<div class="panel attr-panel" id="panel-'+id+'-spot'+idx+'">'+
+          '<div class="attr-photo'+(spot.photo?'':' fallback')+'">'+photoImg+'<span class="attr-photo-fallback">'+iconUse(spot.icon||'i-pin')+'</span></div>'+
           '<div class="panel-head"><span class="p-icon">'+iconUse(spot.icon||'i-pin')+'</span>'+spot.name+'<span class="p-chev">'+iconUse('i-chevron')+'</span></div>'+
-          '<div class="panel-body"><p class="attr-desc">'+spot.desc+'</p></div>'+
+          '<div class="panel-body">'+bodyHtml+'</div>'+
         '</div>';
     });
     html += '</div>';
