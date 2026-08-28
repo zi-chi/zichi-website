@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>名古屋・高山・立山黑部・上高地 家族旅行手帳</title>
+<meta name="theme-color" content="#1f3a5f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f2e8d3;
+    --paper: #faf4e4;
+    --paper-2: #f6efdc;
+    --ink: #1f3a5f;
+    --ink-deep: #142943;
+    --ink-soft: rgba(31,58,95,.7);
+    --vermillion: #bd4034;
+    --gold: #bf9a2e;
+    --text: #2b2620;
+    --text-soft: #6c6353;
+    --border: rgba(31,58,95,.2);
+    --border-soft: rgba(31,58,95,.12);
+    --shadow: 0 6px 18px rgba(31,44,61,.14);
+    --shadow-sm: 0 2px 8px rgba(31,44,61,.1);
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(191,64,52,.05), transparent 40%),
+      radial-gradient(circle at 90% 15%, rgba(31,58,95,.06), transparent 45%);
+    color: var(--text);
+    font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding-bottom: calc(72px + var(--safe-b));
+  }
+  h1,h2,h3,.font-mincho{ font-family:'Shippori Mincho', 'Noto Sans TC', serif; }
+  button{ font-family: inherit; }
+  .icon{ width:1em; height:1em; display:inline-block; vertical-align:-0.15em; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+
+  #app{ max-width: 560px; margin:0 auto; position:relative; }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position: sticky; top:0; z-index: 30;
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-deep) 100%);
+    color:#f4ecd8;
+    padding: 14px 16px;
+    display:flex; align-items:center; justify-content:space-between;
+    box-shadow: var(--shadow);
+    max-width:560px; margin:0 auto;
+  }
+  .topbar .tb-title{ display:flex; flex-direction:column; gap:2px; }
+  .topbar .tb-title .tb-main{ font-size:16px; font-weight:700; letter-spacing:.03em; font-family:'Shippori Mincho',serif; }
+  .topbar .tb-title .tb-sub{ font-size:11px; color:#d8c99a; letter-spacing:.04em; }
+
+  /* ---------- Wave divider ---------- */
+  .wave-divider{
+    height:14px; width:100%;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cg fill='none' stroke='%231f3a5f' stroke-width='1.6' opacity='0.35'%3E%3Cpath d='M-10 13a9 9 0 0 1 18 0'/%3E%3Cpath d='M10 13a9 9 0 0 1 18 0'/%3E%3Cpath d='M28 13a9 9 0 0 1 18 0'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat-x; background-size: 40px 14px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-deep) 78%);
+    color:#f4ecd8; padding: 18px 20px 0; position:relative; overflow:hidden;
+  }
+  .hero-illust{ width:100%; height:auto; display:block; margin-top:6px; }
+  .hero-text{ position:relative; z-index:2; }
+  .hero-text .eyebrow{ font-size:11px; letter-spacing:.18em; color: var(--gold); }
+  .hero-text h1{ margin:6px 0 4px; font-size:24px; line-height:1.35; font-weight:700; }
+  .hero-text .route{ font-size:12.5px; color:#d8c99a; letter-spacing:.03em; }
+  .hero-badge{
+    margin-top:12px; display:inline-flex; align-items:center; gap:6px;
+    background: rgba(244,236,216,.1); border:1px solid rgba(244,236,216,.3);
+    padding:6px 12px; border-radius: 999px; font-size:12.5px; color:#f4ecd8;
+  }
+  .hero-badge .dot{ width:6px; height:6px; border-radius:50%; background: var(--vermillion); }
+
+  /* ---------- Sections & cards ---------- */
+  .section{ padding: 18px 16px 4px; }
+  .section-title{ display:flex; align-items:center; gap:8px; font-size:15px; font-weight:700; color:var(--ink); margin: 4px 0 12px; }
+  .section-title .icon{ font-size:18px; color:var(--vermillion); }
+
+  .day-card{
+    display:flex; align-items:center; gap:12px;
+    background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-lg);
+    padding: 14px; margin-bottom:12px; box-shadow: var(--shadow-sm); cursor:pointer;
+    position:relative; overflow:hidden;
+  }
+  .day-card:active{ transform: scale(.99); }
+  .day-card::before{
+    content:""; position:absolute; inset:0; opacity:.06; pointer-events:none;
+    background-image: radial-gradient(circle at 100% 0%, var(--ink) 0, transparent 60%);
+  }
+  .day-card .d-num{
+    width:52px; height:52px; border-radius:14px; flex:none;
+    background: linear-gradient(155deg, var(--ink), var(--ink-deep));
+    color:#f4ecd8; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    font-family:'Shippori Mincho',serif;
+  }
+  .day-card .d-num .d-label{ font-size:9.5px; letter-spacing:.08em; color:var(--gold); }
+  .day-card .d-num .d-no{ font-size:18px; font-weight:700; line-height:1.1; }
+  .day-card .d-info{ flex:1; min-width:0; }
+  .day-card .d-date{ font-size:13px; font-weight:700; color:var(--ink); }
+  .day-card .d-region{ font-size:12px; color: var(--text-soft); margin-top:2px; }
+  .day-card .d-tags{ display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+  .tag{
+    font-size:10.5px; padding:2px 8px; border-radius:999px; background: rgba(31,58,95,.08);
+    color: var(--ink); border:1px solid var(--border-soft);
+  }
+  .day-card .d-arrow{ color: var(--vermillion); font-size:18px; flex:none; transform:rotate(-90deg); }
+  .day-card.today{ border-color: var(--vermillion); box-shadow: 0 0 0 2px rgba(189,64,52,.18), var(--shadow-sm); }
+  .today-flag{
+    position:absolute; top:10px; right:12px; background: var(--vermillion); color:#fff;
+    font-size:10px; padding:2px 8px; border-radius:999px; letter-spacing:.06em; font-weight:700;
+  }
+
+  .nav-card{
+    display:flex; align-items:center; gap:12px; background: var(--paper);
+    border:1px solid var(--border-soft); border-radius: var(--radius-lg); padding:14px 16px;
+    margin-bottom:12px; box-shadow: var(--shadow-sm); cursor:pointer;
+  }
+  .nav-card:active{ transform: scale(.99); }
+  .nav-card .n-icon{
+    width:42px; height:42px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    background: rgba(191,64,52,.1); color: var(--vermillion); font-size:20px;
+  }
+  .nav-card .n-title{ font-weight:700; font-size:14.5px; color:var(--ink); }
+  .nav-card .n-sub{ font-size:12px; color:var(--text-soft); margin-top:2px; }
+  .nav-card .n-arrow{ margin-left:auto; color:var(--vermillion); }
+
+  .soon-badge{ font-size:10px; background:rgba(31,58,95,.1); color:var(--ink-soft); padding:2px 7px; border-radius:999px; margin-left:8px; }
+
+  /* ---------- Bottom tab bar ---------- */
+  .tabbar{
+    position: fixed; left:0; right:0; bottom:0; z-index:40;
+    max-width:560px; margin:0 auto;
+    background: linear-gradient(0deg, var(--ink-deep), var(--ink));
+    display:flex; padding: 6px 6px calc(6px + var(--safe-b));
+    box-shadow: 0 -4px 16px rgba(0,0,0,.18);
+  }
+  .tabbtn{
+    flex:1; background:none; border:none; color:#c9bd9e; display:flex; flex-direction:column; align-items:center;
+    gap:3px; padding:7px 2px; font-size:10.5px; cursor:pointer; border-radius:10px;
+  }
+  .tabbtn .icon{ font-size:19px; }
+  .tabbtn.active{ color:#f4ecd8; background: rgba(244,236,216,.08); }
+  .tabbtn.active .icon{ color: var(--vermillion); }
+  .tabbtn:disabled{ opacity:.35; }
+
+  /* toast */
+  .toast{
+    position:fixed; bottom: calc(78px + var(--safe-b)); left:50%; transform:translateX(-50%) translateY(10px);
+    background: var(--ink-deep); color:#f4ecd8; padding:9px 16px; border-radius:999px; font-size:12.5px;
+    box-shadow: var(--shadow); opacity:0; pointer-events:none; transition: all .25s; z-index:60; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  .footer-mark{ text-align:center; padding: 18px 16px 6px; color: var(--text-soft); font-size:11px; }
+  .footer-mark .stamp{
+    font-family:'Shippori Mincho',serif; font-size:10.5px; color: var(--vermillion);
+    border:1.4px solid var(--vermillion); border-radius:6px; padding:1px 6px; letter-spacing:.08em; opacity:.85;
+    transform: rotate(-3deg); display:inline-block; margin-top:6px;
+  }
+</style>
+</head>
+<body>
+
+<svg class="hidden" width="0" height="0" style="position:absolute">
+<defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9.5v-6h5v6H17.5a1 1 0 0 0 1-1v-9"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.2a1.7 1.7 0 0 0 0 3.2V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.6a1.7 1.7 0 0 0 0-3.2Z"/><path d="M9 7v10" stroke-dasharray="2.5 2.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5Z"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="M10.5 13.5 3 15l1-2 6-2.2M13.5 10.5 20 4l0 3-6.5 6.5m0 0L15 20l-2-1-2.2-5.2m0 0L7 10"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M15 3v5h5M8 12h8M8 16h5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+</defs>
+</svg>
+
+<div id="app">
+
+  <header class="topbar">
+    <div class="tb-title">
+      <span class="tb-main">家族旅行手帳</span>
+      <span class="tb-sub">2026.10.6（二）— 10.11（日）</span>
+    </div>
+  </header>
+
+  <main class="view" id="view-home">
+    <div class="hero">
+      <div class="hero-text">
+        <div class="eyebrow">FAMILY TRIP・秋の中部日本</div>
+        <h1>名古屋・高山<br>立山黑部・上高地</h1>
+        <div class="route">2026.10.6（二）— 10.11（日）・4 人家族旅行</div>
+        <div class="hero-badge"><span class="dot"></span><span id="countdown-text">距離出發還有計算中…</span></div>
+      </div>
+      <svg class="hero-illust" viewBox="0 0 400 118" preserveAspectRatio="none">
+        <circle cx="322" cy="34" r="22" fill="#bd4034" opacity="0.85"/>
+        <path d="M0 100 L60 45 L100 78 L150 30 L210 90 L260 50 L330 95 L400 60 L400 118 L0 118 Z" fill="#0f2136" opacity="0.55"/>
+        <path d="M0 108 L80 68 L140 98 L190 60 L250 105 L320 70 L400 100 L400 118 L0 118 Z" fill="#16283f" opacity="0.8"/>
+        <path d="M40 118c0-10 4-16 12-16s12 6 12 16" fill="none" stroke="#f4ecd8" stroke-width="1.3" opacity="0.5"/>
+        <path d="M300 100 v18 M292 106h16 M296 100 v-8 M304 100v-8 M288 92h24" stroke="#f4ecd8" stroke-width="1.3" opacity="0.55" fill="none"/>
+      </svg>
+      <div class="wave-divider" style="margin-top:10px;filter:invert(1) brightness(1.6);opacity:.5;"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><svg class="icon"><use href="#i-book"/></svg>每日行程</div>
+      <div id="day-cards"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><svg class="icon"><use href="#i-ticket"/></svg>旅遊資訊</div>
+      <div class="nav-card" id="nav-flight">
+        <div class="n-icon"><svg class="icon"><use href="#i-plane"/></svg></div>
+        <div>
+          <div class="n-title">航班與住宿資訊 <span class="soon-badge">製作中</span></div>
+          <div class="n-sub">去程航班・逐日飯店・行李寄送提醒</div>
+        </div>
+      </div>
+      <div class="nav-card">
+        <div class="n-icon"><svg class="icon"><use href="#i-pin"/></svg></div>
+        <div>
+          <div class="n-title">景點介紹 <span class="soon-badge">製作中</span></div>
+          <div class="n-sub">名古屋・高山・立山黑部・上高地景點小百科</div>
+        </div>
+      </div>
+      <div class="nav-card">
+        <div class="n-icon"><svg class="icon"><use href="#i-note"/></svg></div>
+        <div>
+          <div class="n-title">旅遊日文對照 <span class="soon-badge">製作中</span></div>
+          <div class="n-sub">景點・城市名・常用會話小抄</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-mark">
+      <div class="stamp">家族旅行 ・ 平安順利</div>
+    </div>
+  </main>
+
+  <nav class="tabbar">
+    <button class="tabbtn active" data-view="home"><svg class="icon"><use href="#i-home"/></svg>首頁</button>
+    <button class="tabbtn" disabled><svg class="icon"><use href="#i-calendar"/></svg>每日行程</button>
+    <button class="tabbtn" disabled><svg class="icon"><use href="#i-ticket"/></svg>航班住宿</button>
+    <button class="tabbtn" disabled><svg class="icon"><use href="#i-pin"/></svg>景點</button>
+    <button class="tabbtn" disabled><svg class="icon"><use href="#i-note"/></svg>日文</button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var TRIP_YEAR = 2026;
+  var days = [
+    {id:'d1', no:1, date:'10/6', weekday:'二', isoDate:'2026-10-06', region:'桃園 → 成田 → 上野 → 長野', tags:['出發日','移動日']},
+    {id:'d2', no:2, date:'10/7', weekday:'三', isoDate:'2026-10-07', region:'長野 → 上高地 → 高山', tags:['健行日','換宿']},
+    {id:'d3', no:3, date:'10/8', weekday:'四', isoDate:'2026-10-08', region:'高山', tags:['整理中']},
+    {id:'d4', no:4, date:'10/9', weekday:'五', isoDate:'2026-10-09', region:'立山黑部', tags:['整理中']},
+    {id:'d5', no:5, date:'10/10', weekday:'六', isoDate:'2026-10-10', region:'待安排', tags:['整理中']},
+    {id:'d6', no:6, date:'10/11', weekday:'日', isoDate:'2026-10-11', region:'賦歸', tags:['整理中']}
+  ];
+
+  function showToast(msg){
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(el._t);
+    el._t = setTimeout(function(){ el.classList.remove('show'); }, 1800);
+  }
+
+  function renderHome(){
+    var wrap = document.getElementById('day-cards');
+    wrap.innerHTML = '';
+    var todayIso = new Date().toISOString().slice(0,10);
+    days.forEach(function(d){
+      var card = document.createElement('div');
+      card.className = 'day-card';
+      var isToday = d.isoDate === todayIso;
+      if(isToday) card.classList.add('today');
+      card.innerHTML =
+        (isToday ? '<span class="today-flag">今日</span>' : '') +
+        '<div class="d-num"><span class="d-label">DAY</span><span class="d-no">'+d.no+'</span></div>'+
+        '<div class="d-info">'+
+          '<div class="d-date">'+d.date+'（'+d.weekday+'）</div>'+
+          '<div class="d-region">'+d.region+'</div>'+
+          '<div class="d-tags">'+ d.tags.map(function(tg){return '<span class="tag">'+tg+'</span>';}).join('') +'</div>'+
+        '</div>'+
+        '<svg class="icon d-arrow"><use href="#i-chevron"/></svg>';
+      card.addEventListener('click', function(){ showToast('每日行程頁面製作中，下一步就會完成！'); });
+      wrap.appendChild(card);
+    });
+    updateCountdown();
+  }
+
+  function updateCountdown(){
+    var el = document.getElementById('countdown-text');
+    var now = new Date();
+    var start = new Date(TRIP_YEAR,9,6,0,0,0);
+    var end = new Date(TRIP_YEAR,9,11,23,59,59);
+    var oneDay = 86400000;
+    if(now < start){
+      var diff = Math.ceil((start - now)/oneDay);
+      el.textContent = '距離出發還有 '+diff+' 天';
+    } else if(now >= start && now <= end){
+      var dayIdx = Math.floor((now - start)/oneDay) + 1;
+      el.textContent = '旅程進行中・Day '+Math.min(dayIdx,6);
+    } else {
+      el.textContent = '旅程已圓滿結束，辛苦了！';
+    }
+  }
+
+  document.querySelectorAll('.nav-card').forEach(function(el){
+    el.addEventListener('click', function(){ showToast('這個頁面還在製作中，敬請期待！'); });
+  });
+
+  renderHome();
+
+})();
+</script>
+</body>
+</html>
