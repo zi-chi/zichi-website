@@ -214,6 +214,8 @@
   .note-list li .n-text{ flex:1; outline:none; }
   .note-list li .n-del{ display:none; flex:none; color:var(--vermillion); background:none; border:none; font-size:15px; cursor:pointer; padding:0; }
   .editing .note-list li .n-del{ display:inline-block; }
+  .note-list li .n-link{ flex:none; color: var(--vermillion); font-size:12px; margin-top:2px; }
+  .note-list li .n-link .icon{ transform: rotate(-90deg); display:block; }
   .add-row{ display:none; margin-top:10px; }
   .editing .add-row{ display:block; }
   .add-btn{
@@ -662,7 +664,9 @@
         {t:'17:30', title:'回飯店休息 or 環水公園、池田屋安兵衛商店老舖', desc:'', type:'note'},
         {t:'18:30', title:'晚餐', desc:'きときと市場的すし玉，車站附近', type:'bowl'}
       ],
-      tips:[],
+      tips:[
+        {text:'黑部立山沿線餐廳美食指南', link:'https://tw.alpen-route.com/en/how-to-enjoy/food/'}
+      ],
       prep:[]
     },
     {
@@ -733,10 +737,10 @@
           ] },
         { name:'長野必吃美食、伴手禮', icon:'i-bowl', photo:'https://www.snowmonkeyresorts.com/wp-content/uploads/2020/03/kakiage-soba.jpg',
           shops:[
-            { name:'手打蕎麥 吉祥庵', hours:'週一公休（詳細營業時間建議電洽 026-231-5177）', feature:'十割蕎麥麵老店，善光寺參道周邊人氣名店' },
-            { name:'信州りんご菓子工房 BENI-BENI', hours:'09:00–18:00，全年無休', feature:'長野產蘋果 100% 手工現烤蘋果派，位於善光寺仲見世通' },
-            { name:'根元 八幡屋礒五郎 本店', hours:'09:00–18:30，全年無休', feature:'280 餘年歷史，日本三大七味唐辛子名店之一，可現場客製辣度配方' },
-            { name:'御燒餅（おやき）', hours:'善光寺參道周邊多家店舖均有販售', feature:'信州鄉土麵食，內餡包蔬菜或紅豆，在地人的日常小吃' }
+            { name:'手打蕎麥 吉祥庵', hours:'週一公休（詳細營業時間建議電洽 026-231-5177）', feature:'十割蕎麥麵老店，善光寺參道周邊人氣名店', photo:'https://www.web-komachi.com/webko/wp-content/uploads/2021/06/4fcabd7dd4672bc50026f4d846d19b06.jpg' },
+            { name:'信州りんご菓子工房 BENI-BENI', hours:'09:00–18:00，全年無休', feature:'長野產蘋果 100% 手工現烤蘋果派，位於善光寺仲見世通', photo:'https://kumu2-web-service-resource.s3.amazonaws.com/home/post/pic/000001120623/1623490461_oqsv8OTX.jpg' },
+            { name:'根元 八幡屋礒五郎 本店', hours:'09:00–18:30，全年無休', feature:'280 餘年歷史，日本三大七味唐辛子名店之一，可現場客製辣度配方', photo:'https://image.raku-uru.jp/01/22113/230/waku_shichimi_can_1655434452757.png' },
+            { name:'御燒餅（おやき）', hours:'善光寺參道周邊多家店舖均有販售', feature:'信州鄉土麵食，內餡包蔬菜或紅豆，在地人的日常小吃', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjfatr-DoyUqq6cqAiT5EREeT7K9U1NSaWnXHLzFoz1AnPz-DoisyJHJ4&s=10' }
           ] }
       ]
     },
@@ -750,11 +754,12 @@
           desc:'河童橋是上高地的地標，一座橫跨梓川的木造吊橋，現在看到的是 1997 年重建的第 5 代橋樑。橋名由來眾說紛紜，一說是這裡曾是傳說中河童棲息的深淵，因而得名。從橋上可以正面眺望穗高連峰與岳澤溪谷，是上高地最經典的拍照角度。文豪芥川龍之介曾以此地為靈感創作小說《河童》，讓河童橋更添文學色彩。橋畔聚集飯店、餐廳與紀念品店，是上高地最熱鬧的區域，也最適合安排用餐、休息。' },
         { name:'上高地必吃美食、伴手禮', icon:'i-bowl', photo:'https://imagedelivery.net/QondspN4HIUvB_R16-ddAQ/60175cc3c19c453330087b0a/b8d6030317adde5ef36a.jpg/fit=cover,w=920,h=920',
           shops:[
-            { name:'上高地食堂', hours:'06:00–14:00（依季節調整）', feature:'緊鄰巴士總站，招牌溪魚定食、山賊燒、蕎麥麵等信州鄉土料理' },
-            { name:'五千尺キッチン', hours:'07:00–18:00（14:00–16:00 暫停供餐）', feature:'二樓景觀座位正對河童橋與穗高連峰，日式定食選擇多' },
+            { name:'上高地食堂', hours:'06:00–14:00（依季節調整）', feature:'緊鄰巴士總站，招牌溪魚定食、山賊燒、蕎麥麵等信州鄉土料理', photo:'https://www.m-kamikouchi.jp/tw/shokudo/img/bento_a.jpg' },
+            { name:'五千尺キッチン（山賊燒）', hours:'07:00–18:00（14:00–16:00 暫停供餐）', feature:'二樓景觀座位正對河童橋與穗高連峰，招牌山賊燒份量十足', photo:'https://gosenjakukitchen.jp/wp/wp-content/uploads/2025/04/4cfd61acd6d9b31f3101f875c55187b0-1200x795.jpg' },
             { name:'小梨平食堂', hours:'約 07:30–18:00，分早中晚時段供餐', feature:'小梨平露營區旁，供餐時段最長，湯麵、咖哩、丼飯都有' },
-            { name:'河童燒', hours:'營業時間依橋畔各紀念品店而異', feature:'河童造型和菓子，紅豆／卡士達／奶油紅豆等口味，一個 ¥300' },
-            { name:'上高地布丁', hours:'營業時間依季節調整', feature:'五千尺飯店「上高地みやげ店」販售，嚴選雞蛋鮮奶製作，口感濃郁' }
+            { name:'河童燒', hours:'營業時間依橋畔各紀念品店而異', feature:'河童造型和菓子，紅豆／卡士達／奶油紅豆等口味，一個 ¥300', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx_mt7AKY6M0Tc1wjBUFBlyekvmWiNSQQnS6RNW3k8kqBgEOeEbxZ6ZbYr&s=10' },
+            { name:'上高地布丁', hours:'營業時間依季節調整', feature:'五千尺飯店「上高地みやげ店」販售，嚴選雞蛋鮮奶製作，口感濃郁', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3NmQ40YK9jzjnRis8j9aCAjmnjaTW2UDFmcpgz8vTomyAzy58F539-0VR&s=10' },
+            { name:'蘋果派名店 TROIS CINQ', hours:'營業時間依店舖公告為準', feature:'河童橋周邊人氣蘋果派專門店，現烤酥皮搭配濃郁蘋果餡料', photo:'https://scontent-lax3-1.xx.fbcdn.net/v/t39.30808-6/473030284_464544710029182_6998640848901120805_n.jpg?stp=cp6_dst-jpg_tt6&cstp=mx2048x1536&ctp=s2048x1536&_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_ohc=Mh7jia6NyRcQ7kNvwGDQEA9&_nc_oc=AdquDBMq_HAWtFet4GNk6XZkCiAByxdk2hNX6hg_Ov3z3UeoHBVds8p0VSpiU_k-o3g&_nc_zt=23&_nc_ht=scontent-lax3-1.xx&_nc_gid=s9JM7-gkxqu7DqM_pGzXLw&_nc_ss=7b2a8&oh=00_AQJjXyR0jehtE0cTwadPNXtCPzy2AwR-HH9cVaCT1eV0Ig&oe=6A983253' }
           ] }
       ]
     },
@@ -781,16 +786,16 @@
       region:'立山黑部',
       overview:'立山黑部阿爾卑斯山脈路線橫跨立山連峰與黑部峽谷，全長約 37 公里、最大高低差近 2,000 公尺，需轉乘纜車、空中纜車、無軌電車等六種交通工具才能貫通。沿途行經室堂、大觀峰、黑部水庫等景點，是世界少見的高山觀光路線。10 月正值紅葉季、山頭已見初雪，能同時欣賞楓紅與雪景交織的「三段紅葉」美景。',
       spots:[
-        { name:'室堂', icon:'i-pin', photo:'',
+        { name:'室堂', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%AE%A4%E5%A0%82.jpeg',
           desc:'室堂標高 2,450 公尺，是立山黑部路線中海拔最高的景點，也是最重要的觀光據點。被譽為「北阿爾卑斯最美火山湖」的御庫裏池，清澈水面倒映著標高近 3,000 公尺的立山連峰稜線。這裡也是登山健行路線的起點，天氣晴朗時能遠眺劍岳等知名山峰。10 月的室堂平已進入初雪季節，經常能同時看到殘存的秋色與新雪。' },
-        { name:'大觀峰', icon:'i-pin', photo:'',
+        { name:'大觀峰', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%A4%A7%E8%A7%80%E5%B3%B0.jpg',
           desc:'大觀峰是立山黑部路線中視野最遼闊的展望台之一，從黑部水庫搭乘登山纜車、再轉乘空中纜車，幾分鐘內即可抵達。站在露台上可以俯瞰黑部湖與黑部峽谷，天氣好時還能眺望後立山連峰。這段空中纜車不設任何支柱、一鏡到底，是路線中最驚豔的乘車體驗之一。' },
-        { name:'黑部水庫', icon:'i-pin', photo:'',
+        { name:'黑部水庫', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E9%BB%91%E9%83%A8%E6%B0%B4%E5%A3%A9.webp',
           desc:'黑部水庫是日本海拔最高、堤壩也最高的水壩，昭和時期耗時 7 年、動員上千人力才完工，是日本土木工程史上的重要建設。每年 6 月中旬至 10 月中旬會舉行觀光洩洪，大量水流從壩頂傾瀉而下，氣勢磅礡，是水庫最具代表性的畫面。壩頂步道可以近距離感受水霧與轟隆水聲，天氣晴朗時還能看到彩虹橫跨峽谷。' },
         { name:'立山黑部必吃美食、伴手禮', icon:'i-bowl', photo:'',
           shops:[
             { name:'黑部水庫咖哩飯（黒部ダムカレー）', hours:'黑部水庫展望台食堂，約 09:00–16:00（依季節調整）', feature:'咖哩飯做成水庫大壩造型，是黑部水庫最具人氣的紀念美食' },
-            { name:'立山そば', hours:'室堂餐廳，約 09:00–15:00', feature:'高山蕎麥麵配山藥泥或炸山菜，健行途中補充體力的簡單一餐' }
+            { name:'立山そば', hours:'室堂餐廳，約 09:00–15:00', feature:'高山蕎麥麵配山藥泥或炸山菜，健行途中補充體力的簡單一餐', photo:'https://archerplus.tw/wp-content/uploads/2013/03/20130317-d32f5.jpg' }
           ] }
       ]
     },
@@ -806,9 +811,9 @@
           desc:'近江町市場有「金澤人的廚房」之稱，已有近 300 年歷史，是採買加賀新鮮蔬果與日本海漁獲的市場。市場內各家海鮮丼、握壽司、烤扇貝攤位林立，能一次品嚐螃蟹、甜蝦、鰤魚等北陸海產。除了生鮮食材，也能找到清酒、調味料等在地食材伴手禮。緊鄰市區、交通方便，是安排金澤行程時很適合排入的一站。' },
         { name:'金澤必吃美食、伴手禮', icon:'i-bowl', photo:'',
           shops:[
-            { name:'近江町市場 海鮮丼', hours:'約 09:00–17:00（依店舖而異）', feature:'甜蝦、螃蟹、鰤魚等當季日本海漁獲，市場現點現吃最新鮮' },
-            { name:'箔一 金箔霜淇淋', hours:'約 09:00–18:00', feature:'整片食用金箔包裹霜淇淋，東茶屋街必拍的人氣甜點' },
-            { name:'加賀棒茶', hours:'金澤各大茶葉行、伴手禮店均有販售', feature:'焙煎茶梗製成，香氣溫潤不苦澀，金澤代表性茶飲伴手禮' }
+            { name:'近江町市場 海鮮丼', hours:'約 09:00–17:00（依店舖而異）', feature:'甜蝦、螃蟹、鰤魚等當季日本海漁獲，市場現點現吃最新鮮', photo:'https://www.machiya-inn-japan.com/blog/ja/wp-content/uploads/2023/03/hirai1-1536x1024.jpg' },
+            { name:'箔一 金箔霜淇淋', hours:'約 09:00–18:00', feature:'整片食用金箔包裹霜淇淋，東茶屋街必拍的人氣甜點', photo:'https://www.bubu-jp.com/wp-content/uploads/2017/07/kinpakuginzasix_001-thumb-660xauto-727356.jpg' },
+            { name:'加賀棒茶', hours:'金澤各大茶葉行、伴手禮店均有販售', feature:'焙煎茶梗製成，香氣溫潤不苦澀，金澤代表性茶飲伴手禮', photo:'https://jinomon-gift.com/cdn/shop/files/MG_3931.jpg?v=1722584229&width=1080' }
           ] }
       ]
     },
@@ -817,18 +822,20 @@
       photo:'',
       overview:'名古屋是日本三大都市之一，因地處東京與大阪之間，自古就是東西交通與商業的樞紐，也孕育出獨樹一格的「名古屋飯」飲食文化。這裡有德川家康築城的名古屋城，以及全日本地位最崇高的神社之一熱田神宮，古蹟與現代商業區並存。當地人習慣在喫茶店吃早餐，點一杯飲料就附上吐司、水煮蛋等小點，是名古屋獨有的「早餐文化」。',
       spots:[
-        { name:'名古屋早餐文化', icon:'i-bowl', photo:'',
+        { name:'名古屋早餐文化', icon:'i-bowl', photo:'https://www.specialoffers.jcb/zh-tw/tips/japan/shutterstock_2.jpg',
           desc:'名古屋喫茶店的「早餐文化（モーニング）」是當地一大特色，通常從開店到上午 11 點前，只要點一杯飲料，就會附贈吐司、水煮蛋、沙拉等輕食，有些店家甚至加碼附上茶碗蒸或小份三明治。這個習慣源自昭和時期，店家為了吸引早起的商人與上班族而推出的服務，久而久之演變成名古屋人的日常儀式。街頭巷尾的喫茶店都有各自的招牌吐司口味，抹上濃厚奶油或紅豆餡都很受歡迎，很適合來體驗一次悠閒的在地早晨。' },
-        { name:'熱田神宮', icon:'i-pin', photo:'',
+        { name:'熱田神宮', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-tw/blog/wp-content/uploads/2025/05/%E7%86%B1%E7%94%B0%E7%A5%9E%E5%AE%AE.jpg',
           desc:'熱田神宮創建約 1,900 年前，供奉三神器之一的草薙劍，地位僅次於伊勢神宮，是日本歷史最悠久、格式最崇高的神社之一。境內佔地廣達 6 萬坪，古木參天，即使身處市區也能感受到靜謐莊嚴的氣氛。境內的「信長塀」是織田信長為了答謝桶狹間之戰獲勝所建的土牆，與京都三十三間堂、兵庫西宮神社的土牆並列日本三大古牆。每月初一、十五神宮會舉行朔日參拜，吸引不少信眾與觀光客前來祈福。' },
-        { name:'名古屋城', icon:'i-pin', photo:'',
+        { name:'名古屋城', icon:'i-pin', photo:'https://content.fun-japan.jp/renewal-prod/cms/articles/content/Mpf/Articles/2017/08/16/TW_20170816-11-Nagoya-Castle-Top.jpg',
           desc:'名古屋城由德川家康於 1610 年下令興建，作為德川家鎮守東海道的軍事要地，與大阪城、熊本城並列日本三大名城。城頂金光閃閃的金鯱（金色鯱魚）是名古屋城的招牌意象，也是名古屋市的象徵地標。天守閣在二戰時曾被燒毀，現貌為戰後重建，內部設有展示名古屋城歷史與德川家文物的展覽空間。城內本丸御殿以傳統工法忠實復原，金碧輝煌的障壁畫值得細細品味。' },
-        { name:'大須商店街＆神社', icon:'i-pin', photo:'',
+        { name:'大須商店街＆神社', icon:'i-pin', photo:'https://static.gltjp.com/glt/data/article/21000/20465/20231009_130907_ab11204e_w1920.webp',
           desc:'大須商店街是名古屋歷史最悠久的商店街之一，全長超過 1 公里，涵蓋約 1,200 間店舖，從電器行、二手衣、動漫周邊到庶民美食應有盡有，氣氛熱鬧庶民。商店街的起點大須觀音寺是日本三大觀音之一，供奉聖觀音菩薩，也收藏了大量珍貴古文書。這裡混合了老字號商店與新潮小店，逛起來新舊交織、充滿驚喜，很適合安排在賦歸前的最後採買行程。' },
         { name:'名古屋必吃美食、伴手禮', icon:'i-bowl', photo:'',
           shops:[
-            { name:'味噌豬排（味噌カツ）', hours:'名古屋各大餐廳均有供應', feature:'八丁味噌熬製的濃郁醬汁淋在炸豬排上，鹹甜濃厚的名古屋招牌美食' },
-            { name:'手羽先（雞翅）', hours:'居酒屋、專賣店均有供應，晚間時段最熱鬧', feature:'酥炸雞翅刷上特製甜辣醬汁，風來坊、世界の山ちゃん都是知名連鎖店' },
+            { name:'Konparu（コンパル）鮮蝦吐司', hours:'依店舖略有不同，多數 07:00 前後開始供應早餐', feature:'名古屋老字號喫茶店，招牌鮮蝦沙拉三明治是必點名物', photo:'https://www.bubu-jp.com/wp-content/uploads/2023/02/97c0f83315d8510c3e08a697a26e7f16.jpeg' },
+            { name:'鰻魚飯（ひつまぶし）', hours:'名古屋各大鰻魚飯專賣店均有供應', feature:'白飯上鋪滿炭烤鰻魚，可分次品嚐原味、拌蔥花海苔、泡茶泡飯三種吃法', photo:'https://www.bubu-jp.com/wp-content/uploads/2025/07/60d7ab4acea807a9f7d2eb9cf01efc21.jpeg' },
+            { name:'味噌豬排（味噌カツ）', hours:'名古屋各大餐廳均有供應', feature:'八丁味噌熬製的濃郁醬汁淋在炸豬排上，鹹甜濃厚的名古屋招牌美食', photo:'https://www.bubu-jp.com/wp-content/uploads/2023/02/b7264730d6b1d34a3f9dac42de480f5a.jpeg' },
+            { name:'手羽先（雞翅）', hours:'居酒屋、專賣店均有供應，晚間時段最熱鬧', feature:'酥炸雞翅刷上特製甜辣醬汁，風來坊、世界の山ちゃん都是知名連鎖店', photo:'https://assets.funliday.com/posts/wp-content/uploads/2026/01/05143718/2026%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%BF%85%E5%90%83%E7%BE%8E%E9%A3%9F%EF%BD%9C%E6%89%8B%E7%BE%BD%E5%85%88%E9%9B%9E%E7%BF%8510%E5%A4%A7%E6%8E%A8%E8%96%A6collage.png.webp' },
             { name:'台灣拉麵', hours:'名古屋多家中華料理店均有供應', feature:'名古屋在地發明的重辣擔擔麵風味拉麵，雖名為台灣拉麵但台灣其實吃不到' },
             { name:'ういろう（外郎糕）', hours:'名古屋車站、大須商店街伴手禮店均有販售', feature:'Q 彈米蒸糕，抹茶、黑糖、櫻花等多種口味，經典名古屋伴手禮' }
           ] }
@@ -1194,11 +1201,13 @@
     var hidden = lsGet(storeKey+':hidden', []);
     var extra = lsGet(storeKey+':extra', []);
 
-    defaults.forEach(function(text, idx){
+    defaults.forEach(function(entry, idx){
       if(hidden.indexOf(idx) > -1) return;
+      var text = (entry && typeof entry === 'object') ? entry.text : entry;
+      var link = (entry && typeof entry === 'object') ? entry.link : null;
       var li = buildListItem(storeKey, 'd'+idx, text, isChecklist, false, function(){
         hidden.push(idx); lsSet(storeKey+':hidden', hidden); li.remove();
-      });
+      }, link);
       listEl.appendChild(li);
     });
 
@@ -1232,10 +1241,12 @@
     var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
   }
 
-  function buildListItem(storeKey, itemKey, text, isChecklist, doneVal, onDelete){
+  function buildListItem(storeKey, itemKey, text, isChecklist, doneVal, onDelete, link){
     var li = document.createElement('li');
     var checkboxHtml = isChecklist ? '<input type="checkbox" class="chk">' : '<span class="n-bullet">・</span>';
-    li.innerHTML = checkboxHtml + '<span class="n-text"></span><button class="n-del">'+iconUse('i-close')+'</button>';
+    li.innerHTML = checkboxHtml + '<span class="n-text"></span>'+
+      (link ? '<a class="n-link" href="'+link+'" target="_blank" rel="noopener" title="開啟連結">'+iconUse('i-chevron')+'</a>' : '')+
+      '<button class="n-del">'+iconUse('i-close')+'</button>';
 
     var textEl = li.querySelector('.n-text');
     bindEditableText(textEl, storeKey+':text:'+itemKey, text);
