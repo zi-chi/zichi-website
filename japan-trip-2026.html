@@ -137,7 +137,7 @@
   .day-tab.active{ background: var(--ink); color:#f4ecd8; border-color: var(--ink); }
   .day-tab.disabled{ opacity:.45; cursor:default; }
 
-  .day-head{ padding: 16px 16px 4px; }
+  .day-head{ padding: 16px 16px 4px; display:flex; align-items:center; gap:10px; }
   .day-head .dh-date{ font-size:19px; font-weight:700; color:var(--ink); }
   .day-head .dh-route{ font-size:12.5px; color: var(--text-soft); margin-top:3px; }
 
@@ -260,6 +260,28 @@
 
   .attr-banner{ margin: 4px 16px 12px; border-radius: var(--radius-lg); overflow:hidden; box-shadow: var(--shadow-sm); aspect-ratio:16/9; }
   .attr-banner img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .badge-strip{ display:flex; gap:14px; overflow-x:auto; padding:2px 2px 8px; scrollbar-width:none; }
+  .badge-strip::-webkit-scrollbar{ display:none; }
+  .badge-item{ flex:none; display:flex; flex-direction:column; align-items:center; gap:6px; width:58px; cursor:pointer; }
+  .badge-item:active{ transform: scale(.96); }
+  .badge-item svg{ width:52px; height:52px; filter: drop-shadow(0 2px 4px rgba(31,44,61,.18)); }
+  .badge-item .b-label{ font-size:10.5px; color: var(--ink); font-weight:700; text-align:center; line-height:1.3; }
+  .day-badge{ flex:none; width:34px; height:34px; }
+
+  /* ---------- Japanese phrasebook ---------- */
+  .phrase-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .phrase-item{ display:flex; align-items:flex-start; gap:8px; padding-bottom:10px; border-bottom:1px dashed var(--border-soft); }
+  .phrase-item:last-child{ border-bottom:none; padding-bottom:0; }
+  .phrase-body{ flex:1; min-width:0; display:flex; flex-direction:column; }
+  .phrase-zh{ font-size:12px; color: var(--text-soft); outline:none; order:1; }
+  .phrase-jp{ font-size:15px; font-weight:700; color: var(--ink); outline:none; order:2; margin-top:3px; }
+  .phrase-romaji{ font-size:11px; color: var(--vermillion); outline:none; font-style:italic; order:3; margin-top:2px; }
+  .phrase-del{ flex:none; display:none; background:none; border:none; color: var(--vermillion); cursor:pointer; padding:0; font-size:15px; }
+  .editing .phrase-del{ display:inline-flex; }
+  .jp-intro{ margin: 4px 16px 16px; font-size:12.8px; color: var(--text); line-height:1.75;
+    background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
+    padding:12px 14px; box-shadow: var(--shadow-sm); }
 
   .day-textnote{
     margin: 14px 16px 4px; background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
@@ -448,6 +470,11 @@
     </div>
 
     <div class="section">
+      <div class="section-title"><svg class="icon"><use href="#i-book"/></svg>六天六個風景</div>
+      <div class="badge-strip" id="badge-strip"></div>
+    </div>
+
+    <div class="section">
       <div class="section-title"><svg class="icon"><use href="#i-ticket"/></svg>旅遊資訊</div>
       <div class="nav-card" data-goto="flight">
         <div class="n-icon"><svg class="icon"><use href="#i-plane"/></svg></div>
@@ -464,9 +491,10 @@
         <div><div class="n-title">景點介紹</div><div class="n-sub">逐日景點小百科・在地美食伴手禮</div></div>
         <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
       </div>
-      <div class="nav-card disabled">
+      <div class="nav-card" data-goto="japanese">
         <div class="n-icon"><svg class="icon"><use href="#i-note"/></svg></div>
-        <div><div class="n-title">旅遊日文對照 <span class="soon-badge">製作中</span></div><div class="n-sub">景點・城市名・常用會話小抄</div></div>
+        <div><div class="n-title">旅遊日文對照</div><div class="n-sub">景點・城市名・常用會話小抄</div></div>
+        <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
       </div>
     </div>
 
@@ -506,12 +534,22 @@
     <div id="attractions-content"></div>
   </main>
 
+  <!-- ============ JAPANESE PHRASEBOOK ============ -->
+  <main class="view hidden" id="view-japanese">
+    <div class="section" style="padding-top:16px;">
+      <div class="jp-intro">旅途中可以直接對照這頁的日文、假名讀音給店家或站務人員看。右上角開啟編輯模式後，每一則都能直接修改，也可以新增自己常用的句子。</div>
+      <div id="jp-places-wrap"></div>
+      <div id="jp-categories-wrap"></div>
+    </div>
+    <div class="footer-mark">內容僅供旅途中臨時參考，正式溝通仍建議搭配翻譯 App</div>
+  </main>
+
   <nav class="tabbar">
     <button class="tabbtn active" data-view="home"><svg class="icon"><use href="#i-home"/></svg>首頁</button>
     <button class="tabbtn" data-view="itin"><svg class="icon"><use href="#i-calendar"/></svg>每日行程</button>
     <button class="tabbtn" data-view="flight"><svg class="icon"><use href="#i-ticket"/></svg>航班住宿</button>
     <button class="tabbtn" data-view="attractions"><svg class="icon"><use href="#i-pin"/></svg>景點</button>
-    <button class="tabbtn" disabled><svg class="icon"><use href="#i-note"/></svg>日文</button>
+    <button class="tabbtn" data-view="japanese"><svg class="icon"><use href="#i-note"/></svg>日文</button>
   </nav>
 
   <div class="toast" id="toast"></div>
@@ -533,6 +571,15 @@
 
   /* ================= DATA ================= */
   var TRIP_YEAR = 2026;
+
+  var DAY_BADGES = {
+    d1: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#f3e6c9"/><path d="M9 16h26l-3-5H12l-3 5z" fill="none" stroke="#bd4034" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 19v15M34 19v15M22 19v15" stroke="#bd4034" stroke-width="2.2" stroke-linecap="round"/></svg>',
+    d2: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#dce8e6"/><path d="M6 29l8-11 6 7 5-9 10 13z" fill="#1f3a5f"/><path d="M4 33c4-2 6 2 10 0s6 2 10 0 6 2 10 0" stroke="#2a4d74" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
+    d3: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#f0ddc9"/><path d="M22 8 36 30H8z" fill="#8a4536"/><rect x="19" y="24" width="6" height="8" fill="#5c2a20"/></svg>',
+    d4: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#dfe8f2"/><path d="M4 31l7-14 5 6 6-10 8 12 6-6 4 12z" fill="#2a4d74"/><path d="M8 27l4-3 3 3M24 23l3-2 3 2" stroke="#f4ecd8" stroke-width="1.4" fill="none" stroke-linecap="round"/><line x1="9" y1="14" x2="34" y2="9" stroke="#bd4034" stroke-width="1.6" stroke-linecap="round"/><circle cx="23" cy="11.3" r="2.1" fill="#bd4034"/></svg>',
+    d5: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#f2ecd6"/><path d="M22 8v4M17 12h10l-2 5h-6l-2-5zM16 17h12v6H16zM14 23h6v7M24 23h6v7M17 32h10" stroke="#bf9a2e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    d6: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#f3e2df"/><path d="M12 31V19l4-3v-3h4v3l2-2 2 2v-3h4v3l4 3v12z" fill="#1f3a5f"/><path d="M16 13l-2 3h4zM30 13l-2 3h4z" fill="#bf9a2e"/></svg>'
+  };
   var days = [
     {
       id:'d1', no:1, date:'10/6', weekday:'二', isoDate:'2026-10-06', region:'桃園 → 成田 → 上野 → 長野',
@@ -655,15 +702,17 @@
 
   var hotels = {
     d1:{ city:'長野', name:'Hotel NewNagano Next', address:'828 Minamichitose, Nagano, 380-0822, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（10/7 早上在此享用）', rich:true },
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（10/7 早上在此享用）', rich:true,
+      photo:'https://cf.bstatic.com/xdata/images/hotel/max1024x768/526273219.jpg?k=4ff9be34219146036b247a4817a441d3e79a1add6fcf0be504c9e706ae4dab90&o=' },
     d2:{ city:'高山', name:'hotel around TAKAYAMA, Ascend Hotel Collection', address:'1 Chome-42-7 Hanaokamachi, Takayama, Gifu 506-0009, Japan',
-      checkin:'15:00', checkout:'11:00', breakfast:'不含（10/8 早餐請至宮川朝市／高山老街商店街解決）', rich:true },
+      checkin:'15:00', checkout:'11:00', breakfast:'不含（10/8 早餐請至宮川朝市／高山老街商店街解決）', rich:true,
+      photo:'https://pix8.agoda.net/hotelImages/43263391/0/4433fc61739855b1d5f4b79c87b008b3.jpeg?ce=3&s=1024x' },
     d3:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true },
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true, photo:'' },
     d4:{ city:'富山', name:'Comfort Hotel Toyama', address:'1 Chome-3-2 Takaramachi, Toyama, 930-0007, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true },
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:30）', rich:true, photo:'' },
     d5:{ city:'名古屋', name:'Comfort Hotel Nagoya Fushimi（名古屋伏見凱富酒店）', address:'2 Chome-19-14 Nishiki, Naka Ward, Nagoya, Aichi 460-0003, Japan',
-      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:00）', rich:true }
+      checkin:'15:00', checkout:'10:00', breakfast:'包含（西式自助，約 06:30–09:00）', rich:true, photo:'' }
   };
 
   function mapLink(address){ return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(address); }
@@ -787,6 +836,82 @@
     }
   };
 
+  var jpPlaces = [
+    {zh:'長野', jp:'長野', romaji:'Nagano'},
+    {zh:'上野（東京）', jp:'上野', romaji:'Ueno'},
+    {zh:'成田機場', jp:'成田空港', romaji:'Narita Kuukou'},
+    {zh:'高山', jp:'高山', romaji:'Takayama'},
+    {zh:'富山', jp:'富山', romaji:'Toyama'},
+    {zh:'金澤', jp:'金沢', romaji:'Kanazawa'},
+    {zh:'名古屋', jp:'名古屋', romaji:'Nagoya'},
+    {zh:'中部國際機場', jp:'中部国際空港', romaji:'Chuubu Kokusai Kuukou'},
+    {zh:'善光寺', jp:'善光寺', romaji:'Zenkouji'},
+    {zh:'上高地', jp:'上高地', romaji:'Kamikouchi'},
+    {zh:'河童橋', jp:'河童橋', romaji:'Kappa-bashi'},
+    {zh:'大正池', jp:'大正池', romaji:'Taishou-ike'},
+    {zh:'立山黑部', jp:'立山黒部', romaji:'Tateyama Kurobe'},
+    {zh:'室堂', jp:'室堂', romaji:'Murodou'},
+    {zh:'大觀峰', jp:'大観峰', romaji:'Daikanbou'},
+    {zh:'黑部水庫', jp:'黒部ダム', romaji:'Kurobe Damu'},
+    {zh:'宮川朝市', jp:'宮川朝市', romaji:'Miyagawa Asaichi'},
+    {zh:'高山老街（三町）', jp:'三町筋', romaji:'San-machi Suji'},
+    {zh:'飛驒之里（合掌村）', jp:'飛騨の里', romaji:'Hida no Sato'},
+    {zh:'兼六園', jp:'兼六園', romaji:'Kenroku-en'},
+    {zh:'東茶屋街', jp:'東茶屋街', romaji:'Higashi Chaya-gai'},
+    {zh:'近江町市場', jp:'近江町市場', romaji:'Oumichou Ichiba'},
+    {zh:'熱田神宮', jp:'熱田神宮', romaji:'Atsuta Jinguu'},
+    {zh:'名古屋城', jp:'名古屋城', romaji:'Nagoya-jou'},
+    {zh:'大須商店街', jp:'大須商店街', romaji:'Oosu Shoutengai'}
+  ];
+
+  var jpCategories = [
+    { id:'greeting', icon:'i-note', title:'打招呼、基本禮貌', phrases:[
+      {zh:'你好', jp:'こんにちは', romaji:'Konnichiwa'},
+      {zh:'謝謝', jp:'ありがとうございます', romaji:'Arigatou gozaimasu'},
+      {zh:'不好意思／請問一下', jp:'すみません', romaji:'Sumimasen'},
+      {zh:'對不起', jp:'ごめんなさい', romaji:'Gomen nasai'},
+      {zh:'再見', jp:'さようなら', romaji:'Sayounara'},
+      {zh:'我不太會說日文', jp:'日本語はあまり話せません', romaji:'Nihongo wa amari hanasemasen'}
+    ]},
+    { id:'transport', icon:'i-train', title:'交通', phrases:[
+      {zh:'請問到＿＿怎麼走？', jp:'＿＿まではどう行けばいいですか？', romaji:'~ made wa dou ikeba ii desu ka?'},
+      {zh:'這班車有到＿＿嗎？', jp:'この電車は＿＿に行きますか？', romaji:'Kono densha wa ~ ni ikimasu ka?'},
+      {zh:'下一班巴士幾點？', jp:'次のバスは何時ですか？', romaji:'Tsugi no basu wa nanji desu ka?'},
+      {zh:'這裡是幾號月台？', jp:'ここは何番線ですか？', romaji:'Koko wa nanbansen desu ka?'},
+      {zh:'到＿＿要多久？', jp:'＿＿までどのくらいかかりますか？', romaji:'~ made dono kurai kakarimasu ka?'}
+    ]},
+    { id:'restaurant', icon:'i-bowl', title:'餐廳、飲食', phrases:[
+      {zh:'兩位大人、兩位小孩', jp:'大人2名、子供2名です', romaji:'Otona ni-mei, kodomo ni-mei desu'},
+      {zh:'請給我菜單', jp:'メニューをください', romaji:'Menyuu wo kudasai'},
+      {zh:'我要這個', jp:'これをください', romaji:'Kore wo kudasai'},
+      {zh:'請問有推薦的餐點嗎？', jp:'おすすめは何ですか？', romaji:'Osusume wa nan desu ka?'},
+      {zh:'買單', jp:'お会計をお願いします', romaji:'Okaikei wo onegaishimasu'},
+      {zh:'很好吃！', jp:'おいしいです！', romaji:'Oishii desu!'}
+    ]},
+    { id:'shopping', icon:'i-ticket', title:'購物', phrases:[
+      {zh:'這個多少錢？', jp:'これはいくらですか？', romaji:'Kore wa ikura desu ka?'},
+      {zh:'可以刷卡嗎？', jp:'カードは使えますか？', romaji:'Kaado wa tsukaemasu ka?'},
+      {zh:'請幫我包裝（送禮用）', jp:'プレゼント用に包んでください', romaji:'Purezento you ni tsutsunde kudasai'},
+      {zh:'可以退稅嗎？', jp:'免税できますか？', romaji:'Menzei dekimasu ka?'},
+      {zh:'我只是看看', jp:'見ているだけです', romaji:'Miteiru dake desu'}
+    ]},
+    { id:'hotel', icon:'i-bed', title:'住宿', phrases:[
+      {zh:'我要辦理入住', jp:'チェックインをお願いします', romaji:'Check-in wo onegaishimasu'},
+      {zh:'我要辦理退房', jp:'チェックアウトをお願いします', romaji:'Check-out wo onegaishimasu'},
+      {zh:'可以寄放行李嗎？', jp:'荷物を預けられますか？', romaji:'Nimotsu wo azukeraremasu ka?'},
+      {zh:'早餐幾點開始？', jp:'朝食は何時からですか？', romaji:'Choushoku wa nanji kara desu ka?'},
+      {zh:'Wi-Fi 密碼是？', jp:'Wi-Fiのパスワードは何ですか？', romaji:'Wi-Fi no password wa nan desu ka?'}
+    ]},
+    { id:'emergency', icon:'i-alert', title:'緊急狀況', phrases:[
+      {zh:'請幫幫我', jp:'助けてください', romaji:'Tasukete kudasai'},
+      {zh:'我不舒服', jp:'具合が悪いです', romaji:'Guai ga warui desu'},
+      {zh:'請叫救護車', jp:'救急車を呼んでください', romaji:'Kyuukyuusha wo yonde kudasai'},
+      {zh:'我的行李不見了', jp:'荷物がなくなりました', romaji:'Nimotsu ga nakunarimashita'},
+      {zh:'最近的醫院在哪裡？', jp:'一番近い病院はどこですか？', romaji:'Ichiban chikai byouin wa doko desu ka?'},
+      {zh:'廁所在哪裡？', jp:'トイレはどこですか？', romaji:'Toire wa doko desu ka?'}
+    ]}
+  ];
+
   var flights = [
     {group:'爸、媽', airline:'虎航 Tigerair', flightNo:'IT200', board:'06:35', boardLabel:'桃園機場 T1 登機', arrive:'11:00', arriveLabel:'成田機場入境'},
     {group:'捷、淇', airline:'長榮航空 EVA Air', flightNo:'BR184', board:'07:55', boardLabel:'桃園機場 T2 登機', arrive:'12:25', arriveLabel:'成田機場・與爸媽會合'}
@@ -858,6 +983,16 @@
     document.querySelectorAll('[data-goto]').forEach(function(el){
       el.addEventListener('click', function(){ switchView(el.getAttribute('data-goto')); });
     });
+    var strip = document.getElementById('badge-strip');
+    if(strip){
+      strip.innerHTML = days.map(function(d){
+        var label = (attractions[d.id] && attractions[d.id].region) || d.region;
+        return '<div class="badge-item" data-day="'+d.id+'">'+(DAY_BADGES[d.id]||'')+'<div class="b-label">'+d.date+'<br>'+label+'</div></div>';
+      }).join('');
+      strip.querySelectorAll('.badge-item').forEach(function(el){
+        el.addEventListener('click', function(){ switchView('itin'); selectDay(el.getAttribute('data-day')); });
+      });
+    }
     updateCountdown();
   }
 
@@ -907,8 +1042,9 @@
 
     var html = '';
     html += '<div class="day-head">'+
-      '<div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）</div>'+
-      '<div class="dh-route">'+d.region+'</div>'+
+      '<div class="day-badge">'+(DAY_BADGES[d.id]||'')+'</div>'+
+      '<div><div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）</div>'+
+      '<div class="dh-route">'+d.region+'</div></div>'+
     '</div>';
 
     html += '<div class="glance">'+
@@ -948,10 +1084,10 @@
     return '<div class="glance-item"><div class="g-icon">'+iconUse(icon)+'</div><div class="g-label">'+label+'</div><div class="g-text editable" contenteditable="false" data-key="'+key+'"></div></div>';
   }
 
-  function panelShell(panelId, icon, title, storeKey, isPrep){
+  function panelShell(panelId, icon, title, storeKey, isPrep, listClass){
     return '<div class="panel'+(isPrep?' prep-note':'')+'" id="panel-'+panelId+'">'+
       '<div class="panel-head"><span class="p-icon">'+iconUse(icon)+'</span>'+title+'<span class="p-chev">'+iconUse('i-chevron')+'</span></div>'+
-      '<div class="panel-body"><ul class="note-list" id="list-'+storeKey+'"></ul>'+
+      '<div class="panel-body"><ul class="'+(listClass||'note-list')+'" id="list-'+storeKey+'"></ul>'+
         '<div class="add-row"><button class="add-btn" data-addto="'+storeKey+'">'+iconUse('i-plus')+' 新增一項</button></div>'+
       '</div>'+
     '</div>';
@@ -1180,8 +1316,10 @@
 
       if(h.rich){
         var checkinKey = nameKey+'-checkin', checkoutKey = nameKey+'-checkout', breakfastKey = nameKey+'-breakfast';
+        var photoImg = h.photo ? '<img src="'+h.photo+'" alt="'+h.name+'" loading="lazy" onerror="this.closest(\'.attr-photo\').classList.add(\'fallback\')">' : '';
         card.className = 'hotel-card rich';
         card.innerHTML =
+          '<div class="attr-photo'+(h.photo?'':' fallback')+'" style="margin:0;border-radius:0;">'+photoImg+'<span class="attr-photo-fallback">'+iconUse('i-bed')+'</span></div>'+
           '<div class="hc-row">'+
             '<div class="h-night"><div class="h-d">DAY '+d.no+'</div><div class="h-date">'+d.date+'</div></div>'+
             '<div class="h-info">'+
@@ -1259,6 +1397,7 @@
 
     var html = '';
     html += '<div class="day-head">'+
+      '<div class="day-badge">'+(DAY_BADGES[d.id]||'')+'</div>'+
       '<div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）・'+a.region+'</div>'+
     '</div>';
     if(a.photo){
@@ -1294,9 +1433,83 @@
     bindPanelToggles();
   }
 
+  /* ================= JAPANESE PHRASEBOOK ================= */
+  function buildPhraseItem(storeKey, itemKey, entry, onDelete){
+    var li = document.createElement('li');
+    li.className = 'phrase-item';
+    var zhKey = storeKey+':zh:'+itemKey, jpKey = storeKey+':jp:'+itemKey, roKey = storeKey+':romaji:'+itemKey;
+    li.innerHTML =
+      '<div class="phrase-body">'+
+        '<span class="phrase-zh editable" contenteditable="false" data-key="'+zhKey+'"></span>'+
+        '<span class="phrase-jp editable" contenteditable="false" data-key="'+jpKey+'"></span>'+
+        '<span class="phrase-romaji editable" contenteditable="false" data-key="'+roKey+'"></span>'+
+      '</div>'+
+      '<button class="phrase-del">'+iconUse('i-close')+'</button>';
+    bindEditableText(li.querySelector('.phrase-zh'), zhKey, entry.zh);
+    bindEditableText(li.querySelector('.phrase-jp'), jpKey, entry.jp);
+    bindEditableText(li.querySelector('.phrase-romaji'), roKey, entry.romaji);
+    li.querySelector('.phrase-del').addEventListener('click', onDelete);
+    return li;
+  }
+
+  function renderPhraseList(defaults, storeKey){
+    var listEl = document.getElementById('list-'+storeKey);
+    if(!listEl) return;
+    listEl.innerHTML = '';
+    var hidden = lsGet(storeKey+':hidden', []);
+    var extra = lsGet(storeKey+':extra', []);
+
+    defaults.forEach(function(entry, idx){
+      if(hidden.indexOf(idx) > -1) return;
+      var li = buildPhraseItem(storeKey, 'd'+idx, entry, function(){
+        hidden.push(idx); lsSet(storeKey+':hidden', hidden); li.remove();
+      });
+      listEl.appendChild(li);
+    });
+    extra.forEach(function(entry, exIdx){
+      var li = buildPhraseItem(storeKey, 'x'+exIdx, entry, function(){
+        var arr = lsGet(storeKey+':extra', []);
+        arr.splice(exIdx,1); lsSet(storeKey+':extra', arr);
+        renderPhraseList(defaults, storeKey);
+      });
+      listEl.appendChild(li);
+    });
+
+    var addBtn = document.querySelector('[data-addto="'+storeKey+'"]');
+    if(addBtn){
+      addBtn.onclick = function(){
+        var arr = lsGet(storeKey+':extra', []);
+        arr.push({zh:'中文', jp:'日文', romaji:'romaji'});
+        lsSet(storeKey+':extra', arr);
+        renderPhraseList(defaults, storeKey);
+        applyEditingState();
+        var els = listEl.querySelectorAll('.phrase-zh');
+        var last = els[els.length-1];
+        if(last){ last.focus(); selectAllText(last); }
+      };
+    }
+    applyEditingState();
+  }
+
+  function renderJapanese(){
+    var placesWrap = document.getElementById('jp-places-wrap');
+    placesWrap.innerHTML = panelShell('jp-places', 'i-pin', '城市・景點名稱對照', 'jp-places', false, 'phrase-list');
+    document.querySelector('#panel-jp-places').classList.add('open');
+    renderPhraseList(jpPlaces, 'jp-places');
+
+    var catWrap = document.getElementById('jp-categories-wrap');
+    catWrap.innerHTML = jpCategories.map(function(cat){
+      return panelShell('jp-'+cat.id, cat.icon, cat.title, 'jp-'+cat.id, false, 'phrase-list');
+    }).join('');
+    bindPanelToggles();
+    jpCategories.forEach(function(cat){
+      renderPhraseList(cat.phrases, 'jp-'+cat.id);
+    });
+  }
+
   /* ================= VIEW SWITCHING ================= */
   function switchView(name){
-    ['home','itin','flight','attractions'].forEach(function(v){
+    ['home','itin','flight','attractions','japanese'].forEach(function(v){
       document.getElementById('view-'+v).classList.toggle('hidden', v!==name);
     });
     document.querySelectorAll('.tabbtn[data-view]').forEach(function(b){
@@ -1340,6 +1553,7 @@
   renderDayContent(currentDay);
   renderFlights();
   renderHotels();
+  renderJapanese();
 
 })();
 </script>
