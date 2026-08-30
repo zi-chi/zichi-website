@@ -172,6 +172,8 @@
   .t-desc:empty{ display:none; }
   .editing .t-desc:empty{ display:block; min-height:1.4em; }
   .editing .t-desc:empty::before{ content:'點此新增行程說明'; opacity:.5; }
+  .t-map{ margin-top:8px; border:1px solid var(--border-soft); border-radius: var(--radius-sm); background:#fff; padding:6px; }
+  .t-map img{ width:100%; display:block; }
   .editing .editable{ background: rgba(191,64,52,.06); border:1px dashed rgba(191,64,52,.4); border-radius:6px; padding:2px 5px; }
 
   .t-slot{ display:flex; gap:12px; }
@@ -664,7 +666,7 @@
         {t:'~08:10', title:'盥洗、吃早餐、寄送行李', desc:'', type:'bed'},
         {t:'08:15', title:'抵達長野巴士站', desc:'尋找前往上高地的巴士月台', type:'bus'},
         {t:'08:30', title:'搭巴士前往上高地', desc:'', type:'bus'},
-        {t:'11:10', title:'抵達上高地（大正池站）', desc:'', type:'bus'},
+        {t:'11:10', title:'抵達上高地（大正池站）', desc:'', type:'bus', img:'https://www.kamikochi.org/tw/wp-content/uploads/sites/2/2025/06/walking_map_tw.svg'},
         {t:'13:00', title:'大正池 → 河童橋', desc:'河童橋吃午餐、買伴手禮', type:'walk'},
         {t:'15:30', title:'抵達上高地巴士站', desc:'排隊搭乘前往高山的巴士（經平湯）', type:'bus'},
         {t:'17:30', title:'抵達高山巴士站', desc:'', type:'bus'},
@@ -1256,7 +1258,7 @@
       var idx = parseInt(token.slice(1), 10);
       var base = d.items[idx];
       return {
-        t: base.t, title: base.title, desc: base.desc || '', type: base.type,
+        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '',
         timeKey: d.id+'-item'+idx+'-time', titleKey: d.id+'-item'+idx+'-title', descKey: d.id+'-item'+idx+'-desc'
       };
     }
@@ -1295,6 +1297,7 @@
           '<button class="t-del-btn" title="刪除此行程">'+iconUse('i-close')+'</button>'+
         '</div>'+
         '<div class="t-desc editable" contenteditable="false" data-key="'+entry.descKey+'"></div>'+
+        (entry.img ? '<div class="t-map"><img src="'+entry.img+'" alt="路線圖" loading="lazy" onerror="this.closest(\'.t-map\').style.display=\'none\'"></div>' : '')+
       '</div>';
 
     bindEditableText(row.querySelector('[data-key="'+entry.timeKey+'"]'), entry.timeKey, entry.t);
