@@ -271,6 +271,28 @@
   .badge-item .b-label{ font-size:10.5px; color: var(--ink); font-weight:700; text-align:center; line-height:1.3; }
   .day-badge{ flex:none; width:34px; height:34px; }
 
+  .weather-strip{ display:flex; gap:10px; overflow-x:auto; padding:2px 2px 4px; scrollbar-width:none; }
+  .weather-strip::-webkit-scrollbar{ display:none; }
+  .weather-item{
+    flex:none; width:62px; display:flex; flex-direction:column; align-items:center; gap:2px; text-decoration:none;
+    background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
+    padding:9px 4px; box-shadow: var(--shadow-sm);
+  }
+  .weather-item:active{ transform: scale(.96); }
+  .weather-item .w-date{ font-size:10px; color: var(--text-soft); font-weight:700; }
+  .weather-item .w-icon{ color: var(--vermillion); font-size:21px; margin:3px 0 2px; }
+  .weather-item .w-temp{ font-size:11px; font-weight:700; color: var(--ink); font-variant-numeric: tabular-nums; white-space:nowrap; }
+  .weather-item .w-label{ font-size:8.5px; color: var(--text-soft); }
+  .weather-note{ font-size:10.5px; color: var(--text-soft); margin:6px 2px 2px; line-height:1.6; }
+  .weather-source{ margin-left:auto; font-size:10.5px; font-weight:400; color: var(--ink-soft); text-decoration:none; display:inline-flex; align-items:center; gap:3px; }
+
+  .dh-weather{
+    margin-left:auto; flex:none; display:flex; flex-direction:column; align-items:center; gap:1px;
+    color: var(--vermillion); text-decoration:none;
+  }
+  .dh-weather .icon{ font-size:20px; }
+  .dh-weather .dhw-temp{ font-size:10.5px; font-weight:700; color: var(--ink); font-variant-numeric: tabular-nums; white-space:nowrap; }
+
   /* ---------- Japanese phrasebook ---------- */
   .phrase-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
   .phrase-item{ display:flex; align-items:flex-start; gap:8px; padding-bottom:10px; border-bottom:1px dashed var(--border-soft); }
@@ -436,6 +458,13 @@
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></symbol>
   <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-w-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></symbol>
+  <symbol id="i-w-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .4-8A5.5 5.5 0 0 0 7.1 9.6 4 4 0 0 0 7 18Z"/></symbol>
+  <symbol id="i-w-cloud-sun" viewBox="0 0 24 24"><circle cx="7.5" cy="6.5" r="2.6"/><path d="M7.5 2v1.3M3.2 6.5h1.3M11.8 6.5h-1.3M4.4 3.4l.9 .9M10.6 3.4l-.9 .9"/><path d="M9 18h9a3.4 3.4 0 0 0 .35-6.78A4.7 4.7 0 0 0 9.4 9.1 3.4 3.4 0 0 0 9 18Z"/></symbol>
+  <symbol id="i-w-rain" viewBox="0 0 24 24"><path d="M7 15h10a4 4 0 0 0 .4-8A5.5 5.5 0 0 0 7.1 6.6 4 4 0 0 0 7 15Z"/><path d="M8 18.5 7 21.5M12.5 18.5l-1 3M17 18.5l-1 3"/></symbol>
+  <symbol id="i-w-snow" viewBox="0 0 24 24"><path d="M7 14h10a4 4 0 0 0 .4-8A5.5 5.5 0 0 0 7.1 5.6 4 4 0 0 0 7 14Z"/><path d="M9 18v4M9 19l-1.6 1M9 19l1.6 1M15 18v4M15 19l-1.6 1M15 19l1.6 1"/></symbol>
+  <symbol id="i-w-fog" viewBox="0 0 24 24"><path d="M5 10h6M13 10h6M4 14h16M4 18h11"/></symbol>
+  <symbol id="i-w-storm" viewBox="0 0 24 24"><path d="M7 12h10a4 4 0 0 0 .4-8A5.5 5.5 0 0 0 7.1 3.6 4 4 0 0 0 7 12Z"/><path d="M13.5 13 10 18h3.5L11.5 22.5"/></symbol>
 </defs>
 </svg>
 
@@ -474,6 +503,15 @@
     <div class="section">
       <div class="section-title"><svg class="icon"><use href="#i-book"/></svg>六天六個風景</div>
       <div class="badge-strip" id="badge-strip"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <svg class="icon"><use href="#i-w-sun"/></svg>天氣預報
+        <a class="weather-source" href="https://weather.com/zh-TW" target="_blank" rel="noopener">weather.com<svg class="icon"><use href="#i-chevron" style="transform:rotate(-90deg)"/></svg></a>
+      </div>
+      <div class="weather-strip" id="weather-strip"></div>
+      <div class="weather-note">氣溫與天氣狀況每 3 小時自動更新一次；出發日期較遠時可能尚無預報資料，通常在出發前 16 天內會顯示實際預報。</div>
     </div>
 
     <div class="section">
@@ -582,6 +620,16 @@
     d5: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#f2ecd6"/><path d="M22 8v4M17 12h10l-2 5h-6l-2-5zM16 17h12v6H16zM14 23h6v7M24 23h6v7M17 32h10" stroke="#bf9a2e" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     d6: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#f3e2df"/><path d="M12 31V19l4-3v-3h4v3l2-2 2 2v-3h4v3l4 3v12z" fill="#1f3a5f"/><path d="M16 13l-2 3h4zM30 13l-2 3h4z" fill="#bf9a2e"/></svg>'
   };
+
+  var WEATHER_COORDS = {
+    d1:{lat:36.6513, lon:138.1810}, // 長野
+    d2:{lat:36.2500, lon:137.6333}, // 上高地
+    d3:{lat:36.1461, lon:137.2521}, // 高山
+    d4:{lat:36.5756, lon:137.5928}, // 立山（室堂）
+    d5:{lat:36.5613, lon:136.6562}, // 金澤
+    d6:{lat:35.1815, lon:136.9066}  // 名古屋
+  };
+
   var days = [
     {
       id:'d1', no:1, date:'10/6', weekday:'二', isoDate:'2026-10-06', region:'桃園 → 成田 → 上野 → 長野',
@@ -985,6 +1033,93 @@
     overlay.addEventListener('click', onOverlay);
   }
 
+  /* ================= WEATHER ================= */
+  var WEATHER_CACHE_MS = 3 * 60 * 60 * 1000; // refresh every 3 hours
+
+  function weatherMeta(code){
+    if(code === 0) return {icon:'i-w-sun', label:'晴天'};
+    if(code === 1 || code === 2) return {icon:'i-w-cloud-sun', label:'多雲時晴'};
+    if(code === 3) return {icon:'i-w-cloud', label:'陰天'};
+    if(code === 45 || code === 48) return {icon:'i-w-fog', label:'起霧'};
+    if(code >= 51 && code <= 67) return {icon:'i-w-rain', label:'降雨'};
+    if(code >= 71 && code <= 77) return {icon:'i-w-snow', label:'降雪'};
+    if(code >= 80 && code <= 82) return {icon:'i-w-rain', label:'陣雨'};
+    if(code >= 85 && code <= 86) return {icon:'i-w-snow', label:'陣雪'};
+    if(code >= 95) return {icon:'i-w-storm', label:'雷雨'};
+    return {icon:'i-w-cloud', label:'多雲'};
+  }
+
+  function getWeatherFor(dayId, isoDate, cb){
+    var cacheKey = 'weather:'+dayId;
+    var cached = lsGet(cacheKey, null);
+    var now = Date.now();
+    if(cached && cached.ts && (now - cached.ts) < WEATHER_CACHE_MS){
+      cb(cached.data);
+      return;
+    }
+    var coords = WEATHER_COORDS[dayId];
+    if(!coords){ cb(null); return; }
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+
+      '&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&forecast_days=16';
+    fetch(url).then(function(r){ return r.json(); }).then(function(json){
+      var data = null;
+      var times = json && json.daily && json.daily.time;
+      if(times){
+        var idx = times.indexOf(isoDate);
+        if(idx > -1){
+          data = {
+            code: json.daily.weathercode[idx],
+            tmax: Math.round(json.daily.temperature_2m_max[idx]),
+            tmin: Math.round(json.daily.temperature_2m_min[idx])
+          };
+        }
+      }
+      lsSet(cacheKey, {ts: now, data: data});
+      cb(data);
+    }).catch(function(){
+      cb(cached ? cached.data : null);
+    });
+  }
+
+  function applyWeatherToStripItem(el, data){
+    var iconEl = el.querySelector('.w-icon'), tempEl = el.querySelector('.w-temp'), labelEl = el.querySelector('.w-label');
+    if(!data){ tempEl.textContent = '尚無預報'; labelEl.textContent = ''; return; }
+    var meta = weatherMeta(data.code);
+    iconEl.innerHTML = iconUse(meta.icon);
+    tempEl.textContent = data.tmin+'° / '+data.tmax+'°';
+    labelEl.textContent = meta.label;
+  }
+
+  function applyWeatherToChip(el, data){
+    if(!el) return;
+    var iconEl = el.querySelector('.icon'), tempEl = el.querySelector('.dhw-temp');
+    if(!data){ tempEl.textContent = '尚無預報'; return; }
+    var meta = weatherMeta(data.code);
+    iconEl.outerHTML = iconUse(meta.icon);
+    tempEl.textContent = data.tmin+'°–'+data.tmax+'°';
+  }
+
+  function renderWeatherStrip(){
+    var strip = document.getElementById('weather-strip');
+    if(!strip) return;
+    strip.innerHTML = days.map(function(d){
+      return '<a class="weather-item" id="weather-item-'+d.id+'" href="https://weather.com/zh-TW" target="_blank" rel="noopener">'+
+        '<div class="w-date">'+d.date+'</div>'+
+        '<div class="w-icon">'+iconUse('i-w-cloud')+'</div>'+
+        '<div class="w-temp">載入中</div>'+
+        '<div class="w-label"></div>'+
+      '</a>';
+    }).join('');
+    days.forEach(function(d){
+      getWeatherFor(d.id, d.isoDate, function(data){
+        var el = document.getElementById('weather-item-'+d.id);
+        if(el) applyWeatherToStripItem(el, data);
+        var chip = document.getElementById('dh-weather-'+d.id);
+        if(chip) applyWeatherToChip(chip, data);
+      });
+    });
+  }
+
   /* ================= HOME ================= */
   function renderHome(){
     document.querySelectorAll('[data-goto]').forEach(function(el){
@@ -1000,6 +1135,7 @@
         el.addEventListener('click', function(){ switchView('itin'); selectDay(el.getAttribute('data-day')); });
       });
     }
+    renderWeatherStrip();
     updateCountdown();
   }
 
@@ -1052,6 +1188,7 @@
       '<div class="day-badge">'+(DAY_BADGES[d.id]||'')+'</div>'+
       '<div><div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）</div>'+
       '<div class="dh-route">'+d.region+'</div></div>'+
+      '<a class="dh-weather" id="dh-weather-'+d.id+'" href="https://weather.com/zh-TW" target="_blank" rel="noopener">'+iconUse('i-w-cloud')+'<span class="dhw-temp">--°</span></a>'+
     '</div>';
 
     html += '<div class="glance">'+
@@ -1085,6 +1222,9 @@
     bindPanelToggles();
     bindDayNote(d);
     applyEditingState();
+
+    var weatherChip = document.getElementById('dh-weather-'+d.id);
+    getWeatherFor(d.id, d.isoDate, function(data){ applyWeatherToChip(weatherChip, data); });
   }
 
   function glanceItem(icon,label,key){
@@ -1527,6 +1667,7 @@
       b.classList.toggle('active', b.getAttribute('data-view')===name);
     });
     // re-render so fields shared between views (e.g. hotel name) stay in sync
+    if(name==='home'){ renderWeatherStrip(); }
     if(name==='itin'){ renderDayContent(currentDay); }
     if(name==='flight'){ renderFlights(); renderHotels(); applyEditingState(); }
     if(name==='attractions' && !currentAttractionDay){ selectAttractionDay(days.filter(function(d){return attractions[d.id];})[0].id); }
