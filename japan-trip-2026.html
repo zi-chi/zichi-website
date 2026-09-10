@@ -196,6 +196,12 @@
   .t-map{ display:none; margin-top:8px; border:1px solid var(--border-soft); border-radius: var(--radius-sm); background:#fff; padding:6px; }
   .t-map.open{ display:block; }
   .t-map img{ width:100%; display:block; cursor: zoom-in; }
+  .t-timetable-wrap{ display:none; margin-top:8px; border:1px solid var(--border-soft); border-radius: var(--radius-sm); background:#fff; overflow:auto; }
+  .t-timetable-wrap.open{ display:block; }
+  .t-timetable{ width:100%; border-collapse:collapse; font-size:11.5px; }
+  .t-timetable th{ background: rgba(31,58,95,.06); color: var(--ink); text-align:left; padding:6px 8px; font-weight:700; }
+  .t-timetable td{ padding:6px 8px; border-top:1px solid var(--border-soft); color: var(--text); }
+  .t-timetable td.tt-kind{ color: var(--vermillion); font-weight:700; white-space:nowrap; }
 
   /* ---------- Lightbox (zoomable image viewer) ---------- */
   .lightbox-overlay{
@@ -702,7 +708,19 @@
         {t:'07:55', title:'捷、淇登機', desc:'', type:'plane'},
         {t:'11:00', title:'爸、媽抵達成田機場、入境', desc:'捷、淇抵達日本前，爸媽可在成田機場隨意逛街', type:'plane'},
         {t:'12:25', title:'捷、淇抵達成田機場，跟爸媽會合', desc:'', type:'plane'},
-        {t:'13:30', title:'搭乘 Skyliner，前往上野車站', desc:'', type:'train'},
+        {t:'13:30', title:'搭乘 Skyliner，前往上野車站', desc:'', type:'train',
+          img:'https://www.keisei.co.jp/keisei/tetudou/skyliner/tc/assets/images/top/routemap_skyliner.jpg',
+          timetable:[
+            {time:'13:17', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
+            {time:'13:37', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
+            {time:'13:57', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
+            {time:'14:18', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
+            {time:'14:37', kind:'快速', dest:'西馬込'},
+            {time:'14:57', kind:'快速', dest:'京成高砂'},
+            {time:'15:17', kind:'快速', dest:'京成上野'},
+            {time:'15:36', kind:'快速', dest:'西馬込'},
+            {time:'15:52', kind:'特急', dest:'京成上野'}
+          ]},
         {t:'15:00', title:'抵達上野車站', desc:'買車上零嘴', type:'train'},
         {t:'15:30', title:'搭乘北陸新幹線到長野', desc:'車程約 2.5 小時', type:'train'},
         {t:'18:00', title:'抵達長野、入住飯店', desc:'', type:'bed'},
@@ -1422,7 +1440,7 @@
       var idx = parseInt(token.slice(1), 10);
       var base = d.items[idx];
       return {
-        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '', mapUrl: base.mapUrl || '',
+        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '', mapUrl: base.mapUrl || '', timetable: base.timetable || null,
         timeKey: d.id+'-item'+idx+'-time', titleKey: d.id+'-item'+idx+'-title', descKey: d.id+'-item'+idx+'-desc'
       };
     }
@@ -1468,6 +1486,12 @@
         (entry.mapUrl ?
           '<a class="t-map-link" href="'+entry.mapUrl+'" target="_blank" rel="noopener">'+iconUse('i-pin')+' 在 Google 地圖開啟 <span class="n-ext">'+iconUse('i-chevron')+'</span></a>'
         : '')+
+        (entry.timetable ?
+          '<button type="button" class="t-map-toggle t-tt-toggle" aria-expanded="false">'+iconUse('i-note')+' 查看時刻表 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
+          '<div class="t-timetable-wrap"><table class="t-timetable"><thead><tr><th>時間</th><th>種別</th><th>目的地</th></tr></thead><tbody>'+
+            entry.timetable.map(function(r){ return '<tr><td>'+r.time+'</td><td class="tt-kind">'+r.kind+'</td><td>'+r.dest+'</td></tr>'; }).join('')+
+          '</tbody></table></div>'
+        : '')+
       '</div>';
 
     bindEditableText(row.querySelector('[data-key="'+entry.timeKey+'"]'), entry.timeKey, entry.t);
@@ -1475,11 +1499,20 @@
     bindEditableText(row.querySelector('[data-key="'+entry.descKey+'"]'), entry.descKey, entry.desc);
 
     if(entry.img){
-      var mapToggle = row.querySelector('.t-map-toggle');
+      var mapToggle = row.querySelector('.t-map-toggle:not(.t-tt-toggle)');
       var mapBox = row.querySelector('.t-map');
       mapToggle.addEventListener('click', function(){
         var open = mapBox.classList.toggle('open');
         mapToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+
+    if(entry.timetable){
+      var ttToggle = row.querySelector('.t-tt-toggle');
+      var ttBox = row.querySelector('.t-timetable-wrap');
+      ttToggle.addEventListener('click', function(){
+        var open = ttBox.classList.toggle('open');
+        ttToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     }
 
