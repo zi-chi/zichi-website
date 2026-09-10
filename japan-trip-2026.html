@@ -820,7 +820,12 @@
       items:[
         {t:'13:00', title:'宮川朝市、合掌村', desc:'', type:'walk'},
         {t:'13:00', title:'高山老街', desc:'', type:'walk'},
-        {t:'14:47', title:'搭乘新幹線前往富山', desc:'抵達富山後前往飯店 Check-in', type:'train'},
+        {t:'14:47', title:'搭乘JR高山本線前往富山', desc:'抵達富山後前往飯店 Check-in', type:'train',
+          timetableCols:['高山發車','車次','富山抵達','車程'],
+          timetable:[
+            ['11:03','Hida3号','12:32','1小時29分'],
+            ['13:17','Hida7号','14:51','1小時34分']
+          ]},
         {t:'15:30', title:'富山景點晃晃', desc:'環水公園、池田屋安兵衛商店老舖', type:'walk'},
         {t:'18:30', title:'吃晚餐', desc:'きときと市場的すし玉，車站附近', type:'bowl'},
         {t:'19:30', title:'買小零食隔天吃', desc:'', type:'note'}
