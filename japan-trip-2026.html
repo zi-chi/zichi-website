@@ -380,10 +380,14 @@
     border:1px solid var(--border-soft); overflow:hidden; position:relative;
   }
   .ticket-head{
-    background: linear-gradient(120deg, var(--ink), var(--ink-deep)); color:#f4ecd8;
+    width:100%; background: linear-gradient(120deg, var(--ink), var(--ink-deep)); color:#f4ecd8;
     padding:10px 14px; display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; letter-spacing:.03em;
+    border:none; cursor:pointer; text-align:left; font-family:inherit;
   }
   .ticket-head .icon{ color: var(--gold); }
+  .ticket-head .p-chev{ margin-left:auto; color:#f4ecd8; transition: transform .2s; }
+  .ticket-head[aria-expanded="false"] .p-chev{ transform: rotate(-90deg); }
+  .ticket-content.collapsed{ display:none; }
   .ticket-body{ display:flex; align-items:center; padding: 14px; gap:10px; }
   .ticket-pt{ flex:1; text-align:center; }
   .ticket-pt .tp-time{ font-family:'Shippori Mincho',serif; font-size:20px; font-weight:700; color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -1338,7 +1342,9 @@
     var strip = document.getElementById('weather-strip');
     if(!strip) return;
     strip.innerHTML = days.map(function(d){
-      return '<a class="weather-item" id="weather-item-'+d.id+'" href="https://weather.com/zh-TW" target="_blank" rel="noopener">'+
+      var coords = WEATHER_COORDS[d.id];
+      var href = coords ? ('https://weather.com/zh-TW/weather/tenday/l/'+coords.lat+','+coords.lon) : 'https://weather.com/zh-TW';
+      return '<a class="weather-item" id="weather-item-'+d.id+'" href="'+href+'" target="_blank" rel="noopener">'+
         '<div class="w-date">'+d.date+'</div>'+
         '<div class="w-icon">'+iconUse('i-w-cloud')+'</div>'+
         '<div class="w-temp">載入中</div>'+
@@ -1719,15 +1725,17 @@
       var card = document.createElement('div');
       card.className = 'ticket';
       card.innerHTML =
-        '<div class="ticket-head">'+iconUse('i-plane')+' '+f.group+' ・ '+tripLabel+'</div>'+
-        '<div class="ticket-body">'+
-          '<div class="ticket-pt"><div class="tp-time editable" contenteditable="false" data-key="'+boardKey+'"></div><div class="tp-label editable" contenteditable="false" data-key="'+boardLabelKey+'"></div></div>'+
-          '<div class="ticket-mid">'+iconUse('i-plane')+'<div class="tm-line"></div><div class="tm-note">直飛</div>'+
-            '<div class="tm-flight"><span class="tm-airline">'+f.airline+'</span><span class="editable tm-no" contenteditable="false" data-key="'+noKey+'"></span></div>'+
+        '<button type="button" class="ticket-head" aria-expanded="true">'+iconUse('i-plane')+' '+f.group+' ・ '+tripLabel+' <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
+        '<div class="ticket-content">'+
+          '<div class="ticket-body">'+
+            '<div class="ticket-pt"><div class="tp-time editable" contenteditable="false" data-key="'+boardKey+'"></div><div class="tp-label editable" contenteditable="false" data-key="'+boardLabelKey+'"></div></div>'+
+            '<div class="ticket-mid">'+iconUse('i-plane')+'<div class="tm-line"></div><div class="tm-note">直飛</div>'+
+              '<div class="tm-flight"><span class="tm-airline">'+f.airline+'</span><span class="editable tm-no" contenteditable="false" data-key="'+noKey+'"></span></div>'+
+            '</div>'+
+            '<div class="ticket-pt"><div class="tp-time editable" contenteditable="false" data-key="'+arriveKey+'"></div><div class="tp-label editable" contenteditable="false" data-key="'+arriveLabelKey+'"></div></div>'+
           '</div>'+
-          '<div class="ticket-pt"><div class="tp-time editable" contenteditable="false" data-key="'+arriveKey+'"></div><div class="tp-label editable" contenteditable="false" data-key="'+arriveLabelKey+'"></div></div>'+
-        '</div>'+
-        (showRemark ? ('<div class="ticket-cut"></div><div class="ticket-foot">'+iconUse('i-note')+' <span class="editable" contenteditable="false" data-key="'+remarkKey+'"></span></div>') : '');
+          (showRemark ? ('<div class="ticket-cut"></div><div class="ticket-foot">'+iconUse('i-note')+' <span class="editable" contenteditable="false" data-key="'+remarkKey+'"></span></div>') : '')+
+        '</div>';
       host.appendChild(card);
       bindEditableText(card.querySelector('[data-key="'+boardKey+'"]'), boardKey, f.board);
       bindEditableText(card.querySelector('[data-key="'+arriveKey+'"]'), arriveKey, f.arrive);
@@ -1737,6 +1745,12 @@
       if(showRemark){
         bindEditableText(card.querySelector('[data-key="'+remarkKey+'"]'), remarkKey, FLIGHT_REMARK_DEFAULT);
       }
+      var ticketHead = card.querySelector('.ticket-head');
+      var ticketContent = card.querySelector('.ticket-content');
+      ticketHead.addEventListener('click', function(){
+        var open = !ticketContent.classList.toggle('collapsed');
+        ticketHead.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
     });
   }
   function renderFlights(){
