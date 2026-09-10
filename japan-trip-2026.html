@@ -618,6 +618,10 @@
 (function(){
   "use strict";
 
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+
   /* ================= DATA ================= */
   var TRIP_YEAR = 2026;
 
