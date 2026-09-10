@@ -587,7 +587,7 @@
     <div class="section">
       <div class="section-title">
         <svg class="icon"><use href="#i-w-sun"/></svg>天氣預報
-        <a class="weather-source" href="https://weather.com/zh-TW" target="_blank" rel="noopener">weather.com<svg class="icon"><use href="#i-chevron" style="transform:rotate(-90deg)"/></svg></a>
+        <a class="weather-source" href="https://weathernews.jp/" target="_blank" rel="noopener">weathernews<svg class="icon"><use href="#i-chevron" style="transform:rotate(-90deg)"/></svg></a>
       </div>
       <div class="weather-strip" id="weather-strip"></div>
       <div class="weather-note">氣溫與天氣狀況每 3 小時自動更新一次；出發日期較遠時可能尚無預報資料，通常在出發前 16 天內會顯示實際預報。</div>
@@ -728,6 +728,14 @@
     d4:{lat:36.5756, lon:137.5928}, // 立山（室堂）
     d5:{lat:36.5613, lon:136.6562}, // 金澤
     d6:{lat:35.1815, lon:136.9066}  // 名古屋
+  };
+  var WEATHER_LINKS = {
+    d1:'https://weathernews.jp/onebox/tenki/nagano/20201/?fm=onebox&temp=c&lang=zh_TW', // 長野
+    d2:'https://weathernews.jp/onebox/tenki/spot/landscape/03/4674131/?fm=onebox&temp=c&lang=zh_TW', // 上高地
+    d3:'https://weathernews.jp/onebox/tenki/gifu/21203/?fm=onebox&temp=c&lang=zh_TW', // 高山
+    d4:'https://weathernews.jp/onebox/tenki/toyama/16201/?fm=onebox&temp=c&lang=zh_TW', // 立山黑部
+    d5:'https://weathernews.jp/onebox/tenki/ishikawa/17201/?fm=onebox&temp=c&lang=zh_TW', // 金澤
+    d6:'https://weathernews.jp/onebox/tenki/aichi/23100/?fm=onebox&temp=c&lang=zh_TW'  // 名古屋
   };
 
   var days = [
@@ -1342,8 +1350,7 @@
     var strip = document.getElementById('weather-strip');
     if(!strip) return;
     strip.innerHTML = days.map(function(d){
-      var coords = WEATHER_COORDS[d.id];
-      var href = coords ? ('https://weather.com/zh-TW/weather/tenday/l/'+coords.lat+','+coords.lon) : 'https://weather.com/zh-TW';
+      var href = WEATHER_LINKS[d.id] || 'https://weathernews.jp/';
       return '<a class="weather-item" id="weather-item-'+d.id+'" href="'+href+'" target="_blank" rel="noopener">'+
         '<div class="w-date">'+d.date+'</div>'+
         '<div class="w-icon">'+iconUse('i-w-cloud')+'</div>'+
@@ -1429,7 +1436,7 @@
       '<div class="day-badge">'+(DAY_BADGES[d.id]||'')+'</div>'+
       '<div><div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）</div>'+
       '<div class="dh-route">'+d.region+'</div></div>'+
-      '<a class="dh-weather" id="dh-weather-'+d.id+'" href="'+(WEATHER_COORDS[d.id] ? ('https://weather.com/zh-TW/weather/tenday/l/'+WEATHER_COORDS[d.id].lat+','+WEATHER_COORDS[d.id].lon) : 'https://weather.com/zh-TW')+'" target="_blank" rel="noopener">'+iconUse('i-w-cloud')+'<span class="dhw-temp">--°C</span></a>'+
+      '<a class="dh-weather" id="dh-weather-'+d.id+'" href="'+(WEATHER_LINKS[d.id]||'https://weathernews.jp/')+'" target="_blank" rel="noopener">'+iconUse('i-w-cloud')+'<span class="dhw-temp">--°C</span></a>'+
     '</div>';
 
     html += '<div class="glance">'+
