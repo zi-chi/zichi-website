@@ -1325,7 +1325,7 @@
     if(!data){ tempEl.textContent = '尚無預報'; labelEl.textContent = ''; return; }
     var meta = weatherMeta(data.code);
     iconEl.innerHTML = iconUse(meta.icon);
-    tempEl.textContent = data.tmin+'° / '+data.tmax+'°';
+    tempEl.textContent = data.tmin+'°C / '+data.tmax+'°C';
     labelEl.textContent = meta.label;
   }
 
@@ -1335,7 +1335,7 @@
     if(!data){ tempEl.textContent = '尚無預報'; return; }
     var meta = weatherMeta(data.code);
     iconEl.outerHTML = iconUse(meta.icon);
-    tempEl.textContent = data.tmin+'°–'+data.tmax+'°';
+    tempEl.textContent = data.tmin+'°–'+data.tmax+'°C';
   }
 
   function renderWeatherStrip(){
@@ -1429,7 +1429,7 @@
       '<div class="day-badge">'+(DAY_BADGES[d.id]||'')+'</div>'+
       '<div><div class="dh-date font-mincho">Day '+d.no+'・'+d.date+'（'+d.weekday+'）</div>'+
       '<div class="dh-route">'+d.region+'</div></div>'+
-      '<a class="dh-weather" id="dh-weather-'+d.id+'" href="https://weather.com/zh-TW" target="_blank" rel="noopener">'+iconUse('i-w-cloud')+'<span class="dhw-temp">--°</span></a>'+
+      '<a class="dh-weather" id="dh-weather-'+d.id+'" href="'+(WEATHER_COORDS[d.id] ? ('https://weather.com/zh-TW/weather/tenday/l/'+WEATHER_COORDS[d.id].lat+','+WEATHER_COORDS[d.id].lon) : 'https://weather.com/zh-TW')+'" target="_blank" rel="noopener">'+iconUse('i-w-cloud')+'<span class="dhw-temp">--°C</span></a>'+
     '</div>';
 
     html += '<div class="glance">'+
