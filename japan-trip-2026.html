@@ -605,6 +605,8 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script>
 (function(){
   "use strict";
@@ -983,8 +985,112 @@
     try{ var v = localStorage.getItem(LS_PREFIX+key); if(v===null) return fallback; return JSON.parse(v); }
     catch(e){ return fallback; }
   }
-  function lsSet(key, val){ try{ localStorage.setItem(LS_PREFIX+key, JSON.stringify(val)); }catch(e){} }
-  function lsRemove(key){ try{ localStorage.removeItem(LS_PREFIX+key); }catch(e){} }
+  function lsSet(key, val){
+    try{ localStorage.setItem(LS_PREFIX+key, JSON.stringify(val)); }catch(e){}
+    syncPush(key, val);
+  }
+  function lsRemove(key){
+    try{ localStorage.removeItem(LS_PREFIX+key); }catch(e){}
+    syncPush(key, null);
+  }
+
+  /* ================= REMOTE SYNC (Firebase Realtime Database) =================
+     Mirrors every edited key to a shared database so everyone viewing the trip
+     sees the same live data. If the SDK or network is unavailable, the app
+     silently falls back to local-only mode (same as before). */
+  var firebaseConfig = {
+    apiKey: "AIzaSyCrQntVDuw2LaoX3g0uIJ5ijp9oKDAfuKQ",
+    authDomain: "japantrip2026-4f24d.firebaseapp.com",
+    databaseURL: "https://japantrip2026-4f24d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "japantrip2026-4f24d",
+    storageBucket: "japantrip2026-4f24d.firebasestorage.app",
+    messagingSenderId: "737120266670",
+    appId: "1:737120266670:web:09e7a786fb06909abbc03f"
+  };
+  var SYNC_PATH = 'trips/japan2026';
+  var syncRef = null;
+  var syncShadow = {};
+  var syncLastJSON = null;
+  var syncFirstLoadDone = false;
+  var pendingRerender = false;
+
+  function syncEncodeKey(key){ return key.replace(/[.#$\[\]]/g, '_'); }
+  function syncIsUserKey(key){ return key.indexOf('weather:') !== 0; }
+
+  function syncPush(key, val){
+    if(!syncIsUserKey(key)) return;
+    if(val === null){ delete syncShadow[key]; } else { syncShadow[key] = val; }
+    syncLastJSON = JSON.stringify(syncShadow);
+    if(!syncRef) return;
+    try{
+      var child = syncRef.child(syncEncodeKey(key));
+      if(val === null){ child.remove(); } else { child.set(val); }
+    }catch(e){}
+  }
+
+  function isUserTyping(){
+    var ae = document.activeElement;
+    return !!ae && (ae.tagName==='TEXTAREA' || ae.getAttribute('contenteditable')==='true');
+  }
+
+  function applyRemoteData(data){
+    Object.keys(data).forEach(function(k){
+      try{ localStorage.setItem(LS_PREFIX+k, JSON.stringify(data[k])); }catch(e){}
+    });
+  }
+
+  // One-time reconciliation: this device may already have local edits (made
+  // before sync existed, or while offline) that the shared database doesn't
+  // know about yet — upload those so they aren't silently lost.
+  function pushLocalOnlyKeys(remoteData){
+    try{
+      Object.keys(localStorage).forEach(function(storageKey){
+        if(storageKey.indexOf(LS_PREFIX) !== 0) return;
+        var bareKey = storageKey.slice(LS_PREFIX.length);
+        if(!syncIsUserKey(bareKey)) return;
+        if(Object.prototype.hasOwnProperty.call(remoteData, syncEncodeKey(bareKey))) return;
+        var val = JSON.parse(localStorage.getItem(storageKey));
+        syncPush(bareKey, val);
+      });
+    }catch(e){}
+  }
+
+  function startFirebaseSync(onReady){
+    if(typeof firebase === 'undefined'){ onReady(); return; }
+    try{
+      firebase.initializeApp(firebaseConfig);
+      syncRef = firebase.database().ref(SYNC_PATH);
+    }catch(e){ onReady(); return; }
+
+    var settled = false;
+    var fallbackTimer = setTimeout(function(){
+      if(!settled){ settled = true; syncFirstLoadDone = true; onReady(); }
+    }, 3000);
+
+    syncRef.on('value', function(snap){
+      var data = snap.val() || {};
+      var json = JSON.stringify(data);
+      if(json === syncLastJSON) return; // matches what we already have — nothing to do
+      syncShadow = data;
+      syncLastJSON = json;
+      applyRemoteData(data);
+      if(!settled){
+        settled = true; clearTimeout(fallbackTimer);
+        syncFirstLoadDone = true;
+        pushLocalOnlyKeys(data);
+        onReady();
+      } else if(syncFirstLoadDone){
+        if(isUserTyping()){ pendingRerender = true; }
+        else { renderAll(); }
+      }
+    }, function(){
+      if(!settled){ settled = true; clearTimeout(fallbackTimer); syncFirstLoadDone = true; onReady(); }
+    });
+  }
+
+  document.addEventListener('blur', function(){
+    if(pendingRerender && !isUserTyping()){ pendingRerender = false; renderAll(); }
+  }, true);
 
   var editing = false;
 
@@ -1707,19 +1813,28 @@
   });
 
   document.getElementById('btn-reset').addEventListener('click', function(){
-    showConfirm('確定要將所有已編輯、勾選、新增的內容重設為預設行程嗎？此動作無法復原。', function(){
+    showConfirm('確定要將所有已編輯、勾選、新增的內容重設為預設行程嗎？此動作無法復原，且會影響所有人看到的內容。', function(){
       Object.keys(localStorage).filter(function(k){return k.indexOf(LS_PREFIX)===0;}).forEach(function(k){ localStorage.removeItem(k); });
-      location.reload();
+      if(syncRef){
+        syncRef.remove().then(function(){ location.reload(); }).catch(function(){ location.reload(); });
+      } else {
+        location.reload();
+      }
     }, '重設');
   });
 
   /* ================= INIT ================= */
-  renderHome();
-  renderDayTabs();
-  renderDayContent(currentDay);
-  renderFlights();
-  renderHotels();
-  renderJapanese();
+  function renderAll(){
+    renderHome();
+    renderDayTabs();
+    renderDayContent(currentDay);
+    renderFlights();
+    renderHotels();
+    renderJapanese();
+    if(currentAttractionDay){ renderAttractionTabs(); renderAttractionDay(currentAttractionDay); }
+    applyEditingState();
+  }
+  startFirebaseSync(renderAll);
 
 })();
 </script>
