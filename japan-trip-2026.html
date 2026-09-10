@@ -186,6 +186,13 @@
   }
   .t-map-toggle .p-chev{ margin-left:auto; transition: transform .2s; color: var(--ink-soft); }
   .t-map-toggle[aria-expanded="true"] .p-chev{ transform: rotate(180deg); }
+  .t-map-link{
+    width:100%; margin-top:8px; display:flex; align-items:center; gap:6px; padding:8px 12px; box-sizing:border-box;
+    background: rgba(31,58,95,.05); border:1px solid var(--border-soft); border-radius: var(--radius-sm);
+    color: var(--ink); font-size:12px; font-weight:700; cursor:pointer; text-decoration:none;
+  }
+  .t-map-link .n-ext{ margin-left:auto; color: var(--ink-soft); }
+  .t-map-link .n-ext .icon{ transform: rotate(-90deg); display:block; }
   .t-map{ display:none; margin-top:8px; border:1px solid var(--border-soft); border-radius: var(--radius-sm); background:#fff; padding:6px; }
   .t-map.open{ display:block; }
   .t-map img{ width:100%; display:block; cursor: zoom-in; }
@@ -717,7 +724,7 @@
       meals:{ b:'飯店', l:'上高地', d:'高山餐廳（TBC）' },
       items:[
         {t:'~08:10', title:'盥洗、吃早餐、寄送行李', desc:'', type:'bed'},
-        {t:'08:15', title:'抵達長野巴士站', desc:'尋找前往上高地的巴士月台', type:'bus'},
+        {t:'08:15', title:'抵達長野巴士站', desc:'尋找前往上高地的巴士月台', type:'bus', mapUrl:'https://maps.app.goo.gl/fn7SM4PVh6TJDmn29'},
         {t:'08:30', title:'搭巴士前往上高地', desc:'', type:'bus'},
         {t:'11:10', title:'抵達上高地（大正池站）', desc:'', type:'bus', img:'https://www.kamikochi.org/tw/wp-content/uploads/sites/2/2025/06/walking_map_tw.svg'},
         {t:'13:00', title:'大正池 → 河童橋', desc:'河童橋吃午餐、買伴手禮', type:'walk'},
@@ -1415,7 +1422,7 @@
       var idx = parseInt(token.slice(1), 10);
       var base = d.items[idx];
       return {
-        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '',
+        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '', mapUrl: base.mapUrl || '',
         timeKey: d.id+'-item'+idx+'-time', titleKey: d.id+'-item'+idx+'-title', descKey: d.id+'-item'+idx+'-desc'
       };
     }
@@ -1457,6 +1464,9 @@
         (entry.img ?
           '<button type="button" class="t-map-toggle" aria-expanded="false">'+iconUse('i-pin')+' 查看路線圖 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
           '<div class="t-map"><img src="'+entry.img+'" alt="路線圖" loading="lazy" onerror="this.closest(\'.t-map\').style.display=\'none\'"></div>'
+        : '')+
+        (entry.mapUrl ?
+          '<a class="t-map-link" href="'+entry.mapUrl+'" target="_blank" rel="noopener">'+iconUse('i-pin')+' 在 Google 地圖開啟 <span class="n-ext">'+iconUse('i-chevron')+'</span></a>'
         : '')+
       '</div>';
 
