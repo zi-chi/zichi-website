@@ -179,7 +179,15 @@
   .t-desc:empty{ display:none; }
   .editing .t-desc:empty{ display:block; min-height:1.4em; }
   .editing .t-desc:empty::before{ content:'點此新增行程說明'; opacity:.5; }
-  .t-map{ margin-top:8px; border:1px solid var(--border-soft); border-radius: var(--radius-sm); background:#fff; padding:6px; }
+  .t-map-toggle{
+    width:100%; margin-top:8px; display:flex; align-items:center; gap:6px; padding:8px 12px;
+    background: rgba(31,58,95,.05); border:1px solid var(--border-soft); border-radius: var(--radius-sm);
+    color: var(--ink); font-size:12px; font-weight:700; cursor:pointer;
+  }
+  .t-map-toggle .p-chev{ margin-left:auto; transition: transform .2s; color: var(--ink-soft); }
+  .t-map-toggle[aria-expanded="true"] .p-chev{ transform: rotate(180deg); }
+  .t-map{ display:none; margin-top:8px; border:1px solid var(--border-soft); border-radius: var(--radius-sm); background:#fff; padding:6px; }
+  .t-map.open{ display:block; }
   .t-map img{ width:100%; display:block; cursor: zoom-in; }
 
   /* ---------- Lightbox (zoomable image viewer) ---------- */
@@ -1446,12 +1454,24 @@
           '<button class="t-del-btn" title="刪除此行程">'+iconUse('i-close')+'</button>'+
         '</div>'+
         '<div class="t-desc editable" contenteditable="false" data-key="'+entry.descKey+'"></div>'+
-        (entry.img ? '<div class="t-map"><img src="'+entry.img+'" alt="路線圖" loading="lazy" onerror="this.closest(\'.t-map\').style.display=\'none\'"></div>' : '')+
+        (entry.img ?
+          '<button type="button" class="t-map-toggle" aria-expanded="false">'+iconUse('i-pin')+' 查看路線圖 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
+          '<div class="t-map"><img src="'+entry.img+'" alt="路線圖" loading="lazy" onerror="this.closest(\'.t-map\').style.display=\'none\'"></div>'
+        : '')+
       '</div>';
 
     bindEditableText(row.querySelector('[data-key="'+entry.timeKey+'"]'), entry.timeKey, entry.t);
     bindEditableText(row.querySelector('[data-key="'+entry.titleKey+'"]'), entry.titleKey, entry.title);
     bindEditableText(row.querySelector('[data-key="'+entry.descKey+'"]'), entry.descKey, entry.desc);
+
+    if(entry.img){
+      var mapToggle = row.querySelector('.t-map-toggle');
+      var mapBox = row.querySelector('.t-map');
+      mapToggle.addEventListener('click', function(){
+        var open = mapBox.classList.toggle('open');
+        mapToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
 
     row.querySelector('.t-del-btn').addEventListener('click', function(){
       var titleNow = row.querySelector('[data-key="'+entry.titleKey+'"]').textContent || '此行程';
