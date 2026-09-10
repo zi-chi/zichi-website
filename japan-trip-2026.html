@@ -711,18 +711,30 @@
         {t:'13:30', title:'搭乘 Skyliner，前往上野車站', desc:'', type:'train',
           img:'https://www.keisei.co.jp/keisei/tetudou/skyliner/tc/assets/images/top/routemap_skyliner.jpg',
           timetable:[
-            {time:'13:17', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
-            {time:'13:37', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
-            {time:'13:57', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
-            {time:'14:18', kind:'快速', dest:'羽田機場第1、第2航廈(京急)'},
-            {time:'14:37', kind:'快速', dest:'西馬込'},
-            {time:'14:57', kind:'快速', dest:'京成高砂'},
-            {time:'15:17', kind:'快速', dest:'京成上野'},
-            {time:'15:36', kind:'快速', dest:'西馬込'},
-            {time:'15:52', kind:'特急', dest:'京成上野'}
+            {time:'13:02', kind:'Skyliner', dest:'京成上野'},
+            {time:'13:12', kind:'ACCESS特急', dest:'羽田機場第1、第2航廈(京急)'},
+            {time:'13:22', kind:'Skyliner', dest:'京成上野'},
+            {time:'13:42', kind:'Skyliner', dest:'京成上野'},
+            {time:'13:52', kind:'ACCESS特急', dest:'羽田機場第1、第2航廈(京急)'},
+            {time:'14:02', kind:'Skyliner', dest:'京成上野'},
+            {time:'14:22', kind:'Skyliner', dest:'京成上野'},
+            {time:'14:32', kind:'ACCESS特急', dest:'羽田機場第1、第2航廈(京急)'},
+            {time:'14:42', kind:'Skyliner', dest:'京成上野'}
           ]},
         {t:'15:00', title:'抵達上野車站', desc:'買車上零嘴', type:'train'},
-        {t:'15:30', title:'搭乘北陸新幹線到長野', desc:'車程約 2.5 小時', type:'train'},
+        {t:'15:30', title:'搭乘北陸新幹線到長野', desc:'車程約 2.5 小時', type:'train',
+          timetableCols:['上野發車','車次','長野抵達'],
+          timetable:[
+            {time:'15:10', kind:'Asama617', dest:'16:49'},
+            {time:'15:30', kind:'Hakutaka569', dest:'16:55'},
+            {time:'15:58', kind:'Asama619', dest:'17:42'},
+            {time:'16:10', kind:'Asama669', dest:'17:54'},
+            {time:'16:30', kind:'Kagayaki511', dest:'17:46'},
+            {time:'16:38', kind:'Hakutaka571', dest:'18:10'},
+            {time:'16:58', kind:'Asama621', dest:'18:40'},
+            {time:'17:10', kind:'Kagayaki535', dest:'18:30'},
+            {time:'17:10', kind:'Asama661', dest:'19:03'}
+          ]},
         {t:'18:00', title:'抵達長野、入住飯店', desc:'', type:'bed'},
         {t:'19:00', title:'晚餐、超市買小點心', desc:'', type:'bowl'}
       ],
@@ -1440,7 +1452,8 @@
       var idx = parseInt(token.slice(1), 10);
       var base = d.items[idx];
       return {
-        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '', mapUrl: base.mapUrl || '', timetable: base.timetable || null,
+        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '', mapUrl: base.mapUrl || '',
+        timetable: base.timetable || null, timetableCols: base.timetableCols || ['時間','種別','目的地'],
         timeKey: d.id+'-item'+idx+'-time', titleKey: d.id+'-item'+idx+'-title', descKey: d.id+'-item'+idx+'-desc'
       };
     }
@@ -1488,7 +1501,7 @@
         : '')+
         (entry.timetable ?
           '<button type="button" class="t-map-toggle t-tt-toggle" aria-expanded="false">'+iconUse('i-note')+' 查看時刻表 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
-          '<div class="t-timetable-wrap"><table class="t-timetable"><thead><tr><th>時間</th><th>種別</th><th>目的地</th></tr></thead><tbody>'+
+          '<div class="t-timetable-wrap"><table class="t-timetable"><thead><tr><th>'+entry.timetableCols[0]+'</th><th>'+entry.timetableCols[1]+'</th><th>'+entry.timetableCols[2]+'</th></tr></thead><tbody>'+
             entry.timetable.map(function(r){ return '<tr><td>'+r.time+'</td><td class="tt-kind">'+r.kind+'</td><td>'+r.dest+'</td></tr>'; }).join('')+
           '</tbody></table></div>'
         : '')+
