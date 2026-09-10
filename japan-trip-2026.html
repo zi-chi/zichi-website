@@ -180,7 +180,32 @@
   .editing .t-desc:empty{ display:block; min-height:1.4em; }
   .editing .t-desc:empty::before{ content:'點此新增行程說明'; opacity:.5; }
   .t-map{ margin-top:8px; border:1px solid var(--border-soft); border-radius: var(--radius-sm); background:#fff; padding:6px; }
-  .t-map img{ width:100%; display:block; }
+  .t-map img{ width:100%; display:block; cursor: zoom-in; }
+
+  /* ---------- Lightbox (zoomable image viewer) ---------- */
+  .lightbox-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(16,24,36,.94);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-overlay.hidden{ display:none; }
+  .lightbox-close{
+    position:absolute; top:14px; right:14px; z-index:2;
+    width:40px; height:40px; border-radius:50%;
+    background:rgba(244,236,216,.14); border:1px solid rgba(244,236,216,.35);
+    color:#f4ecd8; font-size:26px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-close:active{ background:rgba(244,236,216,.3); }
+  .lightbox-viewport{
+    width:100%; height:100%; overflow:hidden; touch-action:none;
+    display:flex; align-items:center; justify-content:center; cursor:grab;
+  }
+  .lightbox-viewport.dragging{ cursor:grabbing; }
+  #lightbox-img{
+    max-width:92vw; max-height:88vh; touch-action:none;
+    user-select:none; -webkit-user-drag:none; pointer-events:none;
+  }
   .editing .editable{ background: rgba(191,64,52,.06); border:1px dashed rgba(191,64,52,.4); border-radius:6px; padding:2px 5px; }
 
   .t-slot{ display:flex; gap:12px; }
@@ -608,6 +633,13 @@
         <button class="confirm-btn cancel" id="confirm-cancel">取消</button>
         <button class="confirm-btn ok" id="confirm-ok">確定</button>
       </div>
+    </div>
+  </div>
+
+  <div class="lightbox-overlay hidden" id="lightbox-overlay">
+    <button class="lightbox-close" id="lightbox-close" aria-label="關閉">&times;</button>
+    <div class="lightbox-viewport" id="lightbox-viewport">
+      <img id="lightbox-img" src="" alt="">
     </div>
   </div>
 </div>
@@ -1833,6 +1865,115 @@
       }
     }, '重設');
   });
+
+  /* ================= LIGHTBOX (zoomable image viewer) ================= */
+  (function(){
+    var overlay = document.getElementById('lightbox-overlay');
+    var viewport = document.getElementById('lightbox-viewport');
+    var img = document.getElementById('lightbox-img');
+    var closeBtn = document.getElementById('lightbox-close');
+    if(!overlay || !viewport || !img || !closeBtn) return;
+
+    var MIN_SCALE = 1, MAX_SCALE = 5;
+    var scale = 1, tx = 0, ty = 0;
+    var pointers = {};
+    var dragging = false, dragStart = null, startTx = 0, startTy = 0;
+    var pinchDist = 0;
+
+    function applyTransform(){
+      img.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+scale+')';
+    }
+    function reset(){ scale = 1; tx = 0; ty = 0; applyTransform(); }
+
+    function openLightbox(src, alt){
+      if(!src) return;
+      img.src = src;
+      img.alt = alt || '';
+      reset();
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      overlay.classList.add('hidden');
+      img.src = '';
+      pointers = {};
+      dragging = false;
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', function(e){
+      var target = e.target.closest('.t-map img');
+      if(target){ openLightbox(target.currentSrc || target.src, target.alt); }
+    });
+    closeBtn.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', function(e){ if(e.target === overlay){ closeLightbox(); } });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && !overlay.classList.contains('hidden')){ closeLightbox(); }
+    });
+
+    function dist(p1, p2){ var dx=p1.x-p2.x, dy=p1.y-p2.y; return Math.sqrt(dx*dx+dy*dy); }
+
+    viewport.addEventListener('pointerdown', function(e){
+      viewport.setPointerCapture(e.pointerId);
+      pointers[e.pointerId] = { x:e.clientX, y:e.clientY };
+      var ids = Object.keys(pointers);
+      if(ids.length === 1){
+        dragging = true;
+        dragStart = { x:e.clientX, y:e.clientY };
+        startTx = tx; startTy = ty;
+        viewport.classList.add('dragging');
+      } else if(ids.length === 2){
+        dragging = false;
+        var pts = ids.map(function(id){ return pointers[id]; });
+        pinchDist = dist(pts[0], pts[1]);
+      }
+    });
+
+    viewport.addEventListener('pointermove', function(e){
+      if(!pointers[e.pointerId]) return;
+      pointers[e.pointerId] = { x:e.clientX, y:e.clientY };
+      var ids = Object.keys(pointers);
+      if(ids.length === 2){
+        var pts = ids.map(function(id){ return pointers[id]; });
+        var d = dist(pts[0], pts[1]);
+        if(pinchDist > 0){
+          scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale * (d / pinchDist)));
+          applyTransform();
+        }
+        pinchDist = d;
+      } else if(dragging && ids.length === 1){
+        tx = startTx + (e.clientX - dragStart.x);
+        ty = startTy + (e.clientY - dragStart.y);
+        applyTransform();
+      }
+    });
+
+    function endPointer(e){
+      delete pointers[e.pointerId];
+      var ids = Object.keys(pointers);
+      if(ids.length < 2){ pinchDist = 0; }
+      if(ids.length === 0){ dragging = false; viewport.classList.remove('dragging'); }
+      else if(ids.length === 1){
+        dragging = true;
+        var id = ids[0];
+        dragStart = { x:pointers[id].x, y:pointers[id].y };
+        startTx = tx; startTy = ty;
+      }
+    }
+    viewport.addEventListener('pointerup', endPointer);
+    viewport.addEventListener('pointercancel', endPointer);
+
+    viewport.addEventListener('wheel', function(e){
+      e.preventDefault();
+      var delta = e.deltaY < 0 ? 1.15 : 1/1.15;
+      scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale * delta));
+      applyTransform();
+    }, { passive:false });
+
+    viewport.addEventListener('dblclick', function(){
+      if(scale > 1){ reset(); } else { scale = 2.5; applyTransform(); }
+    });
+  })();
 
   /* ================= INIT ================= */
   function renderAll(){
