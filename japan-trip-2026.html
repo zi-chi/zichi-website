@@ -161,7 +161,10 @@
   .t-dot{
     width:26px; height:26px; border-radius:50%; background: var(--paper); border:2px solid var(--ink);
     color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:13px; z-index:2;
+    padding:0; font-family:inherit; cursor:default;
   }
+  .editing .t-dot{ cursor:pointer; }
+  .editing .t-dot:active{ background: rgba(191,64,52,.12); }
   .t-line{ width:2px; flex:1; background: repeating-linear-gradient(to bottom, var(--border) 0 4px, transparent 4px 8px); margin-top:2px; }
   .t-card{
     flex:1; min-width:0; background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
@@ -481,6 +484,25 @@
   .confirm-btn.cancel{ background: transparent; border-color: var(--border); color: var(--ink-soft); }
   .confirm-btn.ok{ background: var(--vermillion); color:#fff; }
 
+  .icon-picker-overlay{
+    position:fixed; inset:0; z-index:90; background:rgba(20,30,45,.45);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .icon-picker-overlay.hidden{ display:none; }
+  .icon-picker-box{
+    width:100%; max-width:320px; background: var(--paper); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow); padding:20px 18px 16px; text-align:center;
+  }
+  .icon-picker-title{ font-size:13.5px; font-weight:700; color: var(--ink); margin-bottom:14px; }
+  .icon-picker-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-bottom:14px; }
+  .icon-picker-opt{
+    display:flex; flex-direction:column; align-items:center; gap:5px; padding:10px 4px;
+    background: rgba(31,58,95,.05); border:1.4px solid var(--border-soft); border-radius: var(--radius-sm);
+    color: var(--ink); font-size:11px; cursor:pointer;
+  }
+  .icon-picker-opt:active{ background: rgba(191,64,52,.1); border-color: var(--vermillion); }
+  .icon-picker-opt .icon{ width:20px; height:20px; color: var(--vermillion); }
+
   .footer-mark{ text-align:center; padding: 18px 16px 6px; color: var(--text-soft); font-size:11px; }
   .footer-mark .stamp{
     font-family:'Shippori Mincho',serif; font-size:10.5px; color: var(--vermillion);
@@ -502,8 +524,8 @@
   <symbol id="i-train" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="13" rx="4"/><path d="M5 11h14M9 17l-2 3M15 17l2 3"/><circle cx="9" cy="8" r="1"/><circle cx="15" cy="8" r="1"/></symbol>
   <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="14" cy="4.5" r="1.5"/><path d="M12 9l2-1.5 3 1 1.5 4M9 22l1.5-6L8 14l1-4.5L13 8l1 3-2 2 .5 4.5"/></symbol>
   <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7M3 18h18M3 18v2M21 18v2M5 11V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></symbol>
-  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18a9 6 0 0 1-9 6 9 6 0 0 1-9-6Z"/><path d="M6 11c0-3 2-6 6-6M12 4V2"/></symbol>
-  <symbol id="i-note" viewBox="0 0 24 24"><path d="M6 3h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M15 3v5h5M8 12h8M8 16h5"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M6 2v7a2.5 2.5 0 0 0 2.5 2.5V2M6 2v20M8.5 2v9.5M17 2c-1.7 0-3 1.8-3 5s1.3 5 3 5M17 2v20"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M3.5 7a1.5 1.5 0 0 1 1.5-1.5h4.6l1.6 2h8.3A1.5 1.5 0 0 1 21 9v9.5A1.5 1.5 0 0 1 19.5 20h-15A1.5 1.5 0 0 1 3 18.5Z"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 22 20H2Z"/><path d="M12 9.5v4.2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-suitcase" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3.5 12h17"/></symbol>
   <symbol id="i-pencil" viewBox="0 0 24 24"><path d="m4 20 1-4.2L15.5 5.3a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20Z"/></symbol>
@@ -663,6 +685,14 @@
       <img id="lightbox-img" src="" alt="">
     </div>
   </div>
+
+  <div class="icon-picker-overlay hidden" id="icon-picker-overlay">
+    <div class="icon-picker-box">
+      <div class="icon-picker-title">選擇圖示</div>
+      <div class="icon-picker-grid" id="icon-picker-grid"></div>
+      <button class="confirm-btn cancel" id="icon-picker-cancel">取消</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -710,30 +740,31 @@
         {t:'12:25', title:'捷、淇抵達成田機場，跟爸媽會合', desc:'', type:'plane'},
         {t:'13:30', title:'搭乘 Skyliner，前往上野車站', desc:'', type:'train',
           img:'https://www.keisei.co.jp/keisei/tetudou/skyliner/tc/assets/images/top/routemap_skyliner.jpg',
+          timetableCols:['時間','種別','目的地'],
           timetable:[
-            {time:'13:02', kind:'Skyliner', dest:'京成上野'},
-            {time:'13:12', kind:'ACCESS特急', dest:'羽田機場第1、第2航廈(京急)'},
-            {time:'13:22', kind:'Skyliner', dest:'京成上野'},
-            {time:'13:42', kind:'Skyliner', dest:'京成上野'},
-            {time:'13:52', kind:'ACCESS特急', dest:'羽田機場第1、第2航廈(京急)'},
-            {time:'14:02', kind:'Skyliner', dest:'京成上野'},
-            {time:'14:22', kind:'Skyliner', dest:'京成上野'},
-            {time:'14:32', kind:'ACCESS特急', dest:'羽田機場第1、第2航廈(京急)'},
-            {time:'14:42', kind:'Skyliner', dest:'京成上野'}
+            ['13:02','Skyliner','京成上野'],
+            ['13:12','ACCESS特急','羽田機場第1、第2航廈(京急)'],
+            ['13:22','Skyliner','京成上野'],
+            ['13:42','Skyliner','京成上野'],
+            ['13:52','ACCESS特急','羽田機場第1、第2航廈(京急)'],
+            ['14:02','Skyliner','京成上野'],
+            ['14:22','Skyliner','京成上野'],
+            ['14:32','ACCESS特急','羽田機場第1、第2航廈(京急)'],
+            ['14:42','Skyliner','京成上野']
           ]},
         {t:'15:00', title:'抵達上野車站', desc:'買車上零嘴', type:'train'},
         {t:'15:30', title:'搭乘北陸新幹線到長野', desc:'車程約 2.5 小時', type:'train',
-          timetableCols:['上野發車','車次','長野抵達'],
+          timetableCols:['上野發車','車次','長野抵達','車程'],
           timetable:[
-            {time:'15:10', kind:'Asama617', dest:'16:49'},
-            {time:'15:30', kind:'Hakutaka569', dest:'16:55'},
-            {time:'15:58', kind:'Asama619', dest:'17:42'},
-            {time:'16:10', kind:'Asama669', dest:'17:54'},
-            {time:'16:30', kind:'Kagayaki511', dest:'17:46'},
-            {time:'16:38', kind:'Hakutaka571', dest:'18:10'},
-            {time:'16:58', kind:'Asama621', dest:'18:40'},
-            {time:'17:10', kind:'Kagayaki535', dest:'18:30'},
-            {time:'17:10', kind:'Asama661', dest:'19:03'}
+            ['15:10','Asama617','16:49','1小時39分'],
+            ['15:30','Hakutaka569','16:55','1小時25分'],
+            ['15:58','Asama619','17:42','1小時44分'],
+            ['16:10','Asama669','17:54','1小時44分'],
+            ['16:30','Kagayaki511','17:46','1小時16分'],
+            ['16:38','Hakutaka571','18:10','1小時32分'],
+            ['16:58','Asama621','18:40','1小時42分'],
+            ['17:10','Kagayaki535','18:30','1小時20分'],
+            ['17:10','Asama661','19:03','1小時53分']
           ]},
         {t:'18:00', title:'抵達長野、入住飯店', desc:'', type:'bed'},
         {t:'19:00', title:'晚餐、超市買小點心', desc:'', type:'bowl'}
@@ -1065,7 +1096,17 @@
     {group:'全家', airline:'虎航 Tigerair', flightNo:'IT209', board:'21:20', boardLabel:'中部國際機場（名古屋）登機', arrive:'23:25', arriveLabel:'桃園機場入境'}
   ];
 
-  var ICONS = { bus:'i-bus', train:'i-train', plane:'i-plane', walk:'i-walk', bed:'i-bed', bowl:'i-bowl', note:'i-note', suitcase:'i-suitcase' };
+  var ICONS = { bus:'i-bus', train:'i-train', plane:'i-plane', walk:'i-walk', bed:'i-bed', bowl:'i-bowl', note:'i-note', suitcase:'i-suitcase', pin:'i-pin' };
+  var ICON_OPTIONS = [
+    {type:'plane', icon:'i-plane', label:'飛機'},
+    {type:'bus', icon:'i-bus', label:'巴士'},
+    {type:'train', icon:'i-train', label:'火車'},
+    {type:'walk', icon:'i-walk', label:'步行'},
+    {type:'bowl', icon:'i-bowl', label:'餐廳'},
+    {type:'bed', icon:'i-bed', label:'住宿'},
+    {type:'pin', icon:'i-pin', label:'景點'},
+    {type:'note', icon:'i-note', label:'其他'}
+  ];
 
   /* ================= STORAGE ================= */
   var LS_PREFIX = 'jpTrip2026:';
@@ -1451,18 +1492,21 @@
     if(token.charAt(0) === 'd'){
       var idx = parseInt(token.slice(1), 10);
       var base = d.items[idx];
+      var typeKey = d.id+'-item'+idx+'-type';
       return {
-        t: base.t, title: base.title, desc: base.desc || '', type: base.type, img: base.img || '', mapUrl: base.mapUrl || '',
+        t: base.t, title: base.title, desc: base.desc || '', type: lsGet(typeKey, base.type), img: base.img || '', mapUrl: base.mapUrl || '',
         timetable: base.timetable || null, timetableCols: base.timetableCols || ['時間','種別','目的地'],
-        timeKey: d.id+'-item'+idx+'-time', titleKey: d.id+'-item'+idx+'-title', descKey: d.id+'-item'+idx+'-desc'
+        timeKey: d.id+'-item'+idx+'-time', titleKey: d.id+'-item'+idx+'-title', descKey: d.id+'-item'+idx+'-desc',
+        typeKey: typeKey, isExtra: false, extraId: null
       };
     }
     var xId = token.slice(1);
     var extras = lsGet(d.id+':items:extra', {});
     var ex = extras[xId] || {t:'', title:'新行程', desc:'', type:'note'};
     return {
-      t: ex.t, title: ex.title, desc: ex.desc || '', type: ex.type,
-      timeKey: d.id+'-itemx'+xId+'-time', titleKey: d.id+'-itemx'+xId+'-title', descKey: d.id+'-itemx'+xId+'-desc'
+      t: ex.t, title: ex.title, desc: ex.desc || '', type: ex.type, img: '', mapUrl: '', timetable: null, timetableCols: ['時間','種別','目的地'],
+      timeKey: d.id+'-itemx'+xId+'-time', titleKey: d.id+'-itemx'+xId+'-title', descKey: d.id+'-itemx'+xId+'-desc',
+      typeKey: null, isExtra: true, extraId: xId
     };
   }
 
@@ -1484,7 +1528,7 @@
     var row = document.createElement('div');
     row.className = 't-item';
     row.innerHTML =
-      '<div class="t-rail"><div class="t-dot">'+iconUse(ICONS[entry.type]||'i-note')+'</div></div>'+
+      '<div class="t-rail"><button type="button" class="t-dot" title="更換圖示">'+iconUse(ICONS[entry.type]||'i-note')+'</button></div>'+
       '<div class="t-card">'+
         '<div class="t-top">'+
           '<span class="t-time editable" contenteditable="false" data-key="'+entry.timeKey+'"></span>'+
@@ -1501,8 +1545,12 @@
         : '')+
         (entry.timetable ?
           '<button type="button" class="t-map-toggle t-tt-toggle" aria-expanded="false">'+iconUse('i-note')+' 查看時刻表 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>'+
-          '<div class="t-timetable-wrap"><table class="t-timetable"><thead><tr><th>'+entry.timetableCols[0]+'</th><th>'+entry.timetableCols[1]+'</th><th>'+entry.timetableCols[2]+'</th></tr></thead><tbody>'+
-            entry.timetable.map(function(r){ return '<tr><td>'+r.time+'</td><td class="tt-kind">'+r.kind+'</td><td>'+r.dest+'</td></tr>'; }).join('')+
+          '<div class="t-timetable-wrap"><table class="t-timetable"><thead><tr>'+
+            entry.timetableCols.map(function(c){ return '<th>'+c+'</th>'; }).join('')+
+          '</tr></thead><tbody>'+
+            entry.timetable.map(function(r){
+              return '<tr>'+r.map(function(cell, ci){ return '<td'+(ci===1?' class="tt-kind"':'')+'>'+cell+'</td>'; }).join('')+'</tr>';
+            }).join('')+
           '</tbody></table></div>'
         : '')+
       '</div>';
@@ -1510,6 +1558,20 @@
     bindEditableText(row.querySelector('[data-key="'+entry.timeKey+'"]'), entry.timeKey, entry.t);
     bindEditableText(row.querySelector('[data-key="'+entry.titleKey+'"]'), entry.titleKey, entry.title);
     bindEditableText(row.querySelector('[data-key="'+entry.descKey+'"]'), entry.descKey, entry.desc);
+
+    var dotBtn = row.querySelector('.t-dot');
+    dotBtn.addEventListener('click', function(){
+      if(!editing) return;
+      openIconPicker(entry.type, function(newType){
+        if(entry.isExtra){
+          var extras = lsGet(d.id+':items:extra', {});
+          if(extras[entry.extraId]){ extras[entry.extraId].type = newType; lsSet(d.id+':items:extra', extras); }
+        } else {
+          lsSet(entry.typeKey, newType);
+        }
+        dotBtn.innerHTML = iconUse(ICONS[newType]||'i-note');
+      });
+    });
 
     if(entry.img){
       var mapToggle = row.querySelector('.t-map-toggle:not(.t-tt-toggle)');
@@ -2050,6 +2112,42 @@
       if(scale > 1){ reset(); } else { scale = 2.5; applyTransform(); }
     });
   })();
+
+  /* ================= ICON PICKER ================= */
+  var iconPickerCallback = null;
+  (function(){
+    var overlay = document.getElementById('icon-picker-overlay');
+    var grid = document.getElementById('icon-picker-grid');
+    var cancelBtn = document.getElementById('icon-picker-cancel');
+    if(!overlay || !grid || !cancelBtn) return;
+
+    grid.innerHTML = ICON_OPTIONS.map(function(o){
+      return '<button type="button" class="icon-picker-opt" data-type="'+o.type+'">'+iconUse(o.icon)+'<span>'+o.label+'</span></button>';
+    }).join('');
+
+    function closePicker(){
+      overlay.classList.add('hidden');
+      iconPickerCallback = null;
+    }
+
+    grid.addEventListener('click', function(e){
+      var btn = e.target.closest('.icon-picker-opt');
+      if(!btn) return;
+      var t = btn.getAttribute('data-type');
+      var cb = iconPickerCallback;
+      closePicker();
+      if(cb){ cb(t); }
+    });
+    cancelBtn.addEventListener('click', closePicker);
+    overlay.addEventListener('click', function(e){ if(e.target === overlay){ closePicker(); } });
+  })();
+
+  function openIconPicker(currentType, cb){
+    var overlay = document.getElementById('icon-picker-overlay');
+    if(!overlay) return;
+    iconPickerCallback = cb;
+    overlay.classList.remove('hidden');
+  }
 
   /* ================= INIT ================= */
   function renderAll(){
