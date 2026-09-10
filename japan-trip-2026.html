@@ -175,7 +175,7 @@
     cursor:pointer; padding:0; font-size:15px; align-items:center;
   }
   .editing .t-del-btn{ display:inline-flex; }
-  .t-desc{ font-size:12.5px; color: var(--text-soft); margin-top:4px; outline:none; line-height:1.5; }
+  .t-desc{ font-size:12.5px; color: var(--text-soft); margin-top:4px; outline:none; line-height:1.5; white-space: pre-wrap; }
   .t-desc:empty{ display:none; }
   .editing .t-desc:empty{ display:block; min-height:1.4em; }
   .editing .t-desc:empty::before{ content:'點此新增行程說明'; opacity:.5; }
@@ -1175,7 +1175,7 @@
     el.textContent = (override!==null && override!=='') ? override : fallbackText;
     el.classList.add('editable');
     var save = function(){
-      var txt = el.textContent.trim();
+      var txt = (el.innerText !== undefined ? el.innerText : el.textContent).trim();
       if(txt === fallbackText || txt===''){ lsRemove(key); } else { lsSet(key, txt); }
     };
     el.addEventListener('blur', save);
