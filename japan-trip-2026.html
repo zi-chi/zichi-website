@@ -306,6 +306,53 @@
   .attr-photo.fallback img{ display:none; }
   .attr-photo.fallback .attr-photo-fallback{ display:flex; }
 
+  /* ---------- attraction grid (compact card layout, currently 長野 only) ---------- */
+  .dh-filter{
+    margin-left:auto; font-size:11.5px; font-weight:700; color: var(--ink); background: var(--paper);
+    border:1.4px solid var(--border-soft); border-radius: var(--radius-sm); padding:6px 8px; flex:none;
+  }
+  .attr-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:2px 16px 16px; }
+  .attr-grid-card{
+    position:relative; aspect-ratio:1/1; border-radius:18px; overflow:hidden; cursor:pointer;
+    background: linear-gradient(155deg, var(--ink), var(--ink-deep));
+    border:1px solid var(--border-soft); box-shadow: var(--shadow-sm);
+  }
+  .attr-grid-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .attr-grid-card .agc-fallback{
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    color: rgba(244,236,216,.7); font-size:30px;
+  }
+  .attr-grid-card.fallback img{ display:none; }
+  .attr-grid-card.fallback .agc-fallback{ display:flex; }
+  .attr-grid-card .agc-badge{
+    position:absolute; top:8px; left:8px; width:26px; height:26px; border-radius:50%;
+    background: rgba(244,236,216,.92); color: var(--vermillion); display:flex; align-items:center; justify-content:center;
+    box-shadow: var(--shadow-sm); z-index:2;
+  }
+  .attr-grid-card .agc-badge .icon{ width:14px; height:14px; }
+  .attr-grid-card .agc-label{
+    position:absolute; left:0; right:0; bottom:0; padding:22px 10px 9px;
+    background: linear-gradient(to top, rgba(15,22,33,.88), transparent);
+    color:#f4ecd8; font-size:12px; font-weight:700; display:flex; align-items:center; gap:4px; line-height:1.3;
+  }
+  .attr-grid-card .agc-label .icon{ width:12px; height:12px; flex:none; color:#f4ecd8; }
+  .attr-grid-card.active{ outline:2.5px solid var(--vermillion); outline-offset:1px; }
+
+  .attr-detail{
+    margin:2px 16px 16px; background: var(--paper); border:1px solid var(--border-soft);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow:hidden; display:none;
+  }
+  .attr-detail.open{ display:block; }
+  .attr-detail .ad-head{
+    display:flex; align-items:center; gap:8px; padding:12px 14px;
+    background: rgba(31,58,95,.05); font-weight:700; color:var(--ink); font-size:13.5px;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .attr-detail .ad-head .icon{ color:var(--vermillion); flex:none; }
+  .attr-detail .ad-close{ margin-left:auto; cursor:pointer; color:var(--ink-soft); flex:none; }
+  .attr-detail .ad-body{ padding:12px 14px 16px; }
+  .attr-detail .attr-photo{ border-radius:0; }
+
   .shop-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
   .shop-list li{ padding-bottom:12px; border-bottom:1px dashed var(--border-soft); display:flex; gap:10px; }
   .shop-list li:last-child{ border-bottom:none; padding-bottom:0; }
@@ -1910,11 +1957,110 @@
     renderAttractionDay(id);
   }
 
+  // Grid-card layout for attraction spots (currently 長野/d1 only, as a trial).
+  var ATTR_GRID_DAYS = ['d1'];
+
+  function buildSpotBodyHtml(spot){
+    if(spot.shops){
+      return (spot.intro ? '<p class="attr-desc">'+spot.intro+'</p>' : '') +
+        '<ul class="shop-list">' + spot.shops.map(function(s){
+          var thumb = s.photo ? '<div class="shop-thumb"><img src="'+s.photo+'" alt="'+s.name+'" loading="lazy" onerror="this.closest(\'.shop-thumb\').style.display=\'none\'"></div>' : '';
+          return '<li class="'+(s.photo?'has-thumb':'')+'">'+thumb+
+            '<div class="shop-info"><div class="shop-name">'+s.name+'</div>'+
+            '<div class="shop-hours">'+iconUse('i-calendar')+' '+s.hours+'</div>'+
+            '<div class="shop-feature">'+s.feature+'</div></div></li>';
+        }).join('') + '</ul>';
+    }
+    return '<p class="attr-desc">'+spot.desc+'</p>';
+  }
+
+  function spotCategory(spot){
+    return spot.icon === 'i-bowl' ? 'food' : 'pin';
+  }
+
+  function renderAttractionGrid(id, a){
+    var host = document.getElementById('attractions-content');
+    var html = '';
+    html += '<div class="day-head">'+
+      '<div class="day-badge">'+(DAY_BADGES[id]||'')+'</div>'+
+      '<div class="dh-date font-mincho">Day '+days.filter(function(x){return x.id===id;})[0].no+'・'+days.filter(function(x){return x.id===id;})[0].date+'（'+days.filter(function(x){return x.id===id;})[0].weekday+'）・'+a.region+'</div>'+
+      '<select class="dh-filter" id="attr-filter-'+id+'">'+
+        '<option value="all">全部景點</option>'+
+        '<option value="pin">必去景點</option>'+
+        '<option value="food">必吃美食</option>'+
+      '</select>'+
+    '</div>';
+    if(a.photo){
+      html += '<div class="attr-banner"><img src="'+a.photo+'" alt="'+a.region+'" loading="lazy" onerror="this.closest(\'.attr-banner\').style.display=\'none\'"></div>';
+    }
+    html += '<div class="attr-overview">'+a.overview+'</div>';
+
+    html += '<div class="attr-grid" id="attr-grid-'+id+'">';
+    a.spots.forEach(function(spot, idx){
+      var photoImg = spot.photo ? '<img src="'+spot.photo+'" alt="'+spot.name+'" loading="lazy" onerror="this.closest(\'.attr-grid-card\').classList.add(\'fallback\')">' : '';
+      html +=
+        '<div class="attr-grid-card'+(spot.photo?'':' fallback')+'" data-idx="'+idx+'" data-cat="'+spotCategory(spot)+'">'+
+          photoImg+
+          '<span class="agc-fallback">'+iconUse(spot.icon||'i-pin')+'</span>'+
+          '<span class="agc-badge">'+iconUse(spot.icon||'i-pin')+'</span>'+
+          '<span class="agc-label">'+iconUse(spot.icon||'i-pin')+' '+spot.name+'</span>'+
+        '</div>';
+    });
+    html += '</div>';
+
+    html += '<div class="attr-detail" id="attr-detail-'+id+'">'+
+      '<div class="ad-head"><span class="ad-head-icon"></span><span class="ad-head-title"></span><span class="ad-close">'+iconUse('i-close')+'</span></div>'+
+      '<div class="ad-body"></div>'+
+    '</div>';
+
+    host.innerHTML = html;
+
+    var grid = document.getElementById('attr-grid-'+id);
+    var detail = document.getElementById('attr-detail-'+id);
+    var filter = document.getElementById('attr-filter-'+id);
+
+    function closeDetail(){
+      detail.classList.remove('open');
+      grid.querySelectorAll('.attr-grid-card.active').forEach(function(c){ c.classList.remove('active'); });
+    }
+
+    grid.querySelectorAll('.attr-grid-card').forEach(function(card){
+      card.addEventListener('click', function(){
+        var idx = parseInt(card.getAttribute('data-idx'), 10);
+        var spot = a.spots[idx];
+        var wasActive = card.classList.contains('active');
+        closeDetail();
+        if(wasActive) return;
+        card.classList.add('active');
+        detail.querySelector('.ad-head-icon').innerHTML = iconUse(spot.icon||'i-pin');
+        detail.querySelector('.ad-head-title').textContent = spot.name;
+        detail.querySelector('.ad-body').innerHTML = buildSpotBodyHtml(spot);
+        detail.classList.add('open');
+        detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+      });
+    });
+    detail.querySelector('.ad-close').addEventListener('click', closeDetail);
+
+    filter.addEventListener('change', function(){
+      var val = filter.value;
+      closeDetail();
+      grid.querySelectorAll('.attr-grid-card').forEach(function(card){
+        var show = (val === 'all') || (card.getAttribute('data-cat') === val);
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  }
+
   function renderAttractionDay(id){
     var d = days.filter(function(x){return x.id===id;})[0];
     var a = attractions[id];
     var host = document.getElementById('attractions-content');
     if(!a){ host.innerHTML=''; return; }
+
+    if(ATTR_GRID_DAYS.indexOf(id) > -1){
+      renderAttractionGrid(id, a);
+      return;
+    }
 
     var html = '';
     html += '<div class="day-head">'+
@@ -1928,19 +2074,7 @@
     html += '<div class="attr-list">';
     a.spots.forEach(function(spot, idx){
       var photoImg = spot.photo ? '<img src="'+spot.photo+'" alt="'+spot.name+'" loading="lazy" onerror="this.closest(\'.attr-photo\').classList.add(\'fallback\')">' : '';
-      var bodyHtml;
-      if(spot.shops){
-        bodyHtml = (spot.intro ? '<p class="attr-desc">'+spot.intro+'</p>' : '') +
-          '<ul class="shop-list">' + spot.shops.map(function(s){
-            var thumb = s.photo ? '<div class="shop-thumb"><img src="'+s.photo+'" alt="'+s.name+'" loading="lazy" onerror="this.closest(\'.shop-thumb\').style.display=\'none\'"></div>' : '';
-            return '<li class="'+(s.photo?'has-thumb':'')+'">'+thumb+
-              '<div class="shop-info"><div class="shop-name">'+s.name+'</div>'+
-              '<div class="shop-hours">'+iconUse('i-calendar')+' '+s.hours+'</div>'+
-              '<div class="shop-feature">'+s.feature+'</div></div></li>';
-          }).join('') + '</ul>';
-      } else {
-        bodyHtml = '<p class="attr-desc">'+spot.desc+'</p>';
-      }
+      var bodyHtml = buildSpotBodyHtml(spot);
       html +=
         '<div class="panel attr-panel" id="panel-'+id+'-spot'+idx+'">'+
           '<div class="attr-photo'+(spot.photo?'':' fallback')+'">'+photoImg+'<span class="attr-photo-fallback">'+iconUse(spot.icon||'i-pin')+'</span></div>'+
