@@ -288,6 +288,14 @@
     background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
     padding:12px 14px; box-shadow: var(--shadow-sm);
   }
+  .attr-overview-toggle{
+    width:calc(100% - 32px); box-sizing:border-box; margin:4px 16px 8px; display:flex; align-items:center; gap:6px;
+    padding:10px 14px; background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
+    color: var(--ink); font-size:13px; font-weight:700; cursor:pointer; box-shadow: var(--shadow-sm); font-family:inherit;
+  }
+  .attr-overview-toggle .p-chev{ margin-left:auto; transition: transform .2s; color: var(--ink-soft); }
+  .attr-overview-toggle[aria-expanded="true"] .p-chev{ transform: rotate(180deg); }
+  .attr-overview.collapsed{ display:none; }
   .attr-list{ padding: 0 0 8px; }
   .attr-panel{ margin: 0 16px 12px; background: var(--paper); }
   .attr-panel .panel-head{ font-size:14.5px; }
@@ -327,9 +335,11 @@
   .attr-grid-card .agc-badge{
     position:absolute; top:8px; left:8px; width:26px; height:26px; border-radius:50%;
     background: rgba(244,236,216,.92); color: var(--vermillion); display:flex; align-items:center; justify-content:center;
-    box-shadow: var(--shadow-sm); z-index:2;
+    box-shadow: var(--shadow-sm); z-index:2; border:none; padding:0; font-family:inherit; cursor:default;
   }
   .attr-grid-card .agc-badge .icon{ width:14px; height:14px; }
+  .editing .attr-grid-card .agc-badge{ cursor:pointer; box-shadow:0 0 0 2px var(--vermillion), var(--shadow-sm); }
+  .editing .attr-grid-card .agc-badge:active{ background: rgba(191,64,52,.25); }
   .attr-grid-card .agc-label{
     position:absolute; left:0; right:0; bottom:0; padding:22px 10px 9px;
     background: linear-gradient(to top, rgba(15,22,33,.88), transparent);
@@ -579,6 +589,7 @@
   <symbol id="i-note" viewBox="0 0 24 24"><path d="M3.5 7a1.5 1.5 0 0 1 1.5-1.5h4.6l1.6 2h8.3A1.5 1.5 0 0 1 21 9v9.5A1.5 1.5 0 0 1 19.5 20h-15A1.5 1.5 0 0 1 3 18.5Z"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 22 20H2Z"/><path d="M12 9.5v4.2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-suitcase" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3.5 12h17"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><path d="M5 8h14l-1.3 12.2a1 1 0 0 1-1 .8H7.3a1 1 0 0 1-1-.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
   <symbol id="i-pencil" viewBox="0 0 24 24"><path d="m4 20 1-4.2L15.5 5.3a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20Z"/></symbol>
   <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.4"/></symbol>
@@ -714,7 +725,7 @@
     <button class="tabbtn active" data-view="home"><svg class="icon"><use href="#i-home"/></svg>首頁</button>
     <button class="tabbtn" data-view="itin"><svg class="icon"><use href="#i-calendar"/></svg>每日行程</button>
     <button class="tabbtn" data-view="flight"><svg class="icon"><use href="#i-ticket"/></svg>航班住宿</button>
-    <button class="tabbtn" data-view="attractions"><svg class="icon"><use href="#i-pin"/></svg>景點</button>
+    <button class="tabbtn" data-view="attractions"><svg class="icon"><use href="#i-pin"/></svg>景點美食</button>
     <button class="tabbtn" data-view="japanese"><svg class="icon"><use href="#i-note"/></svg>日文</button>
   </nav>
 
@@ -1203,7 +1214,7 @@
     {group:'全家', airline:'虎航 Tigerair', flightNo:'IT209', board:'21:20', boardLabel:'中部國際機場（名古屋）登機', arrive:'23:25', arriveLabel:'桃園機場入境'}
   ];
 
-  var ICONS = { bus:'i-bus', train:'i-train', plane:'i-plane', walk:'i-walk', bed:'i-bed', bowl:'i-bowl', note:'i-note', suitcase:'i-suitcase', pin:'i-pin' };
+  var ICONS = { bus:'i-bus', train:'i-train', plane:'i-plane', walk:'i-walk', bed:'i-bed', bowl:'i-bowl', note:'i-note', suitcase:'i-suitcase', pin:'i-pin', gift:'i-gift' };
   var ICON_OPTIONS = [
     {type:'plane', icon:'i-plane', label:'飛機'},
     {type:'bus', icon:'i-bus', label:'巴士'},
@@ -1212,6 +1223,7 @@
     {type:'bowl', icon:'i-bowl', label:'餐廳'},
     {type:'bed', icon:'i-bed', label:'住宿'},
     {type:'pin', icon:'i-pin', label:'景點'},
+    {type:'gift', icon:'i-gift', label:'伴手禮'},
     {type:'note', icon:'i-note', label:'其他'}
   ];
 
@@ -1974,8 +1986,14 @@
     return '<p class="attr-desc">'+spot.desc+'</p>';
   }
 
-  function spotCategory(spot){
-    return spot.icon === 'i-bowl' ? 'food' : 'pin';
+  function categoryForIcon(icon){
+    if(icon === 'i-bowl') return 'food';
+    if(icon === 'i-gift') return 'gift';
+    return 'pin';
+  }
+
+  function spotIconKey(dayId, idx){
+    return dayId+'-spot'+idx+'-icon';
   }
 
   function renderAttractionGrid(id, a){
@@ -1988,22 +2006,25 @@
         '<option value="all">全部景點</option>'+
         '<option value="pin">必去景點</option>'+
         '<option value="food">必吃美食</option>'+
+        '<option value="gift">必買伴手禮</option>'+
       '</select>'+
     '</div>';
     if(a.photo){
       html += '<div class="attr-banner"><img src="'+a.photo+'" alt="'+a.region+'" loading="lazy" onerror="this.closest(\'.attr-banner\').style.display=\'none\'"></div>';
     }
-    html += '<div class="attr-overview">'+a.overview+'</div>';
+    html += '<button type="button" class="attr-overview-toggle" id="attr-ov-toggle-'+id+'" aria-expanded="false">'+iconUse('i-note')+' '+a.region+'市介紹 <span class="p-chev">'+iconUse('i-chevron')+'</span></button>';
+    html += '<div class="attr-overview collapsed" id="attr-overview-'+id+'">'+a.overview+'</div>';
 
     html += '<div class="attr-grid" id="attr-grid-'+id+'">';
     a.spots.forEach(function(spot, idx){
       var photoImg = spot.photo ? '<img src="'+spot.photo+'" alt="'+spot.name+'" loading="lazy" onerror="this.closest(\'.attr-grid-card\').classList.add(\'fallback\')">' : '';
+      var icon = lsGet(spotIconKey(id, idx), spot.icon || 'i-pin');
       html +=
-        '<div class="attr-grid-card'+(spot.photo?'':' fallback')+'" data-idx="'+idx+'" data-cat="'+spotCategory(spot)+'">'+
+        '<div class="attr-grid-card'+(spot.photo?'':' fallback')+'" data-idx="'+idx+'" data-cat="'+categoryForIcon(icon)+'">'+
           photoImg+
-          '<span class="agc-fallback">'+iconUse(spot.icon||'i-pin')+'</span>'+
-          '<span class="agc-badge">'+iconUse(spot.icon||'i-pin')+'</span>'+
-          '<span class="agc-label">'+iconUse(spot.icon||'i-pin')+' '+spot.name+'</span>'+
+          '<span class="agc-fallback">'+iconUse(icon)+'</span>'+
+          '<button type="button" class="agc-badge" title="更換圖示">'+iconUse(icon)+'</button>'+
+          '<span class="agc-label">'+iconUse(icon)+' '+spot.name+'</span>'+
         '</div>';
     });
     html += '</div>';
@@ -2018,6 +2039,14 @@
     var grid = document.getElementById('attr-grid-'+id);
     var detail = document.getElementById('attr-detail-'+id);
     var filter = document.getElementById('attr-filter-'+id);
+    var ovToggle = document.getElementById('attr-ov-toggle-'+id);
+    var overview = document.getElementById('attr-overview-'+id);
+
+    ovToggle.addEventListener('click', function(){
+      var expand = overview.classList.contains('collapsed');
+      overview.classList.toggle('collapsed', !expand);
+      ovToggle.setAttribute('aria-expanded', expand ? 'true' : 'false');
+    });
 
     function closeDetail(){
       detail.classList.remove('open');
@@ -2025,18 +2054,42 @@
     }
 
     grid.querySelectorAll('.attr-grid-card').forEach(function(card){
+      var idx = parseInt(card.getAttribute('data-idx'), 10);
+      var spot = a.spots[idx];
+
       card.addEventListener('click', function(){
-        var idx = parseInt(card.getAttribute('data-idx'), 10);
-        var spot = a.spots[idx];
         var wasActive = card.classList.contains('active');
         closeDetail();
         if(wasActive) return;
         card.classList.add('active');
-        detail.querySelector('.ad-head-icon').innerHTML = iconUse(spot.icon||'i-pin');
+        var icon = lsGet(spotIconKey(id, idx), spot.icon || 'i-pin');
+        detail.querySelector('.ad-head-icon').innerHTML = iconUse(icon);
         detail.querySelector('.ad-head-title').textContent = spot.name;
         detail.querySelector('.ad-body').innerHTML = buildSpotBodyHtml(spot);
         detail.classList.add('open');
         detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+      });
+
+      var badge = card.querySelector('.agc-badge');
+      badge.addEventListener('click', function(e){
+        e.stopPropagation();
+        if(!editing) return;
+        var currentIcon = lsGet(spotIconKey(id, idx), spot.icon || 'i-pin');
+        openIconPicker(currentIcon, function(newType){
+          var newIcon = ICONS[newType] || 'i-pin';
+          lsSet(spotIconKey(id, idx), newIcon);
+          badge.innerHTML = iconUse(newIcon);
+          card.querySelector('.agc-fallback').innerHTML = iconUse(newIcon);
+          card.querySelector('.agc-label').innerHTML = iconUse(newIcon)+' '+spot.name;
+          card.setAttribute('data-cat', categoryForIcon(newIcon));
+          if(card.classList.contains('active')){
+            detail.querySelector('.ad-head-icon').innerHTML = iconUse(newIcon);
+          }
+          if(filter.value !== 'all' && filter.value !== card.getAttribute('data-cat')){
+            card.style.display = 'none';
+            if(card.classList.contains('active')) closeDetail();
+          }
+        });
       });
     });
     detail.querySelector('.ad-close').addEventListener('click', closeDetail);
