@@ -383,14 +383,20 @@
   }
   .spot-form-cat-btn .icon{ width:15px; height:15px; color: var(--vermillion); }
 
-  .attr-detail{
-    margin:2px 16px 16px; background: var(--paper); border:1px solid var(--border-soft);
-    border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow:hidden; display:none;
+  .attr-detail-overlay{
+    position:fixed; inset:0; z-index:95; background:rgba(20,30,45,.45);
+    display:none; align-items:center; justify-content:center; padding:24px;
   }
-  .attr-detail.open{ display:block; }
+  .attr-detail-overlay.open{ display:flex; }
+  .attr-detail{
+    width:100%; max-width:360px; max-height:78vh; overflow-y:auto;
+    background: var(--paper); border:1px solid var(--border-soft);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow-x:hidden;
+  }
   .attr-detail .ad-head{
+    position:sticky; top:0; z-index:1; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     display:flex; align-items:center; gap:8px; padding:12px 14px;
-    background: rgba(31,58,95,.05); font-weight:700; color:var(--ink); font-size:13.5px;
+    background: var(--paper); font-weight:700; color:var(--ink); font-size:13.5px;
     border-bottom:1px solid var(--border-soft);
   }
   .attr-detail .ad-head .icon{ color:var(--vermillion); flex:none; }
@@ -2153,9 +2159,11 @@
     });
     html += '</div>';
 
-    html += '<div class="attr-detail" id="attr-detail">'+
-      '<div class="ad-head"><span class="ad-head-icon"></span><span class="ad-head-title"></span><span class="ad-close">'+iconUse('i-close')+'</span></div>'+
-      '<div class="ad-body"></div>'+
+    html += '<div class="attr-detail-overlay" id="attr-detail-overlay">'+
+      '<div class="attr-detail" id="attr-detail">'+
+        '<div class="ad-head"><span class="ad-head-icon"></span><span class="ad-head-title"></span><span class="ad-close">'+iconUse('i-close')+'</span></div>'+
+        '<div class="ad-body"></div>'+
+      '</div>'+
     '</div>';
 
     html += '<button type="button" class="attr-add-btn" id="attr-add-btn">'+iconUse('i-plus')+' 新增景點卡</button>';
@@ -2181,8 +2189,9 @@
 
     var grid = document.getElementById('attr-grid');
     var detail = document.getElementById('attr-detail');
+    var detailOverlay = document.getElementById('attr-detail-overlay');
     function closeDetail(){
-      detail.classList.remove('open');
+      detailOverlay.classList.remove('open');
       grid.querySelectorAll('.attr-grid-card.active').forEach(function(c){ c.classList.remove('active'); });
     }
 
@@ -2202,8 +2211,7 @@
         detail.querySelector('.ad-head-icon').innerHTML = iconUse(icon);
         detail.querySelector('.ad-head-title').textContent = spot.name;
         detail.querySelector('.ad-body').innerHTML = buildSpotBodyHtml(spot);
-        detail.classList.add('open');
-        detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+        detailOverlay.classList.add('open');
       });
 
       var badge = card.querySelector('.agc-badge');
@@ -2239,6 +2247,7 @@
     });
 
     detail.querySelector('.ad-close').addEventListener('click', closeDetail);
+    detailOverlay.addEventListener('click', function(e){ if(e.target === detailOverlay){ closeDetail(); } });
 
     document.getElementById('attr-add-btn').addEventListener('click', function(){
       if(!editing){ showToast('請先開啟編輯模式再新增景點卡'); return; }
