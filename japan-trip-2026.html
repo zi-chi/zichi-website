@@ -1286,22 +1286,22 @@
       region:'長野', city:'長野',
       overview:'長野市因擁有約 1,400 年歷史的善光寺而興盛，自古就是圍繞著參拜道路發展起來的「門前町」。這裡也是北陸新幹線的重要轉運站，車站直結的商場購物機能齊全，很適合作為前往上高地、立山黑部等中部山岳地區的中繼站。長野同時是知名的蘋果、蕎麥產地，秋天正是品嚐當季美食、選購伴手禮的好時機。',
       spots:[
-        { name:'善光寺', icon:'i-pin', photo:'https://www.zenkoji.jp/wp-content/uploads/hondou01-1-2.jpg',
+        { id:'d1-s1', name:'善光寺', icon:'i-pin', photo:'https://www.zenkoji.jp/wp-content/uploads/hondou01-1-2.jpg',
           desc:'善光寺創建於飛鳥時代，已有約 1,400 年歷史，供奉日本現存最古老佛像之一「一光三尊阿彌陀如來」。它是「無宗派」寺院，不論信仰宗派、人人都能參拜，因此自古就有「一生至少要參拜一次善光寺」的說法。本堂為國寶建築，是江戶中期具代表性的佛寺建築，長野市街正是圍繞著這條參道發展而成的「門前町」。本尊為絕對秘佛，每隔幾年會舉行一次「御開帳」，屆時本堂前會豎立回向柱，據說觸摸就能得到庇佑。從仁王門到本堂的參道兩旁店家林立，是體驗長野老街風情的最佳去處。' },
-        { name:'長野車站 MIDORI', icon:'i-pin', photo:'https://dl-ringonoki.co.jp/Rb57yfxT/wp-content/uploads/2022/11/dummy.jpg',
+        { id:'d1-s2', name:'長野車站 MIDORI', icon:'i-pin', photo:'https://dl-ringonoki.co.jp/Rb57yfxT/wp-content/uploads/2022/11/dummy.jpg',
           intro:'MIDORI 與 JR 長野車站直結，是新幹線轉乘前最方便的購物去處，共三層樓，逛街、採買伴手禮、用餐都能一次搞定。',
           shops:[
             { name:'Midori Marché（1F）', hours:'09:00–20:00', feature:'生鮮食品超市，蔬果、熟食、日常採買都齊全' },
             { name:'信州伴手禮參道 ORAHO（2F）', hours:'09:00–20:00', feature:'集結信州各地和菓子、蕎麥麵、地酒，也有「八幡屋礒五郎」七味專櫃' },
             { name:'おごっそ Dining（3F）', hours:'11:00–22:00', feature:'多間餐廳進駐的美食街，適合安排正餐' }
           ] },
-        { name:'手打蕎麥 吉祥庵', icon:'i-bowl', photo:'https://www.web-komachi.com/webko/wp-content/uploads/2021/06/4fcabd7dd4672bc50026f4d846d19b06.jpg',
+        { id:'d1-s3', name:'手打蕎麥 吉祥庵', icon:'i-bowl', photo:'https://www.web-komachi.com/webko/wp-content/uploads/2021/06/4fcabd7dd4672bc50026f4d846d19b06.jpg',
           desc:'十割蕎麥麵老店，善光寺參道周邊人氣名店。週一公休（詳細營業時間建議電洽 026-231-5177）。' },
-        { name:'御燒餅（おやき）', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjfatr-DoyUqq6cqAiT5EREeT7K9U1NSaWnXHLzFoz1AnPz-DoisyJHJ4&s=10',
+        { id:'d1-s4', name:'御燒餅（おやき）', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjfatr-DoyUqq6cqAiT5EREeT7K9U1NSaWnXHLzFoz1AnPz-DoisyJHJ4&s=10',
           desc:'信州鄉土麵食，內餡包蔬菜或紅豆，在地人的日常小吃。善光寺參道周邊多家店舖均有販售。' },
-        { name:'信州りんご菓子工房 BENI-BENI', icon:'i-gift', photo:'https://kumu2-web-service-resource.s3.amazonaws.com/home/post/pic/000001120623/1623490461_oqsv8OTX.jpg',
+        { id:'d1-s5', name:'信州りんご菓子工房 BENI-BENI', icon:'i-gift', photo:'https://kumu2-web-service-resource.s3.amazonaws.com/home/post/pic/000001120623/1623490461_oqsv8OTX.jpg',
           desc:'長野產蘋果 100% 手工現烤蘋果派，位於善光寺仲見世通。09:00–18:00，全年無休。' },
-        { name:'根元 八幡屋礒五郎 本店', icon:'i-gift', photo:'https://image.raku-uru.jp/01/22113/230/waku_shichimi_can_1655434452757.png',
+        { id:'d1-s6', name:'根元 八幡屋礒五郎 本店', icon:'i-gift', photo:'https://image.raku-uru.jp/01/22113/230/waku_shichimi_can_1655434452757.png',
           desc:'280 餘年歷史，日本三大七味唐辛子名店之一，可現場客製辣度配方。09:00–18:30，全年無休。' }
       ]
     },
@@ -1309,35 +1309,35 @@
       region:'上高地', city:'上高地',
       overview:'上高地坐落於北阿爾卑斯山脈中、海拔約 1,500 公尺的高山溪谷，屬中部山岳國立公園範圍，因保留原始自然風貌而有「神的故鄉」之稱。這裡禁止一般車輛進入，只能搭乘接駁巴士或計程車抵達，園區內以健行步道串連大正池、河童橋、明神池等景點。清澈見底的梓川與巍峨的穗高連峰是上高地最具代表性的風景，加上 10 月正值初秋楓紅，是全年最美的季節之一。',
       spots:[
-        { name:'大正池', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/07/TaishoPondLateFall.jpg',
+        { id:'d2-s1', name:'大正池', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/07/TaishoPondLateFall.jpg',
           desc:'大正池是 1915 年燒岳火山噴發、泥流阻斷梓川河道所形成的堰塞湖，因形成於大正時代而得名。池中枯立的樹木是當年被淹沒的森林遺跡，隨著時間逐漸腐朽，形成獨特而夢幻的景觀。晴朗無風時，池面會如鏡子般倒映出穗高連峰與燒岳，是攝影愛好者最愛取景的地點。大正池也是上高地健行步道的起點之一，沿著梓川步行即可一路走到河童橋。這裡被列為國家特別名勝與特別天然紀念物，是上高地最具代表性的景觀之一。' },
-        { name:'河童橋', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/07/ak0604202041%E5%A4%8F%E3%81%AE%E7%A9%82%E9%AB%98%E5%B2%B3%E3%81%A8%E6%B2%B3%E7%AB%A5%E6%A9%8B%E3%83%BB%EF%BC%98%E6%9C%88%EF%BC%88%E4%B8%8A%E9%AB%98%E5%9C%B0%EF%BC%89.jpg',
+        { id:'d2-s2', name:'河童橋', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/07/ak0604202041%E5%A4%8F%E3%81%AE%E7%A9%82%E9%AB%98%E5%B2%B3%E3%81%A8%E6%B2%B3%E7%AB%A5%E6%A9%8B%E3%83%BB%EF%BC%98%E6%9C%88%EF%BC%88%E4%B8%8A%E9%AB%98%E5%9C%B0%EF%BC%89.jpg',
           desc:'河童橋是上高地的地標，一座橫跨梓川的木造吊橋，現在看到的是 1997 年重建的第 5 代橋樑。橋名由來眾說紛紜，一說是這裡曾是傳說中河童棲息的深淵，因而得名。從橋上可以正面眺望穗高連峰與岳澤溪谷，是上高地最經典的拍照角度。文豪芥川龍之介曾以此地為靈感創作小說《河童》，讓河童橋更添文學色彩。橋畔聚集飯店、餐廳與紀念品店，是上高地最熱鬧的區域，也最適合安排用餐、休息。' },
-        { name:'上高地公車總站', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/kamikochibt.webp',
+        { id:'d2-s3', name:'上高地公車總站', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/kamikochibt.webp',
           desc:'上高地公車總站是前往上高地的核心樞紐，所有公車、計程車都將到達這裡。在公車總站旁邊，您可以找到上高地諮詢服務中心、商店及餐廳等。' },
-        { name:'上高地遊客中心', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/17.%E3%83%93%E3%82%B8%E3%82%BF%E3%83%BC%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%E5%A4%96%E8%A6%B3-3.jpg',
+        { id:'d2-s4', name:'上高地遊客中心', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/17.%E3%83%93%E3%82%B8%E3%82%BF%E3%83%BC%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%E5%A4%96%E8%A6%B3-3.jpg',
           desc:'從公車總站出發，只需稍稍步行，即可抵達梓川與河童橋，建議您一定要下車，飽覽上高地之美景。' },
-        { name:'Weston碑', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/%EF%BD%B3%EF%BD%B4%EF%BD%BD%EF%BE%84%EF%BE%9D%EF%BE%9A%EF%BE%98%EF%BD%B0%EF%BE%8C%EF%BC%8818.6.4%EF%BC%89-2.jpg',
+        { id:'d2-s5', name:'Weston碑', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/%EF%BD%B3%EF%BD%B4%EF%BD%BD%EF%BE%84%EF%BE%9D%EF%BE%9A%EF%BE%98%EF%BD%B0%EF%BE%8C%EF%BC%8818.6.4%EF%BC%89-2.jpg',
           desc:'這座小小的石碑是為紀念英國傳教士 Walter Weston（1861–1940）而建的，Weston 除了將西式登山運動帶到上高地之外，也讓「日本阿爾卑斯」這一名稱普及到日本各地。' },
-        { name:'岳澤濕原', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2024/11/3-%E7%89%B9%E9%81%B8-%E5%88%9D%E9%9C%9C%E3%81%AE%E9%A0%83-%E5%A0%80%E9%80%A3%E6%B8%85.jpg',
+        { id:'d2-s6', name:'岳澤濕原', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2024/11/3-%E7%89%B9%E9%81%B8-%E5%88%9D%E9%9C%9C%E3%81%AE%E9%A0%83-%E5%A0%80%E9%80%A3%E6%B8%85.jpg',
           desc:'從河童橋出發，沿著健行步道朝明神池方向步行 5 到 10 分鐘，即可抵達上高地最美的景點之一──岳澤濕原。' },
-        { name:'明神池', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/myojinpond1.webp',
+        { id:'d2-s7', name:'明神池', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/myojinpond1.webp',
           desc:'明神池（門票：300 日圓）從河童橋一帶步行約需 1 小時。這裡是一個中轉區域，裡面有旅舍小屋、商店，以及著名的穗高神社。明神池本身與步道稍有偏離，所以要想看到完整的明神池，您需要稍微繞道而行。明神池清澈的池水對於日本神道教而言意義深遠，因為神道教崇拜的核心對象就是大自然。當穗高岳頂峰的積雪融化，梓川的水就能得到補充，其河水灌溉松本盆地的稻田，並連接穗高神社的本宮與奧宮。在同一區域內，還可看到一座精緻的鄉間小屋──嘉門次小屋，長年來吸引許多遊客沉醉於其優美的環境與美味的炸魚料理中。' },
-        { name:'田代池', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/tashiropond2.webp',
+        { id:'d2-s8', name:'田代池', icon:'i-pin', photo:'https://www.kamikochi.org/tw/wp-content/uploads/2016/12/tashiropond2.webp',
           desc:'上高地最美景點之一的田代池是一座四周被濕地環繞的小池，位於連結河童橋與大正池之間的健行步道上。在森林中行走時，眼前忽然豁然開朗，田代池便呈現在眼前，天空與山嶽倒映於澄清的水面上，在溫暖的季節，池邊還圍繞著當季盛放的鮮花。夏天可以看到讓人歎為觀止的蓮華躑躅與羊鬍子草，到了深秋，在寒霜覆蓋之下，這些花都將變白。由於有地下湧泉，即使在冬天田代池也不會結冰，但由於霞澤嶽不斷注入的泥砂與池底枯葉逐漸堆積，田代池正逐年縮小，有些地方已經變成濕地。' },
-        { name:'上高地食堂', icon:'i-bowl', photo:'https://www.m-kamikouchi.jp/tw/shokudo/img/bento_a.jpg',
+        { id:'d2-s9', name:'上高地食堂', icon:'i-bowl', photo:'https://www.m-kamikouchi.jp/tw/shokudo/img/bento_a.jpg',
           desc:'緊鄰巴士總站，招牌溪魚定食、山賊燒、蕎麥麵等信州鄉土料理。06:00–14:00（依季節調整）。' },
-        { name:'五千尺キッチン（山賊燒）', icon:'i-bowl', photo:'https://gosenjakukitchen.jp/wp/wp-content/uploads/2025/04/4cfd61acd6d9b31f3101f875c55187b0-1200x795.jpg',
+        { id:'d2-s10', name:'五千尺キッチン（山賊燒）', icon:'i-bowl', photo:'https://gosenjakukitchen.jp/wp/wp-content/uploads/2025/04/4cfd61acd6d9b31f3101f875c55187b0-1200x795.jpg',
           desc:'二樓景觀座位正對河童橋與穗高連峰，招牌山賊燒份量十足。07:00–18:00（14:00–16:00 暫停供餐）。' },
-        { name:'小梨平食堂', icon:'i-bowl', photo:'https://img.letsgojp.com/2025/07/eat_konashi-mv-1366x638-1752247655.webp',
+        { id:'d2-s11', name:'小梨平食堂', icon:'i-bowl', photo:'https://img.letsgojp.com/2025/07/eat_konashi-mv-1366x638-1752247655.webp',
           desc:'從河童橋沿著梓川上游步行約 5 分鐘，穿過小梨平露營場，就可以看到掛著「小梨平食堂」招牌的小木屋建築。在散步途中或露營期間，想要小憩一下，都可以隨時來這裡來碗熱騰騰的湯麵、咖哩、定食和丼飯等店內人氣餐點，一邊在靜謐的樹林間伴隨梓川潺潺水聲，一邊享用日式家常美食。' },
-        { name:'河童燒', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx_mt7AKY6M0Tc1wjBUFBlyekvmWiNSQQnS6RNW3k8kqBgEOeEbxZ6ZbYr&s=10',
+        { id:'d2-s12', name:'河童燒', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx_mt7AKY6M0Tc1wjBUFBlyekvmWiNSQQnS6RNW3k8kqBgEOeEbxZ6ZbYr&s=10',
           desc:'河童造型和菓子，紅豆／卡士達／奶油紅豆等口味，一個 ¥300。營業時間依橋畔各紀念品店而異。' },
-        { name:'上高地布丁', icon:'i-gift', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3NmQ40YK9jzjnRis8j9aCAjmnjaTW2UDFmcpgz8vTomyAzy58F539-0VR&s=10',
+        { id:'d2-s13', name:'上高地布丁', icon:'i-gift', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3NmQ40YK9jzjnRis8j9aCAjmnjaTW2UDFmcpgz8vTomyAzy58F539-0VR&s=10',
           desc:'五千尺飯店「上高地みやげ店」販售，嚴選雞蛋鮮奶製作，口感濃郁。營業時間依季節調整。' },
-        { name:'TROIS CINQ 上高地蘋果派', icon:'i-gift', photo:'https://img.letsgojp.com/2025/07/fit-920x529-1752250426.webp',
+        { id:'d2-s14', name:'TROIS CINQ 上高地蘋果派', icon:'i-gift', photo:'https://img.letsgojp.com/2025/07/fit-920x529-1752250426.webp',
           desc:'位於河童橋旁的蘋果派名店「Towa Sunc 上高地店」，嚴選信州產充滿果蜜、口感酥脆的新鮮蘋果，為了保留信州蘋果最原始的天然美味和香氣，製作蘋果派時完全不添加任何奶油或香料。店內除了蘋果派之外，還有販售蘋果霜淇淋、蘋果汁等多種使用蘋果製作的特色美食。' },
-        { name:'上高地五千尺飯店', icon:'i-bed', photo:'https://img.letsgojp.com/2025/09/202509085000hotel-870x500-1757334468.webp',
+        { id:'d2-s15', name:'上高地五千尺飯店', icon:'i-bed', photo:'https://img.letsgojp.com/2025/09/202509085000hotel-870x500-1757334468.webp',
           desc:'上高地五千尺飯店位於上高地的中心河童橋旁，壯麗的穗高岳四季美景盡收眼底。飯店周圍有梓川河畔、大正池、明神池、德澤等多個上高地著名景點，在這裡住宿能近距離享受大自然，搭配加入日式元素的簡約設計客房，多種房型可供選擇，適合親子或是家族旅遊。' }
       ]
     },
@@ -1345,19 +1345,19 @@
       region:'高山', city:'高山',
       overview:'高山舊稱飛驒高山，保留了江戶時代商人町的木造街屋，被譽為「小京都」。三町老街至今仍有百年老店、造酒藏與傳統工藝店林立，早晨的宮川朝市則是在地人與旅人採買新鮮蔬果、手作小物的日常風景。這裡也是飛驒牛的故鄉，握壽司、烤肉串、可樂餅等街頭小吃，是逛老街時邊走邊吃的一大樂趣。',
       spots:[
-        { name:'宮川朝市', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIFsUWS9Lyhdp1gU2zsAuGiYG1LjR0agPGgegSMzzWJvY65NDjbxhuYKY&s=10',
+        { id:'d3-s1', name:'宮川朝市', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIFsUWS9Lyhdp1gU2zsAuGiYG1LjR0agPGgegSMzzWJvY65NDjbxhuYKY&s=10',
           desc:'宮川朝市是日本三大朝市之一，沿著宮川河畔展開，已有超過百年歷史。攤位多由當地農家與婆婆媽媽自產自銷，販售新鮮蔬果、醃漬物、花卉與手作小物。這裡也保留著以物易物的古老交易文化，逛市集的同時還能和店家閒話家常。清晨時段最熱鬧，很適合安排在飯店退房後、展開一天行程前順道走逛。' },
-        { name:'高山老街', icon:'i-pin', photo:'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1280,h_720/w_79,x_14,y_14,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/muckuip4bpbcmh4ooezr/%E3%80%901%E4%BA%BA%E6%88%90%E5%9B%A2%E7%99%BD%E5%B7%9D%E9%84%89%E7%B6%93%E5%85%B8%E4%B8%80%E6%97%A5%E9%81%8A%E3%80%91%E9%A3%9B%E9%A8%A8%E9%AB%98%E5%B1%B1%E8%80%81%E8%A1%97%C2%B7%E7%99%BD%E5%B7%9D%E9%84%89%E5%90%88%E6%8E%8C%E6%9D%91%E4%B8%80%E6%97%A5%E6%B8%B8(%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%87%BA%E7%99%BC).jpg',
+        { id:'d3-s2', name:'高山老街', icon:'i-pin', photo:'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1280,h_720/w_79,x_14,y_14,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/muckuip4bpbcmh4ooezr/%E3%80%901%E4%BA%BA%E6%88%90%E5%9B%A2%E7%99%BD%E5%B7%9D%E9%84%89%E7%B6%93%E5%85%B8%E4%B8%80%E6%97%A5%E9%81%8A%E3%80%91%E9%A3%9B%E9%A8%A8%E9%AB%98%E5%B1%B1%E8%80%81%E8%A1%97%C2%B7%E7%99%BD%E5%B7%9D%E9%84%89%E5%90%88%E6%8E%8C%E6%9D%91%E4%B8%80%E6%97%A5%E6%B8%B8(%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%87%BA%E7%99%BC).jpg',
           desc:'高山老街泛指以上三之町為中心的三町傳統街區，是日本重要傳統建造物群保存地區之一。江戶時期作為商人町發展起來，至今仍保留著木造格子窗老屋、造酒藏與百年商家。街道兩旁林立著清酒藏、味噌店、飛驒牛小吃攤與伴手禮店，是體驗江戶風情與品嚐在地小吃的最佳去處。造酒藏門口懸掛的杉玉（酒林）是判斷新酒是否上市的傳統標誌，也是散步途中有趣的小細節。' },
-        { name:'合掌村', icon:'i-pin', photo:'https://www.info-toyama.com/storage/special_features/884/responsive_images/OBDFCZn08dE5kkYRIgKxxIHKjz3bTzzw1mHU0eZX__1597_1065.jpeg',
+        { id:'d3-s3', name:'合掌村', icon:'i-pin', photo:'https://www.info-toyama.com/storage/special_features/884/responsive_images/OBDFCZn08dE5kkYRIgKxxIHKjz3bTzzw1mHU0eZX__1597_1065.jpeg',
           desc:'合掌造聚落以陡斜的茅草屋頂聞名，是為了因應飛驒地區冬季豪雪而發展出的傳統建築工法，屋頂形狀猶如雙手合十而得名。「飛驒之里」將多棟合掌造古民家移建保存，重現昔日山村的生活樣貌，屋內仍保留爐灶、農具等生活器具，且交通比車程較遠的白川鄉方便，很適合安排在高山市區順遊。園區依山傍水，四季景色皆美，秋天時周邊山林轉紅，與茅草屋頂相映成畫。' },
-        { name:'飛驒こって牛（飛驒牛握壽司）', icon:'i-bowl', photo:'https://static.gltjp.com/glt/data/article/21000/20612/20240204_113219_a57310fc_w1920.webp',
+        { id:'d3-s4', name:'飛驒こって牛（飛驒牛握壽司）', icon:'i-bowl', photo:'https://static.gltjp.com/glt/data/article/21000/20612/20240204_113219_a57310fc_w1920.webp',
           desc:'高山老街排隊名店，招牌飛驒牛握壽司入口即化。10:00–17:00，全年無休。' },
-        { name:'坂口屋（飛驒牛串燒）', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6HB95512POSmm94-Rl5YU_ZFxyg4GHyC4qOQekdJZhVYHL6QdEnnomXYn&s=10',
+        { id:'d3-s5', name:'坂口屋（飛驒牛串燒）', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6HB95512POSmm94-Rl5YU_ZFxyg4GHyC4qOQekdJZhVYHL6QdEnnomXYn&s=10',
           desc:'炭火現烤飛驒牛肉串，邊走邊吃的老街經典。11:00–14:30（週二公休）。' },
-        { name:'飛驒牛肉包', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzAoaMNWlgh2-cdDkiRPuIhdns2vXBmmb69sqAZwCsNlnuOTjoQVsr10oT&s=10',
+        { id:'d3-s6', name:'飛驒牛肉包', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzAoaMNWlgh2-cdDkiRPuIhdns2vXBmmb69sqAZwCsNlnuOTjoQVsr10oT&s=10',
           desc:'鬆軟外皮包裹多汁飛驒牛內餡，天冷時暖手又暖胃。老街營業時間內（約 09:00–17:00）多家店舖均有販售。' },
-        { name:'朝市牛乳', icon:'i-bowl', photo:'https://i0.wp.com/littlewave-travel.com/wp-content/uploads/2023/12/%E9%AB%98%E5%B1%B1%E6%99%AF%E9%BB%9E%E5%AE%AE%E5%B7%9D%E6%9C%9D%E5%B8%82%E7%BE%8E%E9%A3%9F%E5%BF%85%E9%A3%9F_%E9%AD%9A%E5%BA%97%E7%89%9B%E5%A5%B6-1024x768.jpg?strip=info&w=1200&ssl=1',
+        { id:'d3-s7', name:'朝市牛乳', icon:'i-bowl', photo:'https://i0.wp.com/littlewave-travel.com/wp-content/uploads/2023/12/%E9%AB%98%E5%B1%B1%E6%99%AF%E9%BB%9E%E5%AE%AE%E5%B7%9D%E6%9C%9D%E5%B8%82%E7%BE%8E%E9%A3%9F%E5%BF%85%E9%A3%9F_%E9%AD%9A%E5%BA%97%E7%89%9B%E5%A5%B6-1024x768.jpg?strip=info&w=1200&ssl=1',
           desc:'新鮮濃醇牛乳，逛朝市途中最消暑解渴的在地飲品。宮川朝市周邊，約 07:00 起販售。' }
       ]
     },
@@ -1365,15 +1365,15 @@
       region:'立山黑部', city:'富山',
       overview:'立山黑部阿爾卑斯山脈路線橫跨立山連峰與黑部峽谷，全長約 37 公里、最大高低差近 2,000 公尺，需轉乘纜車、空中纜車、無軌電車等六種交通工具才能貫通。沿途行經室堂、大觀峰、黑部水庫等景點，是世界少見的高山觀光路線。10 月正值紅葉季、山頭已見初雪，能同時欣賞楓紅與雪景交織的「三段紅葉」美景。',
       spots:[
-        { name:'室堂', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%AE%A4%E5%A0%82.jpeg',
+        { id:'d4-s1', name:'室堂', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%AE%A4%E5%A0%82.jpeg',
           desc:'室堂標高 2,450 公尺，是立山黑部路線中海拔最高的景點，也是最重要的觀光據點。被譽為「北阿爾卑斯最美火山湖」的御庫裏池，清澈水面倒映著標高近 3,000 公尺的立山連峰稜線。這裡也是登山健行路線的起點，天氣晴朗時能遠眺劍岳等知名山峰。10 月的室堂平已進入初雪季節，經常能同時看到殘存的秋色與新雪。' },
-        { name:'大觀峰', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%A4%A7%E8%A7%80%E5%B3%B0.jpg',
+        { id:'d4-s2', name:'大觀峰', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%A4%A7%E8%A7%80%E5%B3%B0.jpg',
           desc:'大觀峰是立山黑部路線中視野最遼闊的展望台之一，從黑部水庫搭乘登山纜車、再轉乘空中纜車，幾分鐘內即可抵達。站在露台上可以俯瞰黑部湖與黑部峽谷，天氣好時還能眺望後立山連峰。這段空中纜車不設任何支柱、一鏡到底，是路線中最驚豔的乘車體驗之一。' },
-        { name:'黑部水庫', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E9%BB%91%E9%83%A8%E6%B0%B4%E5%A3%A9.webp',
+        { id:'d4-s3', name:'黑部水庫', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E9%BB%91%E9%83%A8%E6%B0%B4%E5%A3%A9.webp',
           desc:'黑部水庫是日本海拔最高、堤壩也最高的水壩，昭和時期耗時 7 年、動員上千人力才完工，是日本土木工程史上的重要建設。每年 6 月中旬至 10 月中旬會舉行觀光洩洪，大量水流從壩頂傾瀉而下，氣勢磅礡，是水庫最具代表性的畫面。壩頂步道可以近距離感受水霧與轟隆水聲，天氣晴朗時還能看到彩虹橫跨峽谷。' },
-        { name:'黑部水庫咖哩飯（黒部ダムカレー）', icon:'i-bowl', photo:'',
+        { id:'d4-s4', name:'黑部水庫咖哩飯（黒部ダムカレー）', icon:'i-bowl', photo:'',
           desc:'咖哩飯做成水庫大壩造型，是黑部水庫最具人氣的紀念美食。黑部水庫展望台食堂，約 09:00–16:00（依季節調整）。' },
-        { name:'立山そば', icon:'i-bowl', photo:'https://archerplus.tw/wp-content/uploads/2013/03/20130317-d32f5.jpg',
+        { id:'d4-s5', name:'立山そば', icon:'i-bowl', photo:'https://archerplus.tw/wp-content/uploads/2013/03/20130317-d32f5.jpg',
           desc:'高山蕎麥麵配山藥泥或炸山菜，健行途中補充體力的簡單一餐。室堂餐廳，約 09:00–15:00。' }
       ]
     },
@@ -1381,17 +1381,17 @@
       region:'金澤', city:'金澤',
       overview:'金澤是加賀百萬石的城下町，江戶時期躲過二戰空襲與大規模天災，完整保留了武家屋敷、茶屋街與城下町街景，有「小京都」之稱。這裡同時是北陸的海鮮寶庫，鄰近日本海的地利之便造就了近江町市場豐富的漁獲。金澤也是日本金箔的產地，將近全日本 99% 的金箔都產自此地，金箔工藝品與甜點是必買伴手禮。',
       spots:[
-        { name:'兼六園', icon:'i-pin', photo:'',
+        { id:'d5-s1', name:'兼六園', icon:'i-pin', photo:'',
           desc:'兼六園與岡山後樂園、水戶偕樂園並列日本三大名園，是加賀藩歷代藩主歷時近 200 年打造的迴遊式庭園。園內巧妙融合了宏大、幽邃、人力、蒼古、水泉、眺望六種造園要素，因而得名「兼六」。園內的徽軫燈籠是兼六園的招牌意象，兩腳形狀特殊，佇立在霞之池畔。四季皆有不同風情，秋天的紅葉與冬天的雪吊造景都相當知名。' },
-        { name:'東茶屋街', icon:'i-pin', photo:'',
+        { id:'d5-s2', name:'東茶屋街', icon:'i-pin', photo:'',
           desc:'東茶屋街是金澤三大茶屋街中規模最大、保存最完整的一區，江戶格子窗木造建築沿街林立，重現當年藝伎文化興盛的風華。國家指定重要文化財「志摩」保留了完整的茶屋建築內部陳設，可入內參觀百年前藝伎接待賓客的空間。街區內也有許多金箔工藝品店、和菓子老鋪與咖啡廳，很適合悠閒散步、選購伴手禮。' },
-        { name:'近江町市場', icon:'i-pin', photo:'',
+        { id:'d5-s3', name:'近江町市場', icon:'i-pin', photo:'',
           desc:'近江町市場有「金澤人的廚房」之稱，已有近 300 年歷史，是採買加賀新鮮蔬果與日本海漁獲的市場。市場內各家海鮮丼、握壽司、烤扇貝攤位林立，能一次品嚐螃蟹、甜蝦、鰤魚等北陸海產。除了生鮮食材，也能找到清酒、調味料等在地食材伴手禮。緊鄰市區、交通方便，是安排金澤行程時很適合排入的一站。' },
-        { name:'近江町市場 海鮮丼', icon:'i-bowl', photo:'https://www.machiya-inn-japan.com/blog/ja/wp-content/uploads/2023/03/hirai1-1536x1024.jpg',
+        { id:'d5-s4', name:'近江町市場 海鮮丼', icon:'i-bowl', photo:'https://www.machiya-inn-japan.com/blog/ja/wp-content/uploads/2023/03/hirai1-1536x1024.jpg',
           desc:'甜蝦、螃蟹、鰤魚等當季日本海漁獲，市場現點現吃最新鮮。約 09:00–17:00（依店舖而異）。' },
-        { name:'箔一 金箔霜淇淋', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2017/07/kinpakuginzasix_001-thumb-660xauto-727356.jpg',
+        { id:'d5-s5', name:'箔一 金箔霜淇淋', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2017/07/kinpakuginzasix_001-thumb-660xauto-727356.jpg',
           desc:'整片食用金箔包裹霜淇淋，東茶屋街必拍的人氣甜點。約 09:00–18:00。' },
-        { name:'加賀棒茶', icon:'i-gift', photo:'https://jinomon-gift.com/cdn/shop/files/MG_3931.jpg?v=1722584229&width=1080',
+        { id:'d5-s6', name:'加賀棒茶', icon:'i-gift', photo:'https://jinomon-gift.com/cdn/shop/files/MG_3931.jpg?v=1722584229&width=1080',
           desc:'焙煎茶梗製成，香氣溫潤不苦澀，金澤代表性茶飲伴手禮。金澤各大茶葉行、伴手禮店均有販售。' }
       ]
     },
@@ -1400,25 +1400,25 @@
       photo:'',
       overview:'名古屋是日本三大都市之一，因地處東京與大阪之間，自古就是東西交通與商業的樞紐，也孕育出獨樹一格的「名古屋飯」飲食文化。這裡有德川家康築城的名古屋城，以及全日本地位最崇高的神社之一熱田神宮，古蹟與現代商業區並存。當地人習慣在喫茶店吃早餐，點一杯飲料就附上吐司、水煮蛋等小點，是名古屋獨有的「早餐文化」。',
       spots:[
-        { name:'名古屋早餐文化', icon:'i-bowl', photo:'https://www.specialoffers.jcb/zh-tw/tips/japan/shutterstock_2.jpg',
+        { id:'d6-s1', name:'名古屋早餐文化', icon:'i-bowl', photo:'https://www.specialoffers.jcb/zh-tw/tips/japan/shutterstock_2.jpg',
           desc:'名古屋喫茶店的「早餐文化（モーニング）」是當地一大特色，通常從開店到上午 11 點前，只要點一杯飲料，就會附贈吐司、水煮蛋、沙拉等輕食，有些店家甚至加碼附上茶碗蒸或小份三明治。這個習慣源自昭和時期，店家為了吸引早起的商人與上班族而推出的服務，久而久之演變成名古屋人的日常儀式。街頭巷尾的喫茶店都有各自的招牌吐司口味，抹上濃厚奶油或紅豆餡都很受歡迎，很適合來體驗一次悠閒的在地早晨。' },
-        { name:'熱田神宮', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-tw/blog/wp-content/uploads/2025/05/%E7%86%B1%E7%94%B0%E7%A5%9E%E5%AE%AE.jpg',
+        { id:'d6-s2', name:'熱田神宮', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-tw/blog/wp-content/uploads/2025/05/%E7%86%B1%E7%94%B0%E7%A5%9E%E5%AE%AE.jpg',
           desc:'熱田神宮創建約 1,900 年前，供奉三神器之一的草薙劍，地位僅次於伊勢神宮，是日本歷史最悠久、格式最崇高的神社之一。境內佔地廣達 6 萬坪，古木參天，即使身處市區也能感受到靜謐莊嚴的氣氛。境內的「信長塀」是織田信長為了答謝桶狹間之戰獲勝所建的土牆，與京都三十三間堂、兵庫西宮神社的土牆並列日本三大古牆。每月初一、十五神宮會舉行朔日參拜，吸引不少信眾與觀光客前來祈福。' },
-        { name:'名古屋城', icon:'i-pin', photo:'https://content.fun-japan.jp/renewal-prod/cms/articles/content/Mpf/Articles/2017/08/16/TW_20170816-11-Nagoya-Castle-Top.jpg',
+        { id:'d6-s3', name:'名古屋城', icon:'i-pin', photo:'https://content.fun-japan.jp/renewal-prod/cms/articles/content/Mpf/Articles/2017/08/16/TW_20170816-11-Nagoya-Castle-Top.jpg',
           desc:'名古屋城由德川家康於 1610 年下令興建，作為德川家鎮守東海道的軍事要地，與大阪城、熊本城並列日本三大名城。城頂金光閃閃的金鯱（金色鯱魚）是名古屋城的招牌意象，也是名古屋市的象徵地標。天守閣在二戰時曾被燒毀，現貌為戰後重建，內部設有展示名古屋城歷史與德川家文物的展覽空間。城內本丸御殿以傳統工法忠實復原，金碧輝煌的障壁畫值得細細品味。' },
-        { name:'大須商店街＆神社', icon:'i-pin', photo:'https://static.gltjp.com/glt/data/article/21000/20465/20231009_130907_ab11204e_w1920.webp',
+        { id:'d6-s4', name:'大須商店街＆神社', icon:'i-pin', photo:'https://static.gltjp.com/glt/data/article/21000/20465/20231009_130907_ab11204e_w1920.webp',
           desc:'大須商店街是名古屋歷史最悠久的商店街之一，全長超過 1 公里，涵蓋約 1,200 間店舖，從電器行、二手衣、動漫周邊到庶民美食應有盡有，氣氛熱鬧庶民。商店街的起點大須觀音寺是日本三大觀音之一，供奉聖觀音菩薩，也收藏了大量珍貴古文書。這裡混合了老字號商店與新潮小店，逛起來新舊交織、充滿驚喜，很適合安排在賦歸前的最後採買行程。' },
-        { name:'Konparu（コンパル）鮮蝦吐司', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2023/02/97c0f83315d8510c3e08a697a26e7f16.jpeg',
+        { id:'d6-s5', name:'Konparu（コンパル）鮮蝦吐司', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2023/02/97c0f83315d8510c3e08a697a26e7f16.jpeg',
           desc:'名古屋老字號喫茶店，招牌鮮蝦沙拉三明治是必點名物。依店舖略有不同，多數 07:00 前後開始供應早餐。' },
-        { name:'鰻魚飯（ひつまぶし）', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2025/07/60d7ab4acea807a9f7d2eb9cf01efc21.jpeg',
+        { id:'d6-s6', name:'鰻魚飯（ひつまぶし）', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2025/07/60d7ab4acea807a9f7d2eb9cf01efc21.jpeg',
           desc:'白飯上鋪滿炭烤鰻魚，可分次品嚐原味、拌蔥花海苔、泡茶泡飯三種吃法。名古屋各大鰻魚飯專賣店均有供應。' },
-        { name:'味噌豬排（味噌カツ）', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2023/02/b7264730d6b1d34a3f9dac42de480f5a.jpeg',
+        { id:'d6-s7', name:'味噌豬排（味噌カツ）', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2023/02/b7264730d6b1d34a3f9dac42de480f5a.jpeg',
           desc:'八丁味噌熬製的濃郁醬汁淋在炸豬排上，鹹甜濃厚的名古屋招牌美食。名古屋各大餐廳均有供應。' },
-        { name:'手羽先（雞翅）', icon:'i-bowl', photo:'https://assets.funliday.com/posts/wp-content/uploads/2026/01/05143718/2026%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%BF%85%E5%90%83%E7%BE%8E%E9%A3%9F%EF%BD%9C%E6%89%8B%E7%BE%BD%E5%85%88%E9%9B%9E%E7%BF%8510%E5%A4%A7%E6%8E%A8%E8%96%A6collage.png.webp',
+        { id:'d6-s8', name:'手羽先（雞翅）', icon:'i-bowl', photo:'https://assets.funliday.com/posts/wp-content/uploads/2026/01/05143718/2026%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%BF%85%E5%90%83%E7%BE%8E%E9%A3%9F%EF%BD%9C%E6%89%8B%E7%BE%BD%E5%85%88%E9%9B%9E%E7%BF%8510%E5%A4%A7%E6%8E%A8%E8%96%A6collage.png.webp',
           desc:'酥炸雞翅刷上特製甜辣醬汁，風來坊、世界の山ちゃん都是知名連鎖店。居酒屋、專賣店均有供應，晚間時段最熱鬧。' },
-        { name:'台灣拉麵', icon:'i-bowl', photo:'',
+        { id:'d6-s9', name:'台灣拉麵', icon:'i-bowl', photo:'',
           desc:'名古屋在地發明的重辣擔擔麵風味拉麵，雖名為台灣拉麵但台灣其實吃不到。名古屋多家中華料理店均有供應。' },
-        { name:'ういろう（外郎糕）', icon:'i-gift', photo:'',
+        { id:'d6-s10', name:'ういろう（外郎糕）', icon:'i-gift', photo:'',
           desc:'Q 彈米蒸糕，抹茶、黑糖、櫻花等多種口味，經典名古屋伴手禮。名古屋車站、大須商店街伴手禮店均有販售。' }
       ]
     }
@@ -2280,12 +2280,15 @@
     return 'pin';
   }
 
-  function spotIconKey(dayId, idx){
-    return dayId+'-spot'+idx+'-icon';
+  // Keyed by each spot's stable `id` (not its array position) so that
+  // inserting/reordering/removing spots in the source data can never cause
+  // an icon/field/hidden override to silently land on the wrong spot.
+  function spotIconKey(dayId, spotId){
+    return dayId+'-spot-'+spotId+'-icon';
   }
 
-  function spotFieldsKey(dayId, idx){
-    return dayId+'-spot'+idx+'-fields';
+  function spotFieldsKey(dayId, spotId){
+    return dayId+'-spot-'+spotId+'-fields';
   }
 
   function spotsHiddenKey(dayId){
@@ -2305,11 +2308,11 @@
     Object.keys(attractions).forEach(function(dayId){
       var a = attractions[dayId];
       var hidden = lsGet(spotsHiddenKey(dayId), []);
-      a.spots.forEach(function(spot, idx){
-        if(hidden.indexOf(idx) > -1) return;
-        var fields = lsGet(spotFieldsKey(dayId, idx), null);
+      a.spots.forEach(function(spot){
+        if(hidden.indexOf(spot.id) > -1) return;
+        var fields = lsGet(spotFieldsKey(dayId, spot.id), null);
         var effectiveSpot = fields ? { name:fields.name, photo:fields.photo, desc:fields.desc, icon:spot.icon } : spot;
-        list.push({ key:'b-'+dayId+'-'+idx, city:a.city, dayId:dayId, idx:idx, spot:effectiveSpot, isCustom:false });
+        list.push({ key:'b-'+dayId+'-'+spot.id, city:a.city, dayId:dayId, spotId:spot.id, spot:effectiveSpot, isCustom:false });
       });
     });
     var custom = lsGet('attr:custom-spots', []);
@@ -2326,7 +2329,7 @@
       lsSet('attr:custom-spots', arr);
     } else {
       var hidden = lsGet(spotsHiddenKey(item.dayId), []);
-      if(hidden.indexOf(item.idx) === -1){ hidden.push(item.idx); lsSet(spotsHiddenKey(item.dayId), hidden); }
+      if(hidden.indexOf(item.spotId) === -1){ hidden.push(item.spotId); lsSet(spotsHiddenKey(item.dayId), hidden); }
     }
   }
 
@@ -2366,7 +2369,7 @@
 
     var all = getAllAttractionSpots();
     var visible = all.filter(function(item){
-      var icon = item.isCustom ? (item.spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.idx), item.spot.icon||'i-pin');
+      var icon = item.isCustom ? (item.spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.spotId), item.spot.icon||'i-pin');
       var cat = categoryForIcon(icon);
       var catOk = (attrActiveCat === 'all') || (cat === attrActiveCat);
       var cityOk = (attrActiveCity === 'all') || (item.city === attrActiveCity);
@@ -2379,7 +2382,7 @@
     }
     visible.forEach(function(item){
       var spot = item.spot;
-      var icon = item.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.idx), spot.icon||'i-pin');
+      var icon = item.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.spotId), spot.icon||'i-pin');
       var photoUrl = item.isCustom ? sanitizePhotoUrl(spot.photo) : (spot.photo||'');
       var photoImg = photoUrl ? '<img src="'+escapeHtml(photoUrl)+'" alt="'+escapeHtml(spot.name)+'" loading="lazy" onerror="this.closest(\'.attr-grid-card\').classList.add(\'fallback\')">' : '';
       html +=
@@ -2447,7 +2450,7 @@
         closeDetail();
         if(wasActive) return;
         card.classList.add('active');
-        var icon = item.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.idx), spot.icon||'i-pin');
+        var icon = item.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.spotId), spot.icon||'i-pin');
         detail.querySelector('.ad-head-icon').innerHTML = iconUse(icon);
         detail.querySelector('.ad-head-title').textContent = spot.name;
         detail.querySelector('.ad-body').innerHTML = buildSpotBodyHtml(spot);
@@ -2470,14 +2473,14 @@
       badge.addEventListener('click', function(e){
         e.stopPropagation();
         if(!editing) return;
-        var currentIcon = item.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.idx), spot.icon||'i-pin');
+        var currentIcon = item.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(item.dayId, item.spotId), spot.icon||'i-pin');
         openIconPicker(currentIcon, function(newType){
           var newIcon = ICONS[newType] || 'i-pin';
           if(item.isCustom){
             var arr = lsGet('attr:custom-spots', []);
             if(arr[item.idx]){ arr[item.idx].icon = newIcon; lsSet('attr:custom-spots', arr); }
           } else {
-            lsSet(spotIconKey(item.dayId, item.idx), newIcon);
+            lsSet(spotIconKey(item.dayId, item.spotId), newIcon);
           }
           renderAttractionsUnified();
         });
@@ -2537,7 +2540,7 @@
       citySel.value = spotFormEditItem.city;
       citySel.disabled = !spotFormEditItem.isCustom;
       cityHint.classList.toggle('show', !spotFormEditItem.isCustom);
-      spotFormIcon = spotFormEditItem.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(spotFormEditItem.dayId, spotFormEditItem.idx), spot.icon||'i-pin');
+      spotFormIcon = spotFormEditItem.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(spotFormEditItem.dayId, spotFormEditItem.spotId), spot.icon||'i-pin');
       document.getElementById('spot-form-name').value = spot.name || '';
       document.getElementById('spot-form-photo').value = spot.photo || '';
       document.getElementById('spot-form-desc').value = spot.desc || (spot.shops ? flattenShopsToText(spot.shops) : '');
@@ -2581,8 +2584,8 @@
             lsSet('attr:custom-spots', arr);
           }
         } else {
-          lsSet(spotIconKey(spotFormEditItem.dayId, spotFormEditItem.idx), spotFormIcon);
-          lsSet(spotFieldsKey(spotFormEditItem.dayId, spotFormEditItem.idx), { name:name, photo:photo, desc:desc });
+          lsSet(spotIconKey(spotFormEditItem.dayId, spotFormEditItem.spotId), spotFormIcon);
+          lsSet(spotFieldsKey(spotFormEditItem.dayId, spotFormEditItem.spotId), { name:name, photo:photo, desc:desc });
         }
       } else {
         var addArr = lsGet('attr:custom-spots', []);
