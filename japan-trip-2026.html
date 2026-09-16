@@ -378,6 +378,9 @@
     padding:8px 10px; font-size:13px; font-family:inherit; color: var(--ink); background: var(--bg);
   }
   .spot-form-field textarea{ resize:vertical; }
+  .spot-form-field select:disabled{ opacity:.6; }
+  .spot-form-hint{ display:none; font-size:10.5px; color: var(--text-soft); margin-top:4px; line-height:1.5; }
+  .spot-form-hint.show{ display:block; }
   .spot-form-cat-btn{
     display:flex; align-items:center; gap:6px; width:100%; box-sizing:border-box; border:1.4px solid var(--border-soft);
     border-radius: var(--radius-sm); padding:8px 10px; font-size:13px; font-family:inherit; color: var(--ink);
@@ -402,7 +405,16 @@
     border-bottom:1px solid var(--border-soft);
   }
   .attr-detail .ad-head .icon{ color:var(--vermillion); flex:none; }
-  .attr-detail .ad-close{ margin-left:auto; cursor:pointer; color:var(--ink-soft); flex:none; }
+  .attr-detail .ad-head-title{ flex:1; }
+  .attr-detail .ad-head-actions{ margin-left:auto; display:flex; align-items:center; gap:12px; flex:none; }
+  .attr-detail .ad-close{ cursor:pointer; color:var(--ink-soft); flex:none; }
+  .attr-detail .ad-edit-btn, .attr-detail .ad-del-btn{
+    display:none; background:none; border:none; padding:0; cursor:pointer; flex:none;
+  }
+  .editing .attr-detail .ad-edit-btn, .editing .attr-detail .ad-del-btn{ display:flex; }
+  .attr-detail .ad-edit-btn{ color: var(--ink-soft); }
+  .attr-detail .ad-del-btn{ color: var(--vermillion); }
+  .attr-detail .ad-edit-btn .icon, .attr-detail .ad-del-btn .icon{ width:14px; height:14px; }
   .attr-detail .ad-body{ padding:12px 14px 16px; }
   .attr-detail .attr-photo{ border-radius:0; }
 
@@ -573,7 +585,7 @@
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
   .confirm-overlay{
-    position:fixed; inset:0; z-index:80; background:rgba(20,30,45,.45);
+    position:fixed; inset:0; z-index:150; background:rgba(20,30,45,.45);
     display:flex; align-items:center; justify-content:center; padding:24px;
   }
   .confirm-box{
@@ -589,7 +601,7 @@
   .confirm-btn.ok{ background: var(--vermillion); color:#fff; }
 
   .icon-picker-overlay{
-    position:fixed; inset:0; z-index:90; background:rgba(20,30,45,.45);
+    position:fixed; inset:0; z-index:160; background:rgba(20,30,45,.45);
     display:flex; align-items:center; justify-content:center; padding:24px;
   }
   .icon-picker-overlay.hidden{ display:none; }
@@ -895,10 +907,11 @@
 
   <div class="confirm-overlay hidden" id="spot-form-overlay">
     <div class="confirm-box spot-form-box">
-      <div class="icon-picker-title">新增景點卡</div>
+      <div class="icon-picker-title" id="spot-form-title">新增景點卡</div>
       <div class="spot-form-field">
         <label for="spot-form-city">城市</label>
         <select id="spot-form-city"></select>
+        <div class="spot-form-hint" id="spot-form-city-hint">此圖卡固定屬於這個城市，如需更換請改用「新增」建立新圖卡</div>
       </div>
       <div class="spot-form-field">
         <label>分類</label>
@@ -2262,6 +2275,14 @@
     return dayId+'-spot'+idx+'-icon';
   }
 
+  function spotFieldsKey(dayId, idx){
+    return dayId+'-spot'+idx+'-fields';
+  }
+
+  function spotsHiddenKey(dayId){
+    return dayId+':spots:hidden';
+  }
+
   function findDayForCity(city){
     var found = null;
     Object.keys(attractions).forEach(function(dayId){
@@ -2274,8 +2295,12 @@
     var list = [];
     Object.keys(attractions).forEach(function(dayId){
       var a = attractions[dayId];
+      var hidden = lsGet(spotsHiddenKey(dayId), []);
       a.spots.forEach(function(spot, idx){
-        list.push({ key:'b-'+dayId+'-'+idx, city:a.city, dayId:dayId, idx:idx, spot:spot, isCustom:false });
+        if(hidden.indexOf(idx) > -1) return;
+        var fields = lsGet(spotFieldsKey(dayId, idx), null);
+        var effectiveSpot = fields ? { name:fields.name, photo:fields.photo, desc:fields.desc, icon:spot.icon } : spot;
+        list.push({ key:'b-'+dayId+'-'+idx, city:a.city, dayId:dayId, idx:idx, spot:effectiveSpot, isCustom:false });
       });
     });
     var custom = lsGet('attr:custom-spots', []);
@@ -2283,6 +2308,17 @@
       list.push({ key:'c-'+idx, city:spot.city, dayId:null, idx:idx, spot:spot, isCustom:true });
     });
     return list;
+  }
+
+  function deleteAttractionSpotItem(item){
+    if(item.isCustom){
+      var arr = lsGet('attr:custom-spots', []);
+      arr.splice(item.idx, 1);
+      lsSet('attr:custom-spots', arr);
+    } else {
+      var hidden = lsGet(spotsHiddenKey(item.dayId), []);
+      if(hidden.indexOf(item.idx) === -1){ hidden.push(item.idx); lsSet(spotsHiddenKey(item.dayId), hidden); }
+    }
   }
 
   function renderAttractionCatTabs(){
@@ -2342,7 +2378,7 @@
           photoImg+
           '<span class="agc-fallback">'+iconUse(icon)+'</span>'+
           '<button type="button" class="agc-badge" title="更換圖示"><span class="agc-badge-icon">'+iconUse(icon)+'</span><span class="agc-badge-city">'+escapeHtml(item.city)+'</span></button>'+
-          (item.isCustom ? '<button type="button" class="agc-del" title="刪除圖卡">'+iconUse('i-close')+'</button>' : '')+
+          '<button type="button" class="agc-del" title="刪除圖卡">'+iconUse('i-close')+'</button>'+
           '<span class="agc-label"><span class="agc-label-icon">'+iconUse(icon)+'</span><span class="agc-label-text">'+escapeHtml(spot.name)+'</span></span>'+
         '</div>';
     });
@@ -2350,7 +2386,13 @@
 
     html += '<div class="attr-detail-overlay" id="attr-detail-overlay">'+
       '<div class="attr-detail" id="attr-detail">'+
-        '<div class="ad-head"><span class="ad-head-icon"></span><span class="ad-head-title"></span><span class="ad-close">'+iconUse('i-close')+'</span></div>'+
+        '<div class="ad-head"><span class="ad-head-icon"></span><span class="ad-head-title"></span>'+
+          '<div class="ad-head-actions">'+
+            '<button type="button" class="ad-edit-btn" title="編輯景點">'+iconUse('i-pencil')+'</button>'+
+            '<button type="button" class="ad-del-btn" title="刪除景點">'+iconUse('i-close')+'</button>'+
+            '<span class="ad-close">'+iconUse('i-close')+'</span>'+
+          '</div>'+
+        '</div>'+
         '<div class="ad-body"></div>'+
       '</div>'+
     '</div>';
@@ -2401,6 +2443,18 @@
         detail.querySelector('.ad-head-title').textContent = spot.name;
         detail.querySelector('.ad-body').innerHTML = buildSpotBodyHtml(spot);
         detailOverlay.classList.add('open');
+
+        detail.querySelector('.ad-edit-btn').onclick = function(){
+          closeDetail();
+          openSpotForm(item);
+        };
+        detail.querySelector('.ad-del-btn').onclick = function(){
+          showConfirm('確定要刪除「'+spot.name+'」這張圖卡嗎？此動作無法復原。', function(){
+            deleteAttractionSpotItem(item);
+            closeDetail();
+            renderAttractionsUnified();
+          }, '刪除');
+        };
       });
 
       var badge = card.querySelector('.agc-badge');
@@ -2421,18 +2475,14 @@
       });
 
       var delBtn = card.querySelector('.agc-del');
-      if(delBtn){
-        delBtn.addEventListener('click', function(e){
-          e.stopPropagation();
-          if(!editing) return;
-          showConfirm('確定要刪除「'+spot.name+'」這張圖卡嗎？此動作無法復原。', function(){
-            var arr = lsGet('attr:custom-spots', []);
-            arr.splice(item.idx, 1);
-            lsSet('attr:custom-spots', arr);
-            renderAttractionsUnified();
-          }, '刪除');
-        });
-      }
+      delBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        if(!editing) return;
+        showConfirm('確定要刪除「'+spot.name+'」這張圖卡嗎？此動作無法復原。', function(){
+          deleteAttractionSpotItem(item);
+          renderAttractionsUnified();
+        }, '刪除');
+      });
     });
 
     detail.querySelector('.ad-close').addEventListener('click', closeDetail);
@@ -2444,25 +2494,54 @@
     });
   }
 
-  /* ---- Add-spot form (custom cards, e.g. for cities with no data yet) ---- */
+  /* ---- Add / edit spot form (shared by "新增景點卡" and the detail modal's 編輯) ---- */
   var spotFormIcon = 'i-pin';
+  var spotFormEditItem = null;
+
+  function flattenShopsToText(shops){
+    return shops.map(function(s){
+      return s.name + '（' + s.hours + '）：' + s.feature;
+    }).join('\n');
+  }
+
   function updateSpotFormCatBtn(){
     var btn = document.getElementById('spot-form-cat-btn');
     if(!btn) return;
     var opt = ICON_OPTIONS.filter(function(o){ return o.icon === spotFormIcon; })[0];
     btn.innerHTML = iconUse(spotFormIcon) + ' ' + (opt ? opt.label : '景點');
   }
-  function openSpotForm(){
+
+  function openSpotForm(editItem){
     var overlay = document.getElementById('spot-form-overlay');
     if(!overlay) return;
+    spotFormEditItem = editItem || null;
+
     var citySel = document.getElementById('spot-form-city');
+    var cityHint = document.getElementById('spot-form-city-hint');
     citySel.innerHTML = ATTR_CITY_LIST.map(function(c){ return '<option value="'+c+'">'+c+'</option>'; }).join('');
-    citySel.value = (attrActiveCity !== 'all') ? attrActiveCity : ATTR_CITY_LIST[0];
-    spotFormIcon = (attrActiveCat === 'food') ? 'i-bowl' : (attrActiveCat === 'gift') ? 'i-gift' : 'i-pin';
+
+    document.getElementById('spot-form-title').textContent = spotFormEditItem ? '編輯景點卡' : '新增景點卡';
+    document.getElementById('spot-form-save').textContent = spotFormEditItem ? '儲存' : '新增';
+
+    if(spotFormEditItem){
+      var spot = spotFormEditItem.spot;
+      citySel.value = spotFormEditItem.city;
+      citySel.disabled = !spotFormEditItem.isCustom;
+      cityHint.classList.toggle('show', !spotFormEditItem.isCustom);
+      spotFormIcon = spotFormEditItem.isCustom ? (spot.icon||'i-pin') : lsGet(spotIconKey(spotFormEditItem.dayId, spotFormEditItem.idx), spot.icon||'i-pin');
+      document.getElementById('spot-form-name').value = spot.name || '';
+      document.getElementById('spot-form-photo').value = spot.photo || '';
+      document.getElementById('spot-form-desc').value = spot.desc || (spot.shops ? flattenShopsToText(spot.shops) : '');
+    } else {
+      citySel.disabled = false;
+      cityHint.classList.remove('show');
+      citySel.value = (attrActiveCity !== 'all') ? attrActiveCity : ATTR_CITY_LIST[0];
+      spotFormIcon = (attrActiveCat === 'food') ? 'i-bowl' : (attrActiveCat === 'gift') ? 'i-gift' : 'i-pin';
+      document.getElementById('spot-form-name').value = '';
+      document.getElementById('spot-form-photo').value = '';
+      document.getElementById('spot-form-desc').value = '';
+    }
     updateSpotFormCatBtn();
-    document.getElementById('spot-form-name').value = '';
-    document.getElementById('spot-form-photo').value = '';
-    document.getElementById('spot-form-desc').value = '';
     overlay.classList.remove('hidden');
   }
   (function(){
@@ -2484,9 +2563,23 @@
       var city = document.getElementById('spot-form-city').value;
       var photo = document.getElementById('spot-form-photo').value.trim();
       var desc = document.getElementById('spot-form-desc').value.trim();
-      var arr = lsGet('attr:custom-spots', []);
-      arr.push({ city:city, name:name, icon:spotFormIcon, photo:photo, desc:desc });
-      lsSet('attr:custom-spots', arr);
+
+      if(spotFormEditItem){
+        if(spotFormEditItem.isCustom){
+          var arr = lsGet('attr:custom-spots', []);
+          if(arr[spotFormEditItem.idx]){
+            arr[spotFormEditItem.idx] = { city:city, name:name, icon:spotFormIcon, photo:photo, desc:desc };
+            lsSet('attr:custom-spots', arr);
+          }
+        } else {
+          lsSet(spotIconKey(spotFormEditItem.dayId, spotFormEditItem.idx), spotFormIcon);
+          lsSet(spotFieldsKey(spotFormEditItem.dayId, spotFormEditItem.idx), { name:name, photo:photo, desc:desc });
+        }
+      } else {
+        var addArr = lsGet('attr:custom-spots', []);
+        addArr.push({ city:city, name:name, icon:spotFormIcon, photo:photo, desc:desc });
+        lsSet('attr:custom-spots', addArr);
+      }
       overlay.classList.add('hidden');
       renderAttractionsUnified();
     });
