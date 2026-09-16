@@ -2601,8 +2601,67 @@
   });
 
   document.getElementById('tool-packing').addEventListener('click', function(){ openTool('packing-overlay'); });
-  document.getElementById('tool-currency').addEventListener('click', function(){ showToast('幣值換算小工具製作中，敬請期待！'); });
   document.getElementById('tool-pledge').addEventListener('click', function(){ showToast('家庭旅遊宣示製作中，敬請期待！'); });
+
+  /* -- currency converter -- */
+  var CUR_RATE_DEFAULT = 0.21;
+  var curBuffer = '';
+
+  function curRateKey(){ return 'device:currency:rate'; }
+  function curGetRate(){ return lsGet(curRateKey(), CUR_RATE_DEFAULT); }
+
+  function curFormatInt(n){
+    if(!isFinite(n)) return '0';
+    return Math.round(n).toLocaleString('zh-Hant');
+  }
+
+  function curRecalc(){
+    var rate = curGetRate();
+    var twd = parseFloat(curBuffer) || 0;
+    var jpy = rate > 0 ? twd / rate : 0;
+    document.getElementById('cur-twd').textContent = curBuffer === '' ? '0' : curBuffer;
+    document.getElementById('cur-jpy').textContent = curFormatInt(jpy);
+  }
+
+  (function(){
+    var rateEl = document.getElementById('cur-rate-display');
+    var keypad = document.getElementById('cur-keypad');
+    if(!rateEl || !keypad) return;
+
+    function refreshRateDisplay(){ rateEl.textContent = curGetRate(); }
+    refreshRateDisplay();
+
+    rateEl.addEventListener('focus', function(){ selectAllText(rateEl); });
+    rateEl.addEventListener('blur', function(){
+      var v = parseFloat((rateEl.textContent||'').replace(/[^0-9.]/g, ''));
+      if(!v || v <= 0){ refreshRateDisplay(); return; }
+      lsSet(curRateKey(), v);
+      refreshRateDisplay();
+      curRecalc();
+    });
+    rateEl.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ e.preventDefault(); rateEl.blur(); }
+    });
+
+    keypad.addEventListener('click', function(e){
+      var btn = e.target.closest('button[data-k]');
+      if(!btn) return;
+      var k = btn.getAttribute('data-k');
+      if(k === 'clear'){ curBuffer = ''; }
+      else if(k === 'back'){ curBuffer = curBuffer.slice(0, -1); }
+      else if(k === '.'){ if(curBuffer.indexOf('.') === -1){ curBuffer = (curBuffer === '' ? '0' : curBuffer) + '.'; } }
+      else { curBuffer = (curBuffer === '' || curBuffer === '0') ? k : curBuffer + k; }
+      curRecalc();
+    });
+
+    curRecalc();
+  })();
+
+  document.getElementById('tool-currency').addEventListener('click', function(){
+    curBuffer = '';
+    curRecalc();
+    openTool('currency-overlay');
+  });
 
   /* ================= VIEW SWITCHING ================= */
   function switchView(name){
