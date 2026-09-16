@@ -2601,7 +2601,6 @@
   });
 
   document.getElementById('tool-packing').addEventListener('click', function(){ openTool('packing-overlay'); });
-  document.getElementById('tool-pledge').addEventListener('click', function(){ showToast('家庭旅遊宣示製作中，敬請期待！'); });
 
   /* -- currency converter -- */
   var CUR_RATE_DEFAULT = 0.21;
@@ -2662,6 +2661,173 @@
     curRecalc();
     openTool('currency-overlay');
   });
+
+  /* -- family pledge -- */
+  var PLEDGE_RULES = [
+    '絕對不說「難吃，不如在家裡煮」，可以說「很特別的口味，有吃過就好」。',
+    '絕對不說「好貴，不如在台灣OOO」，可以說「物價驚人，等於台灣OO」。',
+    '絕對不說「不怎麼樣，早知道就不來」，可以說「普通的景點，其他人真會欣賞」。',
+    '要多說「出遊就是幸福，今天的我好開心」。',
+    '要多說「謝謝大自然給我這麼棒的體驗」。',
+    '當「累了走不動、身體不舒服」，絕對要說。',
+    '當「有臨時想逛、想看、想吃的」，絕對要說。',
+    '行程可彈性調整，開心出門，愉快回家。',
+    '遇到突發狀況，優先解決，不責怪對方。',
+    '出遊就是幸福，下雨也浪漫、走錯路是體驗。'
+  ];
+
+  function renderPledgeRules(){
+    var host = document.getElementById('pledge-rules');
+    if(!host || host.children.length) return;
+    host.innerHTML = PLEDGE_RULES.map(function(text, i){
+      return '<li><span class="pr-num">'+(i+1)+'</span><span>'+escapeHtml(text)+'</span></li>';
+    }).join('');
+  }
+
+  var pledgeSignatureDataUrl = null;
+
+  function pledgeUpdateSaveBtn(){
+    var chk = document.getElementById('pledge-agree-chk');
+    var btn = document.getElementById('pledge-save-btn');
+    btn.disabled = !(chk.checked && pledgeSignatureDataUrl);
+  }
+
+  function pledgeUpdateSignPreview(){
+    var img = document.getElementById('pledge-sign-img');
+    var placeholder = document.getElementById('pledge-sign-placeholder');
+    if(pledgeSignatureDataUrl){
+      img.src = pledgeSignatureDataUrl;
+      img.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    } else {
+      img.removeAttribute('src');
+      img.classList.add('hidden');
+      placeholder.classList.remove('hidden');
+    }
+  }
+
+  function pledgeCheckScrollUnlock(){
+    var scrollEl = document.getElementById('pledge-scroll');
+    var chk = document.getElementById('pledge-agree-chk');
+    if(!scrollEl || !chk || !chk.disabled) return;
+    var atBottom = scrollEl.scrollTop + scrollEl.clientHeight >= scrollEl.scrollHeight - 6;
+    if(atBottom){ chk.disabled = false; }
+  }
+
+  (function(){
+    renderPledgeRules();
+    var scrollEl = document.getElementById('pledge-scroll');
+    var chk = document.getElementById('pledge-agree-chk');
+    if(!scrollEl || !chk) return;
+
+    scrollEl.addEventListener('scroll', pledgeCheckScrollUnlock);
+    chk.addEventListener('change', pledgeUpdateSaveBtn);
+
+    document.getElementById('pledge-save-btn').addEventListener('click', function(){
+      if(this.disabled) return;
+      lsSet('device:pledge:signature', pledgeSignatureDataUrl);
+      lsSet('device:pledge:signed', true);
+      hideToolOverlay(document.getElementById('pledge-overlay'));
+      showToast('宣示書已儲存！祝旅途愉快 🎉');
+    });
+
+    document.getElementById('pledge-sign-btn').addEventListener('click', function(){
+      openSignaturePad();
+    });
+  })();
+
+  document.getElementById('tool-pledge').addEventListener('click', function(){
+    var chk = document.getElementById('pledge-agree-chk');
+    var savedSigned = lsGet('device:pledge:signed', false);
+    var savedSig = lsGet('device:pledge:signature', null);
+    chk.checked = !!savedSigned;
+    chk.disabled = true;
+    pledgeSignatureDataUrl = savedSig;
+    pledgeUpdateSignPreview();
+    pledgeUpdateSaveBtn();
+    openTool('pledge-overlay');
+    var scrollEl = document.getElementById('pledge-scroll');
+    scrollEl.scrollTop = 0;
+    requestAnimationFrame(function(){ pledgeCheckScrollUnlock(); });
+  });
+
+  /* -- signature pad -- */
+  var sigCtx = null, sigDrawing = false, sigHasStroke = false;
+
+  function sigResizeCanvas(){
+    var canvas = document.getElementById('signature-canvas');
+    var rect = canvas.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.round(rect.width * dpr));
+    canvas.height = Math.max(1, Math.round(rect.height * dpr));
+    sigCtx = canvas.getContext('2d');
+    sigCtx.scale(dpr, dpr);
+    sigCtx.lineWidth = 2.6;
+    sigCtx.lineCap = 'round';
+    sigCtx.lineJoin = 'round';
+    sigCtx.strokeStyle = '#1f3a5f';
+  }
+
+  function sigClear(){
+    var canvas = document.getElementById('signature-canvas');
+    if(!sigCtx) return;
+    sigCtx.clearRect(0, 0, canvas.width, canvas.height);
+    sigHasStroke = false;
+  }
+
+  function sigGetPos(e, canvas){
+    var rect = canvas.getBoundingClientRect();
+    var t = e.touches && e.touches[0];
+    var clientX = t ? t.clientX : e.clientX;
+    var clientY = t ? t.clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  (function(){
+    var canvas = document.getElementById('signature-canvas');
+    if(!canvas) return;
+
+    function start(e){
+      sigDrawing = true;
+      sigHasStroke = true;
+      var p = sigGetPos(e, canvas);
+      sigCtx.beginPath();
+      sigCtx.moveTo(p.x, p.y);
+      e.preventDefault();
+    }
+    function move(e){
+      if(!sigDrawing) return;
+      var p = sigGetPos(e, canvas);
+      sigCtx.lineTo(p.x, p.y);
+      sigCtx.stroke();
+      e.preventDefault();
+    }
+    function end(){ sigDrawing = false; }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, { passive:false });
+    canvas.addEventListener('touchmove', move, { passive:false });
+    canvas.addEventListener('touchend', end);
+
+    document.getElementById('signature-clear').addEventListener('click', sigClear);
+    document.getElementById('signature-save').addEventListener('click', function(){
+      if(!sigHasStroke){ showToast('請先簽名再儲存'); return; }
+      pledgeSignatureDataUrl = canvas.toDataURL('image/png');
+      pledgeUpdateSignPreview();
+      pledgeUpdateSaveBtn();
+      hideToolOverlay(document.getElementById('signature-overlay'));
+    });
+  })();
+
+  function openSignaturePad(){
+    openTool('signature-overlay');
+    requestAnimationFrame(function(){
+      sigResizeCanvas();
+      sigClear();
+    });
+  }
 
   /* ================= VIEW SWITCHING ================= */
   function switchView(name){
