@@ -1783,6 +1783,11 @@
   }
 
   /* ================= HOME ================= */
+  // Home page's "六天六個風景" strip only: show 10/8 and 10/10's icon+label
+  // swapped with each other, without touching the real per-day itinerary
+  // content (hotels/timetables/attractions), which stays under its own date.
+  var HOME_BADGE_SWAP = { d3:'d5', d5:'d3' };
+
   function renderHome(){
     document.querySelectorAll('[data-goto]').forEach(function(el){
       el.addEventListener('click', function(){ switchView(el.getAttribute('data-goto')); });
@@ -1790,8 +1795,9 @@
     var strip = document.getElementById('badge-strip');
     if(strip){
       strip.innerHTML = days.map(function(d){
-        var label = (attractions[d.id] && attractions[d.id].region) || d.region;
-        return '<div class="badge-item" data-day="'+d.id+'">'+(DAY_BADGES[d.id]||'')+'<div class="b-label">'+d.date+'<br>'+label+'</div></div>';
+        var badgeDay = HOME_BADGE_SWAP[d.id] || d.id;
+        var label = (attractions[badgeDay] && attractions[badgeDay].region) || d.region;
+        return '<div class="badge-item" data-day="'+d.id+'">'+(DAY_BADGES[badgeDay]||'')+'<div class="b-label">'+d.date+'<br>'+label+'</div></div>';
       }).join('');
       strip.querySelectorAll('.badge-item').forEach(function(el){
         el.addEventListener('click', function(){ switchView('itin'); selectDay(el.getAttribute('data-day')); });
