@@ -699,6 +699,18 @@
     flex:none; width:22px; height:22px; border-radius:50%; background: var(--vermillion); color:#fff;
     font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center;
   }
+  .pledge-rules .pr-text{ flex:1; outline:none; }
+  .pledge-rules .pr-del{
+    display:none; flex:none; background:none; border:none; padding:0; margin-top:1px; color: var(--vermillion); cursor:pointer;
+  }
+  .editing .pledge-rules .pr-del{ display:flex; }
+  .pledge-rules .pr-del .icon{ width:13px; height:13px; }
+  .pledge-add-btn{
+    display:none; width:100%; margin:2px 0 10px; padding:9px 0; border-radius: var(--radius-md);
+    border:1.4px dashed var(--vermillion); background:transparent; color: var(--vermillion);
+    font-size:12.5px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  .editing .pledge-add-btn{ display:block; }
   .pledge-scroll-end{ text-align:center; font-size:12px; color: var(--vermillion); font-weight:700; padding:14px 0 4px; }
   .pledge-footer{
     padding:14px 16px 18px; border-top:1px solid var(--border-soft); background: var(--paper);
@@ -812,6 +824,11 @@
 
     <div class="section">
       <div class="section-title"><svg class="icon"><use href="#i-heart"/></svg>旅遊小幫手</div>
+      <div class="nav-card" id="tool-pledge">
+        <div class="n-icon"><svg class="icon"><use href="#i-heart"/></svg></div>
+        <div><div class="n-title">家庭旅遊宣示 <span class="n-required">(必填)</span></div><div class="n-sub">出發前，全家一起約定好心情</div></div>
+        <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
+      </div>
       <div class="nav-card" id="tool-packing">
         <div class="n-icon"><svg class="icon"><use href="#i-suitcase"/></svg></div>
         <div><div class="n-title">行前準備清單</div><div class="n-sub">打包行李核對，可自行新增、編輯項目</div></div>
@@ -822,12 +839,7 @@
         <div><div class="n-title">幣值換算小工具</div><div class="n-sub">台幣／日幣快速換算</div></div>
         <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
       </div>
-      <div class="nav-card" id="tool-pledge">
-        <div class="n-icon"><svg class="icon"><use href="#i-heart"/></svg></div>
-        <div><div class="n-title">家庭旅遊宣示 <span class="n-required">(必填)</span></div><div class="n-sub">出發前，全家一起約定好心情</div></div>
-        <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
-      </div>
-      <div class="device-only-note">以上三項僅儲存在此裝置，不會同步給其他家人</div>
+      <div class="device-only-note">宣示的誓言內容會同步給全家人；簽名與勾選狀態、行前準備清單、幣值換算匯率僅儲存在此裝置</div>
     </div>
 
     <div class="footer-mark">
@@ -1002,6 +1014,7 @@
       <div class="tool-body pledge-scroll" id="pledge-scroll">
         <div class="pledge-intro">出發前，全家一起說好，用最開心的心情迎接這趟旅程 🎒✈️🍁</div>
         <ol class="pledge-rules" id="pledge-rules"></ol>
+        <button type="button" class="pledge-add-btn" id="pledge-add-btn">新增一條宣示內容</button>
         <div class="pledge-scroll-end" id="pledge-scroll-end">已經看完囉，往下簽名吧 👇</div>
       </div>
       <div class="pledge-footer">
@@ -2827,12 +2840,56 @@
     '出遊就是幸福，下雨也浪漫、走錯路是體驗。'
   ];
 
+  // Rule text (defaults minus hidden, plus family-added extras) syncs to
+  // everyone via Firebase like the rest of the trip data; only the
+  // per-person agree/signature state further below stays device-only.
+  function pledgeHiddenKey(){ return 'pledge:rules:hidden'; }
+  function pledgeExtraKey(){ return 'pledge:rules:extra'; }
+
   function renderPledgeRules(){
     var host = document.getElementById('pledge-rules');
-    if(!host || host.children.length) return;
-    host.innerHTML = PLEDGE_RULES.map(function(text, i){
-      return '<li><span class="pr-num">'+(i+1)+'</span><span>'+escapeHtml(text)+'</span></li>';
-    }).join('');
+    if(!host) return;
+    host.innerHTML = '';
+    var hidden = lsGet(pledgeHiddenKey(), []);
+    var extra = lsGet(pledgeExtraKey(), []);
+    var num = 0;
+
+    PLEDGE_RULES.forEach(function(text, idx){
+      if(hidden.indexOf(idx) > -1) return;
+      num++;
+      var li = document.createElement('li');
+      li.innerHTML = '<span class="pr-num">'+num+'</span><span class="pr-text"></span>'+
+        '<button type="button" class="pr-del" title="刪除">'+iconUse('i-close')+'</button>';
+      li.querySelector('.pr-text').textContent = text;
+      li.querySelector('.pr-del').addEventListener('click', function(){
+        showConfirm('確定要刪除這條宣示內容嗎？此動作無法復原，且會影響所有人看到的內容。', function(){
+          var h = lsGet(pledgeHiddenKey(), []);
+          h.push(idx); lsSet(pledgeHiddenKey(), h);
+          renderPledgeRules();
+        }, '刪除');
+      });
+      host.appendChild(li);
+    });
+
+    extra.forEach(function(text, exIdx){
+      num++;
+      var li = document.createElement('li');
+      li.innerHTML = '<span class="pr-num">'+num+'</span><span class="pr-text editable" contenteditable="false"></span>'+
+        '<button type="button" class="pr-del" title="刪除">'+iconUse('i-close')+'</button>';
+      bindEditableText(li.querySelector('.pr-text'), 'pledge:rules:extra:text:'+exIdx, text);
+      li.querySelector('.pr-del').addEventListener('click', function(){
+        showConfirm('確定要刪除這條宣示內容嗎？此動作無法復原，且會影響所有人看到的內容。', function(){
+          var arr = lsGet(pledgeExtraKey(), []);
+          arr.splice(exIdx, 1);
+          lsSet(pledgeExtraKey(), arr);
+          lsRemove('pledge:rules:extra:text:'+exIdx);
+          renderPledgeRules();
+        }, '刪除');
+      });
+      host.appendChild(li);
+    });
+
+    applyEditingState();
   }
 
   var pledgeSignatureDataUrl = null;
@@ -2873,6 +2930,16 @@
 
     scrollEl.addEventListener('scroll', pledgeCheckScrollUnlock);
     chk.addEventListener('change', pledgeUpdateSaveBtn);
+
+    document.getElementById('pledge-add-btn').addEventListener('click', function(){
+      var arr = lsGet(pledgeExtraKey(), []);
+      arr.push('新的宣示內容');
+      lsSet(pledgeExtraKey(), arr);
+      renderPledgeRules();
+      var textEls = document.querySelectorAll('#pledge-rules .pr-text');
+      var last = textEls[textEls.length-1];
+      if(last){ last.focus(); selectAllText(last); }
+    });
 
     document.getElementById('pledge-save-btn').addEventListener('click', function(){
       if(this.disabled) return;
@@ -3181,6 +3248,7 @@
     renderAttractionCatTabs();
     renderAttractionsUnified();
     renderList(PACKING_DEFAULTS, true, 'device:packing');
+    renderPledgeRules();
     applyEditingState();
   }
 
