@@ -660,12 +660,18 @@
   .cur-rate-hint{ display:block; font-size:10.5px; margin-top:2px; }
   .cur-display{ display:flex; align-items:center; gap:8px; margin-bottom:16px; }
   .cur-field{
-    flex:1; background: var(--bg); border:1px solid var(--border-soft); border-radius: var(--radius-md);
-    padding:12px 12px; text-align:right;
+    flex:1; background: var(--bg); border:1.4px solid var(--border-soft); border-radius: var(--radius-md);
+    padding:12px 12px; text-align:right; cursor:pointer;
   }
+  .cur-field.active{ border-color: var(--vermillion); box-shadow: 0 0 0 1px var(--vermillion); }
   .cur-label{ font-size:11px; color: var(--text-soft); margin-bottom:4px; }
   .cur-value{ font-size:19px; font-weight:700; color: var(--ink); word-break:break-all; }
-  .cur-swap-icon{ flex:none; width:18px; height:18px; color: var(--vermillion); }
+  .cur-swap-btn{
+    flex:none; width:32px; height:32px; border-radius:50%; border:none; padding:0; cursor:pointer;
+    background: rgba(191,64,52,.08); color: var(--vermillion); display:flex; align-items:center; justify-content:center;
+  }
+  .cur-swap-btn:active{ background: rgba(191,64,52,.2); }
+  .cur-swap-btn .icon{ width:16px; height:16px; }
   .cur-keypad{ display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; }
   .cur-keypad button{
     padding:14px 0; font-size:17px; font-weight:700; color: var(--ink); background: var(--bg);
@@ -965,12 +971,12 @@
           <span class="cur-rate-hint">（可點數字修改，僅供估算）</span>
         </div>
         <div class="cur-display">
-          <div class="cur-field">
+          <div class="cur-field" id="cur-twd-field">
             <div class="cur-label">台幣 NT$</div>
             <div class="cur-value" id="cur-twd">0</div>
           </div>
-          <svg class="icon cur-swap-icon"><use href="#i-currency"/></svg>
-          <div class="cur-field">
+          <button type="button" class="cur-swap-btn" id="cur-swap-btn" title="切換輸入方向"><svg class="icon"><use href="#i-currency"/></svg></button>
+          <div class="cur-field" id="cur-jpy-field">
             <div class="cur-label">日幣 ¥</div>
             <div class="cur-value" id="cur-jpy">0</div>
           </div>
@@ -2717,6 +2723,7 @@
   /* -- currency converter -- */
   var CUR_RATE_DEFAULT = 0.21;
   var curBuffer = '';
+  var curActiveField = 'twd'; // 'twd' or 'jpy' — which field the keypad currently edits
 
   function curRateKey(){ return 'device:currency:rate'; }
   function curGetRate(){ return lsGet(curRateKey(), CUR_RATE_DEFAULT); }
@@ -2728,10 +2735,29 @@
 
   function curRecalc(){
     var rate = curGetRate();
-    var twd = parseFloat(curBuffer) || 0;
-    var jpy = rate > 0 ? twd / rate : 0;
-    document.getElementById('cur-twd').textContent = curBuffer === '' ? '0' : curBuffer;
-    document.getElementById('cur-jpy').textContent = curFormatInt(jpy);
+    var twdEl = document.getElementById('cur-twd');
+    var jpyEl = document.getElementById('cur-jpy');
+    var val = parseFloat(curBuffer) || 0;
+    if(curActiveField === 'twd'){
+      var jpy = rate > 0 ? val / rate : 0;
+      twdEl.textContent = curBuffer === '' ? '0' : curBuffer;
+      jpyEl.textContent = curFormatInt(jpy);
+    } else {
+      var twd = val * rate;
+      jpyEl.textContent = curBuffer === '' ? '0' : curBuffer;
+      twdEl.textContent = curFormatInt(twd);
+    }
+    document.getElementById('cur-twd-field').classList.toggle('active', curActiveField === 'twd');
+    document.getElementById('cur-jpy-field').classList.toggle('active', curActiveField === 'jpy');
+  }
+
+  function curSetActiveField(field){
+    if(field === curActiveField) return;
+    var el = document.getElementById(field === 'twd' ? 'cur-twd' : 'cur-jpy');
+    var text = (el.textContent || '').replace(/,/g, '');
+    curActiveField = field;
+    curBuffer = (text === '0') ? '' : text;
+    curRecalc();
   }
 
   (function(){
@@ -2754,6 +2780,12 @@
       if(e.key === 'Enter'){ e.preventDefault(); rateEl.blur(); }
     });
 
+    document.getElementById('cur-twd-field').addEventListener('click', function(){ curSetActiveField('twd'); });
+    document.getElementById('cur-jpy-field').addEventListener('click', function(){ curSetActiveField('jpy'); });
+    document.getElementById('cur-swap-btn').addEventListener('click', function(){
+      curSetActiveField(curActiveField === 'twd' ? 'jpy' : 'twd');
+    });
+
     keypad.addEventListener('click', function(e){
       var btn = e.target.closest('button[data-k]');
       if(!btn) return;
@@ -2770,6 +2802,7 @@
 
   document.getElementById('tool-currency').addEventListener('click', function(){
     curBuffer = '';
+    curActiveField = 'twd';
     curRecalc();
     openTool('currency-overlay');
   });
