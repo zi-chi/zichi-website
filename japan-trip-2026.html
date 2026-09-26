@@ -37,7 +37,7 @@
     --safe-b: env(safe-area-inset-bottom, 0px);
   }
   *,*::before,*::after{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;overflow-x:hidden;}
   body{
     background: var(--bg);
     background-image:
@@ -440,16 +440,19 @@
   .badge-item .b-label{ font-size:10.5px; color: var(--ink); font-weight:700; text-align:center; line-height:1.3; }
   .day-badge{ flex:none; width:34px; height:34px; }
 
-  .weather-strip{ display:grid; grid-template-columns: repeat(6, 1fr); gap:8px; padding:2px 2px 4px; }
+  .weather-strip{ display:grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap:6px; padding:2px 2px 4px; }
   .weather-item{
     display:flex; flex-direction:column; align-items:center; gap:2px; text-decoration:none;
     background: var(--paper); border:1px solid var(--border-soft); border-radius: var(--radius-md);
-    padding:9px 4px; box-shadow: var(--shadow-sm);
+    padding:9px 2px; box-shadow: var(--shadow-sm); min-width:0;
   }
   .weather-item:active{ transform: scale(.96); }
   .weather-item .w-date{ font-size:10px; color: var(--text-soft); font-weight:700; }
   .weather-item .w-icon{ color: var(--vermillion); font-size:21px; margin:3px 0 2px; }
-  .weather-item .w-temp{ font-size:11px; font-weight:700; color: var(--ink); font-variant-numeric: tabular-nums; white-space:nowrap; }
+  .weather-item .w-temp{
+    font-size:10.5px; font-weight:700; color: var(--ink); font-variant-numeric: tabular-nums;
+    max-width:100%; text-align:center;
+  }
   .weather-item .w-label{ font-size:8.5px; color: var(--text-soft); }
   .weather-note{ font-size:10.5px; color: var(--text-soft); margin:6px 2px 2px; line-height:1.6; }
   .weather-source{ margin-left:auto; font-size:10.5px; font-weight:400; color: var(--ink-soft); text-decoration:none; display:inline-flex; align-items:center; gap:3px; }
@@ -1760,7 +1763,7 @@
     if(!data){ tempEl.textContent = '尚無預報'; labelEl.textContent = ''; return; }
     var meta = weatherMeta(data.code);
     iconEl.innerHTML = iconUse(meta.icon);
-    tempEl.textContent = data.tmin+'°C / '+data.tmax+'°C';
+    tempEl.textContent = data.tmin+'°–'+data.tmax+'°C';
     labelEl.textContent = meta.label;
   }
 
