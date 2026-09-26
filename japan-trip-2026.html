@@ -450,9 +450,11 @@
   .weather-item .w-date{ font-size:10px; color: var(--text-soft); font-weight:700; }
   .weather-item .w-icon{ color: var(--vermillion); font-size:21px; margin:3px 0 2px; }
   .weather-item .w-temp{
+    display:flex; flex-direction:column; align-items:center; line-height:1.28;
     font-size:10.5px; font-weight:700; color: var(--ink); font-variant-numeric: tabular-nums;
     max-width:100%; text-align:center;
   }
+  .weather-item .w-temp .w-lo{ color: var(--text-soft); font-weight:600; }
   .weather-item .w-label{ font-size:8.5px; color: var(--text-soft); }
   .weather-note{ font-size:10.5px; color: var(--text-soft); margin:6px 2px 2px; line-height:1.6; }
   .weather-source{ margin-left:auto; font-size:10.5px; font-weight:400; color: var(--ink-soft); text-decoration:none; display:inline-flex; align-items:center; gap:3px; }
@@ -1378,7 +1380,7 @@
           desc:'宮川朝市是日本三大朝市之一，沿著宮川河畔展開，已有超過百年歷史。攤位多由當地農家與婆婆媽媽自產自銷，販售新鮮蔬果、醃漬物、花卉與手作小物。這裡也保留著以物易物的古老交易文化，逛市集的同時還能和店家閒話家常。清晨時段最熱鬧，很適合安排在飯店退房後、展開一天行程前順道走逛。' },
         { id:'d3-s2', name:'高山老街', icon:'i-pin', photo:'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1280,h_720/w_79,x_14,y_14,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/muckuip4bpbcmh4ooezr/%E3%80%901%E4%BA%BA%E6%88%90%E5%9B%A2%E7%99%BD%E5%B7%9D%E9%84%89%E7%B6%93%E5%85%B8%E4%B8%80%E6%97%A5%E9%81%8A%E3%80%91%E9%A3%9B%E9%A8%A8%E9%AB%98%E5%B1%B1%E8%80%81%E8%A1%97%C2%B7%E7%99%BD%E5%B7%9D%E9%84%89%E5%90%88%E6%8E%8C%E6%9D%91%E4%B8%80%E6%97%A5%E6%B8%B8(%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%87%BA%E7%99%BC).jpg',
           desc:'高山老街泛指以上三之町為中心的三町傳統街區，是日本重要傳統建造物群保存地區之一。江戶時期作為商人町發展起來，至今仍保留著木造格子窗老屋、造酒藏與百年商家。街道兩旁林立著清酒藏、味噌店、飛驒牛小吃攤與伴手禮店，是體驗江戶風情與品嚐在地小吃的最佳去處。造酒藏門口懸掛的杉玉（酒林）是判斷新酒是否上市的傳統標誌，也是散步途中有趣的小細節。' },
-        { id:'d3-s3', name:'合掌村', icon:'i-pin', photo:'https://www.info-toyama.com/storage/special_features/884/responsive_images/OBDFCZn08dE5kkYRIgKxxIHKjz3bTzzw1mHU0eZX__1597_1065.jpeg',
+        { id:'d3-s3', name:'合掌村', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSCyxIJw5-hajDx0dLI53NFAu0cHJu1e2IPVrUr4pWmNfu5ByeW5NF-GY&s=10',
           desc:'合掌造聚落以陡斜的茅草屋頂聞名，是為了因應飛驒地區冬季豪雪而發展出的傳統建築工法，屋頂形狀猶如雙手合十而得名。「飛驒之里」將多棟合掌造古民家移建保存，重現昔日山村的生活樣貌，屋內仍保留爐灶、農具等生活器具，且交通比車程較遠的白川鄉方便，很適合安排在高山市區順遊。園區依山傍水，四季景色皆美，秋天時周邊山林轉紅，與茅草屋頂相映成畫。' },
         { id:'d3-s4', name:'飛驒こって牛（飛驒牛握壽司）', icon:'i-bowl', photo:'https://static.gltjp.com/glt/data/article/21000/20612/20240204_113219_a57310fc_w1920.webp',
           desc:'高山老街排隊名店，招牌飛驒牛握壽司入口即化。10:00–17:00，全年無休。' },
@@ -1394,13 +1396,17 @@
       region:'立山黑部', city:'富山',
       overview:'立山黑部阿爾卑斯山脈路線橫跨立山連峰與黑部峽谷，全長約 37 公里、最大高低差近 2,000 公尺，需轉乘纜車、空中纜車、無軌電車等六種交通工具才能貫通。沿途行經室堂、大觀峰、黑部水庫等景點，是世界少見的高山觀光路線。10 月正值紅葉季、山頭已見初雪，能同時欣賞楓紅與雪景交織的「三段紅葉」美景。',
       spots:[
+        { id:'d4-s6', name:'立山車站', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzHqhjEvK-7K_d3JVPIIM0aSw54EQlrkVIPBz_WEze8_iaDbdfSntJ3hw&s=10',
+          desc:'立山車站是立山黑部阿爾卑斯路線的起點，由此搭乘登山纜車前往美女平，展開六種交通工具接力的高山之旅。車站周邊有伴手禮店與餐飲，也是回程領取寄放行李的地方。' },
+        { id:'d4-s7', name:'美女坪', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGi5_OKQ4cnbCJ1ZzxH51uj_jQJ3zTAmYlWVJRAGT8P0Ykc9zNell1T94&s=10',
+          desc:'美女坪標高約 977 公尺，是搭乘登山纜車後轉乘高原巴士的樞紐站，四周被樹齡數百年的原生林環繞。車站旁的美女杉巨木相傳因一段傳說而得名，10 月正值楓紅時節，站前廣場能欣賞層層疊疊的山林秋色。' },
         { id:'d4-s1', name:'室堂', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%AE%A4%E5%A0%82.jpeg',
           desc:'室堂標高 2,450 公尺，是立山黑部路線中海拔最高的景點，也是最重要的觀光據點。被譽為「北阿爾卑斯最美火山湖」的御庫裏池，清澈水面倒映著標高近 3,000 公尺的立山連峰稜線。這裡也是登山健行路線的起點，天氣晴朗時能遠眺劍岳等知名山峰。10 月的室堂平已進入初雪季節，經常能同時看到殘存的秋色與新雪。' },
         { id:'d4-s2', name:'大觀峰', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E5%A4%A7%E8%A7%80%E5%B3%B0.jpg',
           desc:'大觀峰是立山黑部路線中視野最遼闊的展望台之一，從黑部水庫搭乘登山纜車、再轉乘空中纜車，幾分鐘內即可抵達。站在露台上可以俯瞰黑部湖與黑部峽谷，天氣好時還能眺望後立山連峰。這段空中纜車不設任何支柱、一鏡到底，是路線中最驚豔的乘車體驗之一。' },
-        { id:'d4-s3', name:'黑部水庫', icon:'i-pin', photo:'https://blog-static.kkday.com/zh-hk/blog/wp-content/uploads/%E7%AB%8B%E5%B1%B1%E9%BB%91%E9%83%A8%E9%BB%91%E9%83%A8%E6%B0%B4%E5%A3%A9.webp',
+        { id:'d4-s3', name:'黑部水庫', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR2e5QtMBYMHq5ph-BGzb88O28GohncTaLCuBwRWHh7Cq74AARzpYZ01k&s=10',
           desc:'黑部水庫是日本海拔最高、堤壩也最高的水壩，昭和時期耗時 7 年、動員上千人力才完工，是日本土木工程史上的重要建設。每年 6 月中旬至 10 月中旬會舉行觀光洩洪，大量水流從壩頂傾瀉而下，氣勢磅礡，是水庫最具代表性的畫面。壩頂步道可以近距離感受水霧與轟隆水聲，天氣晴朗時還能看到彩虹橫跨峽谷。' },
-        { id:'d4-s4', name:'黑部水庫咖哩飯（黒部ダムカレー）', icon:'i-bowl', photo:'',
+        { id:'d4-s4', name:'黑部水庫咖哩飯（黒部ダムカレー）', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNZIDJy1CRPlBonZeQS5dGj3-870mXcTf-TEG1foWa3mDgY91GG0fDSERs&s=10',
           desc:'咖哩飯做成水庫大壩造型，是黑部水庫最具人氣的紀念美食。黑部水庫展望台食堂，約 09:00–16:00（依季節調整）。' },
         { id:'d4-s5', name:'立山そば', icon:'i-bowl', photo:'https://archerplus.tw/wp-content/uploads/2013/03/20130317-d32f5.jpg',
           desc:'高山蕎麥麵配山藥泥或炸山菜，健行途中補充體力的簡單一餐。室堂餐廳，約 09:00–15:00。' }
@@ -1410,18 +1416,20 @@
       region:'金澤', city:'金澤',
       overview:'金澤是加賀百萬石的城下町，江戶時期躲過二戰空襲與大規模天災，完整保留了武家屋敷、茶屋街與城下町街景，有「小京都」之稱。這裡同時是北陸的海鮮寶庫，鄰近日本海的地利之便造就了近江町市場豐富的漁獲。金澤也是日本金箔的產地，將近全日本 99% 的金箔都產自此地，金箔工藝品與甜點是必買伴手禮。',
       spots:[
-        { id:'d5-s1', name:'兼六園', icon:'i-pin', photo:'',
+        { id:'d5-s1', name:'兼六園', icon:'i-pin', photo:'https://garden-guide.jp/photo/kenrokuen/kenrokuen01.jpg',
           desc:'兼六園與岡山後樂園、水戶偕樂園並列日本三大名園，是加賀藩歷代藩主歷時近 200 年打造的迴遊式庭園。園內巧妙融合了宏大、幽邃、人力、蒼古、水泉、眺望六種造園要素，因而得名「兼六」。園內的徽軫燈籠是兼六園的招牌意象，兩腳形狀特殊，佇立在霞之池畔。四季皆有不同風情，秋天的紅葉與冬天的雪吊造景都相當知名。' },
-        { id:'d5-s2', name:'東茶屋街', icon:'i-pin', photo:'',
+        { id:'d5-s2', name:'東茶屋街', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoMQ_RL_HsNkpKDwhB53KxxTfz8nnTPZLF57Spn3ViAQ&s=10',
           desc:'東茶屋街是金澤三大茶屋街中規模最大、保存最完整的一區，江戶格子窗木造建築沿街林立，重現當年藝伎文化興盛的風華。國家指定重要文化財「志摩」保留了完整的茶屋建築內部陳設，可入內參觀百年前藝伎接待賓客的空間。街區內也有許多金箔工藝品店、和菓子老鋪與咖啡廳，很適合悠閒散步、選購伴手禮。' },
-        { id:'d5-s3', name:'近江町市場', icon:'i-pin', photo:'',
+        { id:'d5-s3', name:'近江町市場', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlWwW5GZnFUQnJdzkCoSN-E6ikSKfB9jsHQ9xvcsWjSbz0OII04Xni3sK_&s=10',
           desc:'近江町市場有「金澤人的廚房」之稱，已有近 300 年歷史，是採買加賀新鮮蔬果與日本海漁獲的市場。市場內各家海鮮丼、握壽司、烤扇貝攤位林立，能一次品嚐螃蟹、甜蝦、鰤魚等北陸海產。除了生鮮食材，也能找到清酒、調味料等在地食材伴手禮。緊鄰市區、交通方便，是安排金澤行程時很適合排入的一站。' },
         { id:'d5-s4', name:'近江町市場 海鮮丼', icon:'i-bowl', photo:'https://www.machiya-inn-japan.com/blog/ja/wp-content/uploads/2023/03/hirai1-1536x1024.jpg',
           desc:'甜蝦、螃蟹、鰤魚等當季日本海漁獲，市場現點現吃最新鮮。約 09:00–17:00（依店舖而異）。' },
-        { id:'d5-s5', name:'箔一 金箔霜淇淋', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2017/07/kinpakuginzasix_001-thumb-660xauto-727356.jpg',
+        { id:'d5-s5', name:'箔一 金箔霜淇淋', icon:'i-bowl', photo:'https://www.bubu-jp.com/wp-content/uploads/2017/07/kinpakuginzasix_002-thumb-660x495-727357.jpg',
           desc:'整片食用金箔包裹霜淇淋，東茶屋街必拍的人氣甜點。約 09:00–18:00。' },
         { id:'d5-s6', name:'加賀棒茶', icon:'i-gift', photo:'https://jinomon-gift.com/cdn/shop/files/MG_3931.jpg?v=1722584229&width=1080',
-          desc:'焙煎茶梗製成，香氣溫潤不苦澀，金澤代表性茶飲伴手禮。金澤各大茶葉行、伴手禮店均有販售。' }
+          desc:'焙煎茶梗製成，香氣溫潤不苦澀，金澤代表性茶飲伴手禮。金澤各大茶葉行、伴手禮店均有販售。' },
+        { id:'d5-s7', name:'金澤車站', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXlYQ0SwJEKcuuxJbGgf_ZCZWR7UrGSuIGw0zPtydC4PfwheORlEFNZGJd&s=10',
+          desc:'金澤車站以巨大的木造「鼓門」與玻璃穹頂「もてなしドーム」聞名，被譽為世界最美車站之一。鼓門造型取自能樂使用的鼓，是金澤傳統與現代融合的象徵地標，車站內外也有多間伴手禮店與美食街，很適合作為離開金澤前的最後採買地點。' }
       ]
     },
     d6:{
@@ -1445,10 +1453,22 @@
           desc:'八丁味噌熬製的濃郁醬汁淋在炸豬排上，鹹甜濃厚的名古屋招牌美食。名古屋各大餐廳均有供應。' },
         { id:'d6-s8', name:'手羽先（雞翅）', icon:'i-bowl', photo:'https://assets.funliday.com/posts/wp-content/uploads/2026/01/05143718/2026%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%BF%85%E5%90%83%E7%BE%8E%E9%A3%9F%EF%BD%9C%E6%89%8B%E7%BE%BD%E5%85%88%E9%9B%9E%E7%BF%8510%E5%A4%A7%E6%8E%A8%E8%96%A6collage.png.webp',
           desc:'酥炸雞翅刷上特製甜辣醬汁，風來坊、世界の山ちゃん都是知名連鎖店。居酒屋、專賣店均有供應，晚間時段最熱鬧。' },
-        { id:'d6-s9', name:'台灣拉麵', icon:'i-bowl', photo:'',
+        { id:'d6-s9', name:'台灣拉麵', icon:'i-bowl', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Cvpy52NrDafw6rP_yMHBFqBoviz3twS4YKTRYm9jDvwSrHviG78Cy4NX&s=10',
           desc:'名古屋在地發明的重辣擔擔麵風味拉麵，雖名為台灣拉麵但台灣其實吃不到。名古屋多家中華料理店均有供應。' },
-        { id:'d6-s10', name:'ういろう（外郎糕）', icon:'i-gift', photo:'',
-          desc:'Q 彈米蒸糕，抹茶、黑糖、櫻花等多種口味，經典名古屋伴手禮。名古屋車站、大須商店街伴手禮店均有販售。' }
+        { id:'d6-s10', name:'ういろう（外郎糕）', icon:'i-gift', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGeuzbeg-IfNHBhN5LOEb9a9pmIZ0Nv1houB5pPfNgwTW-TzYcfmQJ-7I&s=10',
+          desc:'Q 彈米蒸糕，抹茶、黑糖、櫻花等多種口味，經典名古屋伴手禮。名古屋車站、大須商店街伴手禮店均有販售。' },
+        { id:'d6-s11', name:'榮商圈', icon:'i-pin', photo:'https://img.letsgojp.com/2022/06/aichishopping26.jpg',
+          desc:'榮是名古屋最大的購物娛樂區，久屋大通公園兩側百貨、商場林立，久屋大通電視塔是區域地標。逛街、採買伴手禮、吃晚餐都很方便，很適合安排在賦歸前最後一晚。' }
+      ]
+    },
+    ueno:{
+      region:'上野', city:'上野',
+      overview:'上野是抵達東京的第一站，成田機場搭乘 Skyliner 即可直達上野車站，車站周邊的上野公園與阿美橫町是轉乘、覓食、採買零嘴的最佳去處，很適合安排在轉車空檔順道走逛。',
+      spots:[
+        { id:'ueno-s1', name:'上野公園', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFQxpcsrw16a9G1NHXvqiI8cP7GlwSHwwL0VTXiVDm1UEmUSN-5EmbnNY&s=10',
+          desc:'上野公園是日本第一座公園，園內有東京國立博物館、上野動物園、不忍池等景點，也是賞櫻、賞蓮的知名地點。腹地廣大、綠意盎然，很適合在轉乘空檔稍作停留、散步透氣。' },
+        { id:'ueno-s2', name:'阿美橫町', icon:'i-pin', photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1ps9ObyK97zuQSxSVS6S79e9JzYHgG5o8OFGF-MHv3Tg5n7vZOUlQRy_0&s=10',
+          desc:'阿美橫町沿著 JR 上野至御徒町之間的高架橋下延伸，戰後從黑市發展成庶民商店街，海鮮乾貨、零食、藥妝、服飾攤位林立，氣氛熱鬧道地。很適合抵達日本第一天，在此採買零食飲料、感受道地下町風情。' }
       ]
     }
   };
@@ -1763,7 +1783,7 @@
     if(!data){ tempEl.textContent = '尚無預報'; labelEl.textContent = ''; return; }
     var meta = weatherMeta(data.code);
     iconEl.innerHTML = iconUse(meta.icon);
-    tempEl.textContent = data.tmin+'°–'+data.tmax+'°C';
+    tempEl.innerHTML = '<span class="w-hi">'+data.tmax+'°</span><span class="w-lo">'+data.tmin+'°C</span>';
     labelEl.textContent = meta.label;
   }
 
