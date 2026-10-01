@@ -633,7 +633,7 @@
     transform: rotate(-3deg); display:inline-block; margin-top:6px;
   }
 
-  /* ---------- Travel tools (packing / currency / pledge) ---------- */
+  /* ---------- Local-only travel tools (packing / currency / pledge) ---------- */
   .tool-overlay{
     position:fixed; inset:0; z-index:96; background:rgba(20,30,45,.5);
     display:none; align-items:center; justify-content:center; padding:20px;
@@ -846,7 +846,7 @@
         <div><div class="n-title">幣值換算小工具</div><div class="n-sub">台幣／日幣快速換算</div></div>
         <svg class="icon n-arrow"><use href="#i-chevron"/></svg>
       </div>
-      <div class="device-only-note">宣示的誓言內容、行前準備清單會同步給全家人；簽名與勾選狀態、幣值換算匯率僅儲存在此裝置</div>
+      <div class="device-only-note">宣示的誓言內容會同步給全家人；簽名與勾選狀態、行前準備清單、幣值換算匯率僅儲存在此裝置</div>
     </div>
 
     <div class="footer-mark">
@@ -971,8 +971,8 @@
       </div>
       <div class="tool-body">
         <div class="tool-hint">點右上角 <svg class="icon" style="vertical-align:-2px"><use href="#i-pencil"/></svg> 開啟編輯模式，才能新增／刪除項目。這份清單只存在這台裝置上。</div>
-        <ul class="note-list" id="list-packing"></ul>
-        <div class="add-row"><button class="add-btn" data-addto="packing">新增一項</button></div>
+        <ul class="note-list" id="list-device:packing"></ul>
+        <div class="add-row"><button class="add-btn" data-addto="device:packing">新增一項</button></div>
       </div>
     </div>
   </div>
@@ -3302,7 +3302,7 @@
     renderJapanese();
     renderAttractionCatTabs();
     renderAttractionsUnified();
-    renderList(PACKING_DEFAULTS, true, 'packing');
+    renderList(PACKING_DEFAULTS, true, 'device:packing');
     renderPledgeRules();
     applyEditingState();
   }
