@@ -26,6 +26,14 @@
 - 用 `python3 -m http.server --directory /home/user/zichi-website` 起本機伺服器，搭配 Playwright 驗證渲染結果（例如卡片的 `img src`、句數、資料來源連結是否正確）。
 - 本機 sandbox 對外網路會擋掉大部分網域（含圖片來源網域），所以照片在本機測試時不會真的顯示出來、只能驗證 `src` 屬性是否正確，但在使用者實際裝置上會正常顯示。
 
+## Firebase Realtime Database 安全規則
+
+`database.rules.json` 只是備查用的參考檔案，**不會自動部署**（repo 裡沒有設定 Firebase CLI/GitHub Actions 的部署流程）。這個專案的 Realtime Database 當初是用「測試模式」建立的，Firebase 預設會在 30 天後自動鎖死測試模式的規則（到期後所有同步功能都會失效），每次快到期都會寄信提醒。真正生效的規則要由使用者本人登入 Firebase Console 手動貼上並按「發布」：
+
+https://console.firebase.google.com/project/japantrip2026-4f24d/database/japantrip2026-4f24d-default-rtdb/rules
+
+因為這個 App 完全沒有做登入/帳號機制（全家共用同一份資料），規則只能維持完全開放（`".read": true, ".write": true`），沒辦法改成「需要登入才能寫入」之類更嚴格的規則，除非未來真的要做登入系統。收到 Firebase 寄來的到期提醒信時，提醒使用者照上面連結重新貼一次 `database.rules.json` 的內容並發布即可。
+
 ## Git 流程
 
 先在 `claude/family-japan-itinerary-app-dfskh4` commit + push，再 fast-forward merge 到 `main` 並 push，兩個分支都要更新完，網站（GitHub Pages）才會顯示最新內容。
