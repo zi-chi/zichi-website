@@ -28,11 +28,15 @@
 
 ## Firebase Realtime Database 安全規則
 
-`database.rules.json` 只是備查用的參考檔案，**不會自動部署**（repo 裡沒有設定 Firebase CLI/GitHub Actions 的部署流程）。這個專案的 Realtime Database 當初是用「測試模式」建立的，Firebase 預設會在 30 天後自動鎖死測試模式的規則（到期後所有同步功能都會失效），每次快到期都會寄信提醒。真正生效的規則要由使用者本人登入 Firebase Console 手動貼上並按「發布」：
+`database.rules.json` 只是備查用的參考檔案，**不會自動部署**（repo 裡沒有設定 Firebase CLI/GitHub Actions 的部署流程）。真正生效的規則要由使用者本人登入 Firebase Console 手動貼上並按「發布」：
 
 https://console.firebase.google.com/project/japantrip2026-4f24d/database/japantrip2026-4f24d-default-rtdb/rules
 
-因為這個 App 完全沒有做登入/帳號機制（全家共用同一份資料），規則只能維持完全開放（`".read": true, ".write": true`），沒辦法改成「需要登入才能寫入」之類更嚴格的規則，除非未來真的要做登入系統。收到 Firebase 寄來的到期提醒信時，提醒使用者照上面連結重新貼一次 `database.rules.json` 的內容並發布即可。
+**現況（2026/10 旅程結束後）：旅程已結束，規則已改為唯讀保留當紀念**（`".read": true, ".write": false`）。App 仍可正常開啟瀏覽（首頁、每日行程、景點美食等內容都看得到），但編輯/打勾/新增等任何寫入動作都不會再同步出去（localStorage 本機寫入仍會成功，但不會再同步給其他人，也不會持久保留，下次清快取就不見了）。因為是唯讀，Firebase 就不會再寄「安全性較低」的提醒信了。
+
+如果以後想重新開放編輯（例如規劃下一趟旅行、想沿用這個 App），把 `database.rules.json` 的 `.write` 改回 `true`，一樣要照上面連結手動在 Firebase Console 貼上並發布才會生效。
+
+歷史脈絡：這個專案的 Realtime Database 當初是用「測試模式」建立的，Firebase 預設會在 30 天後自動鎖死測試模式的規則，旅程進行中曾經因為快到期收到提醒信，改成永久開放（`.write: true`）過一段時間；開放期間 Firebase 又寄來「規則安全性較低」的提醒信（只要是完全開放讀寫，這封信會不定期一直寄，沒有明確停止日期），旅程結束後才改成現在的唯讀狀態。
 
 ## Git 流程
 
